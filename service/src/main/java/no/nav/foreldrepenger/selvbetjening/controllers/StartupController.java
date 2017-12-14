@@ -4,6 +4,8 @@ import static java.util.stream.Collectors.joining;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,8 @@ import no.nav.foreldrepenger.selvbetjening.AktorIdKlient;
 @RequestMapping("/startup")
 public class StartupController {
 
+	
+	private static final Logger LOG = LoggerFactory.getLogger(StartupController.class);
    private final AktorIdKlient aktorClient;
 
    @Inject
@@ -26,6 +30,7 @@ public class StartupController {
 
    @RequestMapping(method = {RequestMethod.GET}, value = "/")
    public ResponseEntity<String> startup(@RequestParam("fnr") String fnr) {
+	   LOG.info("Looking up {}",fnr);
       return new ResponseEntity<String>(aktorClient.aktorIdForFnr(fnr), HttpStatus.OK);
    }
 

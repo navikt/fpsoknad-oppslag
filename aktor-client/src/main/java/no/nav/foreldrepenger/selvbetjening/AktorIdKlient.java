@@ -17,7 +17,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentReques
 
 @Component
 public class AktorIdKlient {
-   private static final Logger LOGGER = LoggerFactory.getLogger(AktorIdKlient.class);
+   private static final Logger LOG = LoggerFactory.getLogger(AktorIdKlient.class);
 
    private final AktoerV2 aktoerV2;
 
@@ -37,7 +37,7 @@ public class AktorIdKlient {
             .map(r -> r.getAktoerId())
             .map(AktorId::new);
       } catch (SOAPFaultException e) {
-         LOGGER.warn("Henting av aktørid har feilet", e);
+         LOG.warn("Henting av aktørid har feilet", e);
          return Optional.empty();
       } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
          return Optional.empty();
