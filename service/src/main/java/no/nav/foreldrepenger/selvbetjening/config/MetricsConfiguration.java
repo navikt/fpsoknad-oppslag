@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.selvbetjening;
+package no.nav.foreldrepenger.selvbetjening.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -59,9 +59,9 @@ public class MetricsConfiguration {
   }
   
   @Bean
-	public STSConfig stsConfig(@Value("${SECURITYTOKENSERVICE_URL}") String stsUrl,
-	                           @Value("${FPSELVBETJENING_USERNAME}") String systemUserName,
-	                           @Value("${FPSELVBETJENING_PASSWORD}") String systemUserPassword) {
+	public STSConfig stsConfig(@Value("${SECURITYTOKENSERVICE_URL:\"https://sts-t1.test.local/SecurityTokenServiceProvider/}") String stsUrl,
+	                           @Value("${FPSELVBETJENING_USERNAME:srvengangsstonad}") String systemUserName,
+	                           @Value("${FPSELVBETJENING_PASSWORD:AsbwRoF101WrjtP}") String systemUserPassword) {
 		return new STSConfig(stsUrl,systemUserName,systemUserPassword);
 	}
 

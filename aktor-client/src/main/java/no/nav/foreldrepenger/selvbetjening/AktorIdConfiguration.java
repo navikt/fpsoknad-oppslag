@@ -1,16 +1,14 @@
 package no.nav.foreldrepenger.selvbetjening;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import no.nav.foreldrepenger.selvbetjening.cxfclient.CXFClient;
 import no.nav.foreldrepenger.selvbetjening.cxfclient.STSConfig;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 
-@SpringBootConfiguration
-@ComponentScan(basePackages= {"no.nav.foreldrepenger.selvbetjening"})
+@Configuration
 public class AktorIdConfiguration {
 	
 @Bean
