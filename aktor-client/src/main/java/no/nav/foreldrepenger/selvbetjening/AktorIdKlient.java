@@ -25,6 +25,11 @@ public class AktorIdKlient {
    public AktorIdKlient(AktoerV2 aktoerV2) {
       this.aktoerV2 = aktoerV2;
    }
+   
+   public String aktorIdForFnr(String fnr)  {
+	   Optional<AktorId> aktorId = aktorIdForFnr(new Fodselsnummer(fnr));
+	   return aktorId.isPresent() ? aktorId.get().value() : "Nope";
+   }
 
    public Optional<AktorId> aktorIdForFnr(Fodselsnummer fnr)  {
       try {
