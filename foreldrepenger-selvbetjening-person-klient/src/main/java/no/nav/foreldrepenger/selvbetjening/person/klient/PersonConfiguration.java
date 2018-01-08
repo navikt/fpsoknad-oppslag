@@ -17,7 +17,7 @@ public class PersonConfiguration {
 	}
 
 	@Bean
-	public PersonV3 personV3(@Value("${PERSON_V3_ENDPOINTURL}") String serviceUrl) {
+	public PersonV3 personV3(@Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") String serviceUrl) {
 		return new CXFClient<>(PersonV3.class).configureStsForSystemUser().address(serviceUrl).build();
 	}
 	
