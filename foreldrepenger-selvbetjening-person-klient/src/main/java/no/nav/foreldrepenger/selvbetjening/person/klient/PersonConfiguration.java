@@ -22,7 +22,7 @@ public class PersonConfiguration {
 	}
 	
 	@Bean
-	public PersonKlient prsonKlient(BarneVelger barneVelger, PersonV3 person) {
+	public PersonKlient personKlient(BarneVelger barneVelger, PersonV3 person) {
 		return new PersonKlient(person, barneVelger);
 	}
 }
