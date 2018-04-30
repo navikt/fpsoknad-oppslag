@@ -17,7 +17,6 @@ public class ArenaClientStub implements ArenaClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
     @Override

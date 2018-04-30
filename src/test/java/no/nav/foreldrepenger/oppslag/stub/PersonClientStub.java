@@ -14,9 +14,9 @@ public class PersonClientStub implements PersonClient {
 
     @Override
     public Person hentPersonInfo(ID id) {
-        Navn navn = new Navn("Jan", "H.", "Johansen");
+        Navn navn = new Navn("Skjegg", "Stub", "Sveen");
         return new Person(id, CountryCode.NO, Kjonn.valueOf("M"), navn,
-            "nynoregsk", new Bankkonto("1234567890", "Pæng r'us"),
+            "NN", new Bankkonto("1234567890", "Stub NOR"),
             LocalDate.now().minusYears(20));
     }
 

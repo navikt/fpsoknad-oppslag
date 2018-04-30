@@ -16,7 +16,6 @@ public class InfotrygdClientStub implements InfotrygdClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
     @Override

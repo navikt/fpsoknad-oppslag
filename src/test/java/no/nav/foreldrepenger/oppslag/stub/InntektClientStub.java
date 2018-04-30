@@ -16,7 +16,6 @@ public class InntektClientStub implements InntektClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
     @Override

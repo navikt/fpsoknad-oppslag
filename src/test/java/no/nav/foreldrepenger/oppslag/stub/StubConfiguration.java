@@ -29,13 +29,11 @@ public class StubConfiguration {
         return new PersonClientStub();
     }
 
-
     @Bean
     @Primary
     public AaregClient getAaregClientStub() {
         return new AaregClientStub();
     }
-
 
     @Bean
     @Primary
@@ -61,11 +59,9 @@ public class StubConfiguration {
         return new InntektClientStub();
     }
 
-
     @Bean
     @Primary
     public MedlClient getMedlClientStub() {
         return new MedlClientStub();
     }
-
 }

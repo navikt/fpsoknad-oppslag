@@ -18,7 +18,6 @@ public class AktorIdClientStub implements AktorIdClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
 }

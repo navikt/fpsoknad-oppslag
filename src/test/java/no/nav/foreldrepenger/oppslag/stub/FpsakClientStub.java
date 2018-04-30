@@ -15,7 +15,6 @@ public class FpsakClientStub implements FpsakClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
     @Override

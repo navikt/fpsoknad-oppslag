@@ -15,7 +15,6 @@ public class MedlClientStub implements MedlClient {
     @Override
     public void ping() {
         LOG.debug("PONG");
-
     }
 
     @Override
