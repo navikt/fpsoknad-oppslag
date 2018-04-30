@@ -18,14 +18,8 @@ public class PersonConfiguration extends WsClient<PersonV3>{
     }
 
     @Bean
-    @ConditionalOnProperty(name = "stub.person", matchIfMissing = true, havingValue = "false")
     public PersonClient personKlientTpsWs(PersonV3 person) {
         return new PersonClientTpsWs(person);
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "stub.person", havingValue = "true")
-    public PersonClient personKlientStub() {
-        return new PersonClientStub();
-    }
 }

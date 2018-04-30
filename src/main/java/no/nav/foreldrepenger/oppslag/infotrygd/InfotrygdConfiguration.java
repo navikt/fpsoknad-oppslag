@@ -16,4 +16,9 @@ public class InfotrygdConfiguration extends WsClient<InfotrygdSakV1>{
         return createPort(serviceUrl, InfotrygdSakV1.class);
     }
 
+    @Bean
+    public InfotrygdClient infotrygdClientWs(InfotrygdSakV1 infotrygdSakV1) {
+        return new InfotrygdClientWs(infotrygdSakV1);
+    }
+
 }

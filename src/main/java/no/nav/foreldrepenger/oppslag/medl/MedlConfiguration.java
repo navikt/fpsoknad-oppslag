@@ -16,4 +16,9 @@ public class MedlConfiguration extends WsClient<MedlemskapV2>{
         return createPort(serviceUrl, MedlemskapV2.class);
     }
 
+    @Bean
+    public MedlClient medlClientWs(MedlemskapV2 medlemskapV2) {
+        return new MedlClientWs(medlemskapV2);
+    }
+
 }

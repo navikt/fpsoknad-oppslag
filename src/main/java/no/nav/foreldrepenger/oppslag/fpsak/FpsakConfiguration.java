@@ -15,4 +15,9 @@ public class FpsakConfiguration extends WsClient<ForeldrepengesakV1>{
     public ForeldrepengesakV1 fpsakV1(@Value("${VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL}") String serviceUrl) {
         return createPort(serviceUrl, ForeldrepengesakV1.class);
     }
+
+    @Bean
+    public FpsakClient fpsakClientWs(ForeldrepengesakV1 fpsakV1) {
+        return new FpsakClientWs(fpsakV1);
+    }
 }

@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 import no.nav.foreldrepenger.oppslag.ws.WsClient;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootConfiguration
-@ComponentScan(basePackages = { "no.nav.foreldrepenger.oppslag" })
+@Configuration
 public class AaregConfiguration extends WsClient<ArbeidsforholdV3>{
 
     @SuppressWarnings("unchecked")
@@ -17,5 +17,10 @@ public class AaregConfiguration extends WsClient<ArbeidsforholdV3>{
     public ArbeidsforholdV3 arbeidsforholdV3(
             @Value("${VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL}") String serviceUrl) {
         return createPort(serviceUrl, ArbeidsforholdV3.class);
+    }
+
+    @Bean
+    public AaregClient aaregClientWs(ArbeidsforholdV3 arbeidsforholdV3) {
+        return new AaregClientWs(arbeidsforholdV3);
     }
 }

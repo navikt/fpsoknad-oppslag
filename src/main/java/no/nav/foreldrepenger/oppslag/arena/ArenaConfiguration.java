@@ -18,4 +18,9 @@ public class ArenaConfiguration extends WsClient<YtelseskontraktV3>{
             @Value("${VIRKSOMHET_YTELSESKONTRAKT_V3_ENDPOINTURL}") String serviceUrl) {
         return createPort(serviceUrl, YtelseskontraktV3.class);
     }
+
+    @Bean
+    public ArenaClient arenaClientWs(YtelseskontraktV3 ytelser) {
+        return new ArenaClientWs(ytelser);
+    }
 }

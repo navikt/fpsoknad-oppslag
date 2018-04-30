@@ -1,11 +1,17 @@
-package no.nav.foreldrepenger.oppslag.person;
+package no.nav.foreldrepenger.oppslag.stub;
 
 import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.oppslag.domain.*;
+import no.nav.foreldrepenger.oppslag.person.PersonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
 public class PersonClientStub implements PersonClient {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersonClientStub.class);
+
     @Override
     public Person hentPersonInfo(ID id) {
         Navn navn = new Navn("Jan", "H.", "Johansen");
@@ -15,5 +21,8 @@ public class PersonClientStub implements PersonClient {
     }
 
     @Override
-    public void ping() { }
+    public void ping() {
+        LOG.info("PONG");
+
+    }
 }
