@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InntektClientStub implements InntektClient {
@@ -20,6 +21,6 @@ public class InntektClientStub implements InntektClient {
 
     @Override
     public List<Inntekt> incomeForPeriod(Fodselsnummer fnr, LocalDate from, LocalDate to) {
-        return null;
+        return new ArrayList<>();
     }
 }

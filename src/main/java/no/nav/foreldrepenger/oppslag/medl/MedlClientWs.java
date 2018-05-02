@@ -25,7 +25,7 @@ public class MedlClientWs implements MedlClient {
 
     private final MedlemskapV2 medlemskapV2;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.medl");
+    private static final Counter errorCounter = Metrics.counter("errors.lookup.medl");
 
     @Inject
     public MedlClientWs(MedlemskapV2 medlemskapV2) {

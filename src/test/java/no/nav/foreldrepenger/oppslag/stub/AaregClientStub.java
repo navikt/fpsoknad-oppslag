@@ -6,6 +6,7 @@ import no.nav.foreldrepenger.oppslag.domain.Fodselsnummer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AaregClientStub implements AaregClient {
@@ -19,6 +20,6 @@ public class AaregClientStub implements AaregClient {
 
     @Override
     public List<Arbeidsforhold> arbeidsforhold(Fodselsnummer fnr) {
-        return null;
+        return new ArrayList<>();
     }
 }

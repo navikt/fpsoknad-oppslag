@@ -28,7 +28,7 @@ public class PersonClientTpsWs implements PersonClient {
 
     private final PersonV3 person;
 
-    private final Counter errorCounter = Metrics.counter("person.lookup.error");
+    private static final Counter ERROR_COUNTER = Metrics.counter("person.lookup.error");
 
     public PersonClientTpsWs(PersonV3 person) {
         this.person = Objects.requireNonNull(person);
@@ -48,7 +48,7 @@ public class PersonClientTpsWs implements PersonClient {
                 hentPerson(id.getFnr(), request).getPerson();
             return PersonMapper.map(id, tpsPerson);
         } catch (Exception ex) {
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw new RuntimeException(ex);
         }
 

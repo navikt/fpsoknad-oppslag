@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -22,7 +21,7 @@ public class AktorIdClientWs implements AktorIdClient {
 
     private final AktoerV2 aktoerV2;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.aktorid");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.aktorid");
 
     @Inject
     public AktorIdClientWs(AktoerV2 aktoerV2) {
@@ -36,7 +35,7 @@ public class AktorIdClientWs implements AktorIdClient {
             LOG.warn("Henting av aktørid har feilet", e);
             throw new NotFoundException(e.getMessage());
         } catch (Exception ex) {
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw ex;
         }
     }

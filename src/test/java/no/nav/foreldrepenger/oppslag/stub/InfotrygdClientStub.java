@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InfotrygdClientStub implements InfotrygdClient {
@@ -20,6 +21,6 @@ public class InfotrygdClientStub implements InfotrygdClient {
 
     @Override
     public List<Ytelse> casesFor(Fodselsnummer fnr, LocalDate from, LocalDate to) {
-        return null;
+        return new ArrayList<>();
     }
 }

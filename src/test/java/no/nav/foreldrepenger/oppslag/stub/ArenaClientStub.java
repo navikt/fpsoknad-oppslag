@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaClientStub implements ArenaClient {
@@ -21,6 +22,6 @@ public class ArenaClientStub implements ArenaClient {
 
     @Override
     public List<Ytelse> ytelser(Fodselsnummer fnr, LocalDate from, LocalDate to) {
-        return null;
+        return new ArrayList<>();
     }
 }

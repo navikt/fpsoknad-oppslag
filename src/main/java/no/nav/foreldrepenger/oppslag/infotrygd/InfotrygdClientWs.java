@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -30,7 +29,7 @@ public class InfotrygdClientWs implements InfotrygdClient {
 
     private final InfotrygdSakV1 infotrygd;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.infotrygd");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.infotrygd");
 
     @Inject
     public InfotrygdClientWs(InfotrygdSakV1 infotrygd) {
@@ -58,7 +57,7 @@ public class InfotrygdClientWs implements InfotrygdClient {
             throw new ForbiddenException(ex);
         } catch (Exception ex) {
             log.warn("Error while reading from Infotrygd", ex);
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw new RuntimeException("Error while reading from Infotrygd", ex);
         }
     }

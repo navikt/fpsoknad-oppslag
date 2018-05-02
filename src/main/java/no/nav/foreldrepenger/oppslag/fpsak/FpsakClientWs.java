@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -27,7 +26,7 @@ public class FpsakClientWs implements FpsakClient {
 
     private final ForeldrepengesakV1 fpsakV1;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.fpsak");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.fpsak");
 
     @Inject
     public FpsakClientWs(ForeldrepengesakV1 fpsakV1) {
@@ -51,7 +50,7 @@ public class FpsakClientWs implements FpsakClient {
             throw new ForbiddenException(ex);
         } catch (Exception ex) {
             log.warn("Error while reading from Fpsak", ex);
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw new RuntimeException("Error while reading from Fpsak", ex);
         }
     }

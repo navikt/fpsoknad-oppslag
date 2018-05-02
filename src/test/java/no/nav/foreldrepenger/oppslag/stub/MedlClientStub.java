@@ -6,6 +6,7 @@ import no.nav.foreldrepenger.oppslag.medl.MedlClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MedlClientStub implements MedlClient {
@@ -19,6 +20,6 @@ public class MedlClientStub implements MedlClient {
 
     @Override
     public List<MedlPeriode> medlInfo(Fodselsnummer fnr) {
-        return null;
+        return new ArrayList<>();
     }
 }

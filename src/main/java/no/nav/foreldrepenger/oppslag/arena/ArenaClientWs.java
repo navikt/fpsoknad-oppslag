@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -25,9 +24,9 @@ import no.nav.tjeneste.virksomhet.ytelseskontrakt.v3.meldinger.HentYtelseskontra
 public class ArenaClientWs implements ArenaClient {
     private static final Logger LOG = LoggerFactory.getLogger(ArenaClientWs.class);
 
-    private YtelseskontraktV3 ytelser;
+    private final YtelseskontraktV3 ytelser;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.arena");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.arena");
 
     @Inject
     public ArenaClientWs(YtelseskontraktV3 ytelser) {
@@ -47,7 +46,7 @@ public class ArenaClientWs implements ArenaClient {
             LOG.warn("Sikkehetsfeil fra Arena", ex);
             throw new ForbiddenException(ex);
         } catch (Exception ex) {
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw ex;
         }
     }

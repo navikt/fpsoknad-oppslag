@@ -6,6 +6,7 @@ import no.nav.foreldrepenger.oppslag.fpsak.FpsakClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FpsakClientStub implements FpsakClient {
@@ -19,6 +20,6 @@ public class FpsakClientStub implements FpsakClient {
 
     @Override
     public List<Ytelse> casesFor(AktorId aktor) {
-        return null;
+        return new ArrayList<>();
     }
 }

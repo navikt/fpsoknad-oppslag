@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -34,7 +33,7 @@ public class InntektClientWs implements InntektClient {
 
     private final InntektV3 inntektV3;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.inntekt");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.inntekt");
 
     @Inject
     public InntektClientWs(InntektV3 inntektV3) {
@@ -59,7 +58,7 @@ public class InntektClientWs implements InntektClient {
             log.warn("Error while retrieving income", e);
             throw new IncompleteRequestException(e);
         } catch (Exception ex) {
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw new RuntimeException(ex);
         }
     }

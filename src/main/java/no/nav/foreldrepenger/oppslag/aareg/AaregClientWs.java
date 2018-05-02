@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
@@ -27,9 +26,9 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforhold
 public class AaregClientWs implements AaregClient {
     private static final Logger LOG = LoggerFactory.getLogger(AaregClientWs.class);
 
-    private ArbeidsforholdV3 arbeidsforholdV3;
+    private final ArbeidsforholdV3 arbeidsforholdV3;
 
-    private final Counter errorCounter = Metrics.counter("errors.lookup.aareg");
+    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.aareg");
 
     @Inject
     public AaregClientWs(ArbeidsforholdV3 arbeidsforholdV3) {
@@ -53,7 +52,7 @@ public class AaregClientWs implements AaregClient {
         } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput ex) {
             throw new IncompleteRequestException(ex);
         } catch (Exception ex) {
-            errorCounter.increment();
+            ERROR_COUNTER.increment();
             throw new RuntimeException(ex);
         }
     }
