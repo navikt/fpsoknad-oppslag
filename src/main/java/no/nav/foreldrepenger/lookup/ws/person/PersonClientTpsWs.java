@@ -12,7 +12,6 @@ import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
@@ -27,7 +26,6 @@ import io.micrometer.core.instrument.Metrics;
 import io.vavr.API;
 import io.vavr.Predicates;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
-import no.nav.foreldrepenger.errorhandling.RemoteUnavailableException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
 import no.nav.foreldrepenger.lookup.TokenHandler;
@@ -74,24 +72,13 @@ public class PersonClientTpsWs implements PersonClient {
     @Override
     @Timed("lookup.person")
     public Person hentPersonInfo(ID id) {
-        try {
-            HentPersonRequest request = RequestUtils.request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
-            LOG.info("Slår opp person");
-            LOG.info(CONFIDENTIAL, "Fra ID {}", id);
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = tpsPersonWithRetry(request);
-            Person p = person(id, tpsPerson, barnFor(tpsPerson));
-            LOG.info(CONFIDENTIAL, "Person er {}", p);
-            return p;
-        } catch (SOAPFaultException e) {
-            ERROR_COUNTER.increment();
-            if (tokenHandler.isExpired()) {
-                throw new TokenExpiredException(tokenHandler.getExp(), e);
-            }
-            throw e;
-        } catch (WebServiceException e) {
-            ERROR_COUNTER.increment();
-            throw new RemoteUnavailableException(e);
-        }
+        HentPersonRequest request = RequestUtils.request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
+        LOG.info("Slår opp person");
+        LOG.info(CONFIDENTIAL, "Fra ID {}", id);
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = tpsPersonWithRetry(request);
+        Person p = person(id, tpsPerson, barnFor(tpsPerson));
+        LOG.info(CONFIDENTIAL, "Person er {}", p);
+        return p;
     }
 
     private no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPersonWithRetry(HentPersonRequest request) {
@@ -152,14 +139,18 @@ public class PersonClientTpsWs implements PersonClient {
         if (RequestUtils.isFnr(id)) {
             return new Fødselsnummer(id.getIdent());
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     private HentPersonResponse hentPerson(HentPersonRequest request) {
         try {
             return person.hentPerson(request);
+        } catch (SOAPFaultException e) {
+            ERROR_COUNTER.increment();
+            if (tokenHandler.isExpired()) {
+                throw new TokenExpiredException(tokenHandler.getExp(), e);
+            }
+            throw e;
         } catch (HentPersonPersonIkkeFunnet e) {
             LOG.warn("Fant ikke person", e);
             throw new NotFoundException(e);
@@ -170,7 +161,6 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     private static Retry retry() {
-
         Retry retry = RetryRegistry.of(RetryConfig.custom()
                 .retryOnException(throwable -> API.Match(throwable).of(
                         API.Case($(Predicates.instanceOf(SOAPFaultException.class)), true),
