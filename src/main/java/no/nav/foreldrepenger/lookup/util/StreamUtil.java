@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger;
+package no.nav.foreldrepenger.lookup.util;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;

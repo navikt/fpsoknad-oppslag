@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.lookup;
 
-import static no.nav.foreldrepenger.StreamUtil.not;
 import static no.nav.foreldrepenger.lookup.Constants.ISSUER;
+import static no.nav.foreldrepenger.lookup.util.StreamUtil.not;
 
 import java.util.Date;
 import java.util.Objects;
