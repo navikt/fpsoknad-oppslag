@@ -90,10 +90,11 @@ public class HentPersonInfoTest {
     public void testRetryUntilFail() throws Exception {
         when(tps.hentPerson(any()))
                 .thenThrow(soapFault());
-        assertThrows(SOAPFaultException.class, () -> {
+        try {
             klient.hentPersonInfo(id());
-        });
-        verify(tps, times(2)).hentPerson(any());
+        } catch (SOAPFaultException e) {
+            verify(tps, times(2)).hentPerson(any());
+        }
     }
 
     @Test
