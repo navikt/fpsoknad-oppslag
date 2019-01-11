@@ -41,7 +41,7 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 public class PersonClientTpsWs implements PersonClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
-    private static final Retry RETRY = retry();
+    private static final Retry RETRY = retry(2);
 
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
@@ -160,16 +160,15 @@ public class PersonClientTpsWs implements PersonClient {
         }
     }
 
-    private static Retry retry() {
+    private static Retry retry(int max) {
         Retry retry = RetryRegistry.of(RetryConfig.custom()
                 .retryOnException(throwable -> API.Match(throwable).of(
                         API.Case($(Predicates.instanceOf(SOAPFaultException.class)), true),
                         API.Case($(), false)))
-                .maxAttempts(2)
+                .maxAttempts(max)
                 .build()).retry("tpsPerson");
         retry.getEventPublisher()
-                .onRetry(event -> LOG.info("Prøver igjen for {}. gang av {}", event.getNumberOfRetryAttempts(),
-                        RETRY.getRetryConfig().getMaxAttempts()))
+                .onRetry(event -> LOG.info("Prøver igjen for {}. gang av {}", event.getNumberOfRetryAttempts(), max))
                 .onSuccess(event -> LOG.info("Hentet person OK"))
                 .onError(event -> LOG.warn("Kunne ikke hente person OK etter {} forsøk",
                         event.getNumberOfRetryAttempts(), event.getLastThrowable()));
