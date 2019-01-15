@@ -49,9 +49,6 @@ node {
                 color  : 'danger',
                 message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${application}@master by ${committer} failed (${changelog})"
             ])
-            echo '[FAILURE] Failed to build: ${ex}'
-            currentBuild.result = 'FAILURE'
-            return
         } finally {
             junit '**/target/surefire-reports/*.xml'
         }
