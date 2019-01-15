@@ -1,8 +1,21 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
+import static io.github.resilience4j.retry.Retry.decorateSupplier;
+import static java.util.stream.Collectors.joining;
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
+
+import java.util.Optional;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
+import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
+import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonOrganisasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
@@ -10,70 +23,88 @@ import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.SammensattNavn;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.UstrukturertNavn;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.meldinger.HentOrganisasjonRequest;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.meldinger.HentOrganisasjonResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.*;
 
 public class OrganisasjonClientWs implements OrganisasjonClient {
 
-    private static final Logger log = LoggerFactory.getLogger(OrganisasjonClientWs.class);
-    private static final Counter errorCounter = Metrics.counter("errors.lookup.organisasjon");
+    private static final Logger LOG = LoggerFactory.getLogger(OrganisasjonClientWs.class);
 
     private OrganisasjonV5 organisasjonV5;
     private OrganisasjonV5 healthIndicator;
+    private final TokenHandler tokenHandler;
+    private final Retry retry;
 
-    @Inject
-    public OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator) {
+    OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
+            TokenHandler tokenHandler) {
+        this(organisasjonV5, healthIndicator, tokenHandler, retry());
+    }
+
+    public OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
+            TokenHandler tokenHandler, Retry retry) {
         this.organisasjonV5 = organisasjonV5;
         this.healthIndicator = healthIndicator;
+        this.tokenHandler = tokenHandler;
+        this.retry = retry;
     }
 
     @Override
     public void ping() {
         try {
-            log.info("Pinger Organisasjon");
+            LOG.info("Pinger organisasjonstjenesten");
             healthIndicator.ping();
-        } catch (Exception ex) {
-            errorCounter.increment();
-            throw ex;
+        } catch (Exception e) {
+            throw e;
         }
     }
 
     @Override
     @Timed("lookup.organisasjon")
     public Optional<String> nameFor(String orgnr) {
+        if (orgnr.length() != 9) {
+            LOG.warn("{} ser ikke ut som et organisasjonsnummer, slår ikke opp navn", orgnr);
+            return Optional.empty();
+        }
+        return decorateSupplier(retry, () -> doGetNameFor(orgnr)).get();
+    }
+
+    private Optional<String> doGetNameFor(String orgnr) {
         try {
             HentOrganisasjonRequest request = new HentOrganisasjonRequest();
             request.setOrgnummer(orgnr);
             final HentOrganisasjonResponse response = organisasjonV5.hentOrganisasjon(request);
             return Optional.ofNullable(name(response.getOrganisasjon().getNavn()));
-        } catch (HentOrganisasjonUgyldigInput ex) {
-            log.warn("Invalid input error when looking for organisation " + orgnr, ex);
-            errorCounter.increment();
-        } catch (HentOrganisasjonOrganisasjonIkkeFunnet ex) {
-            log.warn("Couldn't find organisation " + orgnr, ex);
-            errorCounter.increment();
-        } catch (Exception ex) {
-            log.warn("Error while looking up organisation " + orgnr, ex);
-            errorCounter.increment();
+        } catch (HentOrganisasjonUgyldigInput e) {
+            LOG.warn("Ugyldig input ved oppslag av navn for organisasjon {}", orgnr, e);
+            return Optional.empty();
+        } catch (HentOrganisasjonOrganisasjonIkkeFunnet e) {
+            LOG.warn("Fant ikke navn for organisasjon {}", orgnr, e);
+            return Optional.empty();
+        } catch (SOAPFaultException e) {
+            if (tokenHandler.isExpired()) {
+                throw new TokenExpiredException(tokenHandler.getExp(), e);
+            }
+            throw e;
         }
-
-        return Optional.empty();
     }
 
-    private String name(SammensattNavn sammensattNavn) {
+    private static String name(SammensattNavn sammensattNavn) {
         return UstrukturertNavn.class.cast(sammensattNavn).getNavnelinje()
-            .stream()
-            .filter(this::isNotEmpty)
-            .collect(joining(","));
+                .stream()
+                .filter(OrganisasjonClientWs::isNotEmpty)
+                .collect(joining(","));
     }
 
-    private boolean isNotEmpty(String str) {
-        return str != null && str.trim().length() != 0;
+    private static boolean isNotEmpty(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
+    private static Retry retry() {
+        return RetryUtil.retry(DEFAULT_RETRIES, "organisasjon", SOAPFaultException.class, LOG);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [organisasjonV5=" + organisasjonV5 + ", healthIndicator="
+                + healthIndicator + ", tokenHandler=" + tokenHandler + ", retry=" + retry + "]";
     }
 
 }

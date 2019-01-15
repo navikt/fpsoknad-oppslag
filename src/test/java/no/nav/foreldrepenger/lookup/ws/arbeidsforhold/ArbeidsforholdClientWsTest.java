@@ -1,43 +1,229 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
-import org.junit.Test;
+import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.soapFault;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.soap.SOAPFaultException;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
+import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
+import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.AnsettelsesPeriode;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Gyldighetsperiode;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Organisasjon;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerResponse;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonUgyldigInput;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.SammensattNavn;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.UstrukturertNavn;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.meldinger.HentOrganisasjonResponse;
+
+@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ArbeidsforholdClientWsTest {
 
-    LocalDate yesterday = LocalDate.now().minusDays(1);
-    LocalDate oneWeekAgo = LocalDate.now().minusDays(7);
-    LocalDate tomorrow = LocalDate.now().plusDays(2);
+    private static final String LURIUM_AS = "Lurium AS";
+    private static final String ORGNR = "999999999";
+    private static final String YRKE = "snekker";
+    private static final String NAVN = "S. Vindel & sønn";
+    private static final LocalDate yesterday = LocalDate.now().minusDays(1);
+    private static final LocalDate oneWeekAgo = LocalDate.now().minusDays(7);
+    private static final LocalDate tomorrow = LocalDate.now().plusDays(2);
+    private static final Fødselsnummer FNR = new Fødselsnummer("22222222222");
+    @Mock
+    private ArbeidsforholdV3 arbeidsforhold;
+    @Mock
+    private ArbeidsforholdV3 healthIndicator;
+    private OrganisasjonClient orgClient;
+    @Mock
+    private TokenHandler tokenHandler;
+    @Mock
+    private OrganisasjonV5 organisasjonV5;
+    @Mock
+    private OrganisasjonV5 orgHealth;
+
+    private ArbeidsforholdClientWs client;
+
+    @BeforeEach
+    public void beforeEach() {
+        orgClient = new OrganisasjonClientWs(organisasjonV5, orgHealth, tokenHandler);
+        client = new ArbeidsforholdClientWs(arbeidsforhold, healthIndicator, orgClient,
+                tokenHandler);
+    }
+
+    @Test
+    public void testRetryArbeidsforholdUntilFail() throws Exception {
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenThrow(soapFault());
+        assertThrows(SOAPFaultException.class, () -> {
+            client.aktiveArbeidsforhold(FNR);
+        });
+        verify(arbeidsforhold, times(2)).finnArbeidsforholdPrArbeidstaker(any());
+    }
+
+    @Test
+    public void testarbeidsforholdExpiredTokenDoesNotRetry() throws Exception {
+        when(tokenHandler.isExpired()).thenReturn(true);
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenThrow(soapFault());
+        assertThrows(TokenExpiredException.class, () -> {
+            client.aktiveArbeidsforhold(FNR);
+        });
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+    }
+
+    @Test
+    public void testArbeidsforholdNonSoapExceptionDoesNotRetry() throws Exception {
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenThrow(new FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning(null, null));
+        assertThrows(UnauthorizedException.class, () -> {
+            client.aktiveArbeidsforhold(FNR);
+        });
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+    }
+
+    @Test
+    public void testRetryRecoversBoth() throws Exception {
+        when(organisasjonV5.hentOrganisasjon(any()))
+                .thenThrow(soapFault())
+                .thenReturn(hentOrgResponse());
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenThrow(soapFault())
+                .thenReturn(respons());
+        List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
+        assertEquals(aktiveArbeidsforhold.size(), 1);
+        assertEquals(aktiveArbeidsforhold.get(0).getArbeidsgiverNavn(), LURIUM_AS);
+        verify(arbeidsforhold, times(2)).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+    }
+
+    @Test
+    public void testBothOK() throws Exception {
+        when(organisasjonV5.hentOrganisasjon(any()))
+                .thenReturn(hentOrgResponse());
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenReturn(respons());
+        List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
+        assertEquals(aktiveArbeidsforhold.size(), 1);
+        assertEquals(aktiveArbeidsforhold.get(0).getArbeidsgiverNavn(), LURIUM_AS);
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5).hentOrganisasjon(any());
+    }
+
+    @Test
+    public void OrgFailInvalidExceptionGivesNoName() throws Exception {
+        when(organisasjonV5.hentOrganisasjon(any()))
+                .thenThrow(new HentOrganisasjonUgyldigInput(null, null));
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenReturn(respons());
+        List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
+        assertEquals(aktiveArbeidsforhold.size(), 1);
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5).hentOrganisasjon(any());
+    }
+
+    @Test
+    public void OrgFailSOAPExceptionGivesNoName() throws Exception {
+        when(organisasjonV5.hentOrganisasjon(any()))
+                .thenThrow(soapFault());
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenReturn(respons());
+        List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
+        assertEquals(aktiveArbeidsforhold.size(), 1);
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+    }
+
+    @Test
+    public void testOrganisasjonRetryUntilFail() throws Exception {
+        when(organisasjonV5.hentOrganisasjon(any()))
+                .thenThrow(soapFault());
+        when(arbeidsforhold.finnArbeidsforholdPrArbeidstaker(any()))
+                .thenReturn(respons());
+        client.aktiveArbeidsforhold(FNR);
+        verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+    }
 
     @Test
     public void noEndDateSet() {
-        ArbeidsforholdClientWs lookup = new ArbeidsforholdClientWs(null, null, null);
-        Arbeidsforhold arbeidsforhold = new Arbeidsforhold("S. Vindel & sønn", "snekker",
-            100.0, yesterday, Optional.empty());
-        boolean ongoing = lookup.isOngoing(arbeidsforhold);
-        assertTrue(ongoing);
+        assertTrue(client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, yesterday, Optional.empty())));
     }
 
     @Test
     public void endDateInThePast() {
-        ArbeidsforholdClientWs lookup = new ArbeidsforholdClientWs(null, null, null);
-        Arbeidsforhold arbeidsforhold = new Arbeidsforhold("S. Vindel & sønn", "snekker",
-            100.0, oneWeekAgo, Optional.ofNullable(yesterday));
-        boolean ongoing = lookup.isOngoing(arbeidsforhold);
-        assertFalse(ongoing);
+        assertFalse(
+                client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(yesterday))));
     }
 
     @Test
     public void endDateInTheFuture() {
-        ArbeidsforholdClientWs lookup = new ArbeidsforholdClientWs(null, null, null);
-        Arbeidsforhold arbeidsforhold = new Arbeidsforhold("S. Vindel & sønn", "snekker",
-            100.0, oneWeekAgo, Optional.ofNullable(tomorrow));
-        boolean ongoing = lookup.isOngoing(arbeidsforhold);
-        assertTrue(ongoing);
+        assertTrue(client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(tomorrow))));
     }
 
+    private FinnArbeidsforholdPrArbeidstakerResponse respons() throws Exception {
+        FinnArbeidsforholdPrArbeidstakerResponse respons = new FinnArbeidsforholdPrArbeidstakerResponse();
+        respons.getArbeidsforhold().add(af());
+        return respons;
+    }
+
+    private no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold af()
+            throws Exception {
+        no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold af = new no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold();
+        Organisasjon aktør = new Organisasjon();
+        aktør.setOrgnummer(ORGNR);
+        af.setArbeidsgiver(aktør);
+        AnsettelsesPeriode periode = new AnsettelsesPeriode();
+        Gyldighetsperiode gyldighet = new Gyldighetsperiode();
+        GregorianCalendar now = new GregorianCalendar();
+        XMLGregorianCalendar fom = DatatypeFactory.newInstance().newXMLGregorianCalendar(now);
+        gyldighet.setFom(fom);
+        periode.setPeriode(gyldighet);
+        af.setAnsettelsesPeriode(periode);
+        return af;
+    }
+
+    private HentOrganisasjonResponse hentOrgResponse() {
+        HentOrganisasjonResponse respons = new HentOrganisasjonResponse();
+        respons.setOrganisasjon(org());
+        return respons;
+    }
+
+    private no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.Organisasjon org() {
+        no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.Organisasjon org = new no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.Organisasjon();
+        org.setOrgnummer(ORGNR);
+        org.setNavn(navn());
+        return org;
+    }
+
+    private SammensattNavn navn() {
+        UstrukturertNavn navn = new UstrukturertNavn();
+        navn.getNavnelinje().add(LURIUM_AS);
+        return navn;
+    }
 }

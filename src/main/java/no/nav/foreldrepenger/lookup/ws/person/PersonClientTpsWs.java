@@ -1,8 +1,8 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
-import static io.vavr.API.$;
 import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.lookup.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
 import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
 import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.BANKKONTO;
@@ -18,17 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryConfig;
-import io.github.resilience4j.retry.RetryRegistry;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
-import io.vavr.API;
-import io.vavr.Predicates;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
 import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -41,21 +38,27 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 public class PersonClientTpsWs implements PersonClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
-    private static final Retry RETRY = retry(2);
 
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
     private final Barnutvelger barnutvelger;
-    protected final TokenHandler tokenHandler;
+    private final TokenHandler tokenHandler;
+    private final Retry retry;
 
     private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.tps");
 
-    public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenHandler tokenHandler,
+    PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenHandler tokenHandler,
             Barnutvelger barnutvelger) {
+        this(person, healthIndicator, tokenHandler, barnutvelger, retry());
+    }
+
+    public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenHandler tokenHandler,
+            Barnutvelger barnutvelger, Retry retry) {
         this.person = Objects.requireNonNull(person);
         this.healthIndicator = healthIndicator;
         this.tokenHandler = tokenHandler;
         this.barnutvelger = Objects.requireNonNull(barnutvelger);
+        this.retry = retry;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     private no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPersonWithRetry(HentPersonRequest request) {
-        return Retry.decorateSupplier(RETRY, () -> hentPerson(request)).get().getPerson();
+        return Retry.decorateSupplier(retry, () -> hentPerson(request)).get().getPerson();
     }
 
     private List<Barn> barnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
@@ -155,29 +158,19 @@ public class PersonClientTpsWs implements PersonClient {
             LOG.warn("Fant ikke person", e);
             throw new NotFoundException(e);
         } catch (HentPersonSikkerhetsbegrensning e) {
-            LOG.warn("Sikkerhetsbegrensning ved oppslag.", e);
+            LOG.warn("Sikkerhetsbegrensning ved oppslag", e);
             throw new UnauthorizedException(e);
         }
     }
 
-    private static Retry retry(int max) {
-        Retry retry = RetryRegistry.of(RetryConfig.custom()
-                .retryOnException(throwable -> API.Match(throwable).of(
-                        API.Case($(Predicates.instanceOf(SOAPFaultException.class)), true),
-                        API.Case($(), false)))
-                .maxAttempts(max)
-                .build()).retry("tpsPerson");
-        retry.getEventPublisher()
-                .onRetry(event -> LOG.info("Prøver igjen for {}. gang av {}", event.getNumberOfRetryAttempts(), max))
-                .onSuccess(event -> LOG.info("Hentet person OK"))
-                .onError(event -> LOG.warn("Kunne ikke hente person OK etter {} forsøk",
-                        event.getNumberOfRetryAttempts(), event.getLastThrowable()));
-        return retry;
+    private static Retry retry() {
+        return RetryUtil.retry(DEFAULT_RETRIES, "person", SOAPFaultException.class, LOG);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [person=" + person + "]";
+        return getClass().getSimpleName() + " [person=" + person + ", healthIndicator=" + healthIndicator
+                + ", barnutvelger=" + barnutvelger + ", tokenHandler=" + tokenHandler + ", retry=" + retry + "]";
     }
 
 }

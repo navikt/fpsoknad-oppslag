@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.lookup.rest.sak;
 
+import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static java.util.stream.Collectors.joining;
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.TEXT_XML_VALUE;
 
@@ -13,10 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
+
+import io.github.resilience4j.retry.Retry;
+import no.nav.foreldrepenger.lookup.util.RetryUtil;
 
 public class StsClient {
 
@@ -26,57 +29,78 @@ public class StsClient {
     private final String stsUrl;
     private final String serviceUser;
     private final String servicePwd;
-    private final String soapRequestTemplate;
+    private final String template;
+    private final Retry retry;
 
-    public StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd) {
+    StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd) {
+        this(restOperations, stsUrl, serviceUser, servicePwd, retry());
+    }
+
+    public StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd, Retry retry) {
         this.restOperations = restOperations;
         this.stsUrl = stsUrl;
         this.serviceUser = serviceUser;
         this.servicePwd = servicePwd;
-        this.soapRequestTemplate = readTemplate();
+        this.retry = retry;
+        this.template = readTemplate(serviceUser, servicePwd);
     }
 
-    public String exchangeForSamlToken(String oidcToken) {
+    public String oidcToSamlToken(String oidcToken) {
         LOG.trace("Attempting OIDC to SAML token exchange from {}", stsUrl);
+        String respons = postWithRetry(new HttpEntity<>(body(oidcToken), headers()));
+        LOG.trace("Got SAML token OK");
+        return samlAssertionFra(respons);
+    }
+
+    private String postWithRetry(HttpEntity<String> request) {
+        return decorateSupplier(retry, () -> restOperations.postForObject(stsUrl, request, String.class)).get();
+    }
+
+    private String body(String oidcToken) {
+        return injectToken(encode(oidcToken));
+    }
+
+    private static HttpHeaders headers() {
         HttpHeaders headers = new HttpHeaders();
         headers.set(CONTENT_TYPE, TEXT_XML_VALUE);
         headers.set("SOAPAction", "http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Issue");
-        String requestBody = replacePlaceholders(Base64.getEncoder().encodeToString(oidcToken.getBytes()));
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<String> response = restOperations.exchange(stsUrl, HttpMethod.POST, requestEntity, String.class);
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new RuntimeException("Error while exchanging token, STS returned " + response.getStatusCode());
-        }
-        LOG.trace("Got SAML token");
-        return extractSamlAssertionFrom(response.getBody());
+        return headers;
     }
 
-    private String readTemplate() {
+    private String encode(String oidcToken) {
+        return Base64.getEncoder().encodeToString(oidcToken.getBytes());
+    }
+
+    private static String readTemplate(String serviceUser, String servicePwd) {
         try (InputStream stream = StsClient.class.getResourceAsStream("/template/stsenvelope.txt");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-            return reader.lines().collect(joining("\n"));
-        } catch (Exception ex) {
-            throw new RuntimeException("Error while reading SOAP request template", ex);
+            return reader.lines()
+                    .collect(joining("\n"))
+                    .replace("%SOMESERVICEUSER%", serviceUser)
+                    .replace("%THEPASSWORD%", servicePwd);
+        } catch (Exception e) {
+            throw new IllegalStateException("Error while reading SOAP request template", e);
         }
     }
 
-    protected String replacePlaceholders(String oidcToken) {
-        return soapRequestTemplate.replace("%SOMESERVICEUSER%", serviceUser)
-                .replace("%THEPASSWORD%", servicePwd)
-                .replace("%OIDCTOKEN%", oidcToken);
+    String injectToken(String oidcToken) {
+        return template.replace("%OIDCTOKEN%", oidcToken);
     }
 
-    protected String extractSamlAssertionFrom(String envelope) {
+    static String samlAssertionFra(String envelope) {
         int startIdx = envelope.indexOf("<saml2:Assertion");
         int endIdx = envelope.indexOf("</saml2:Assertion>") + 18;
         return envelope.substring(startIdx, endIdx);
     }
 
+    private static Retry retry() {
+        return RetryUtil.retry(DEFAULT_RETRIES, "STS", HttpServerErrorException.class, LOG);
+    }
+
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [restOperations=" + restOperations + ", stsUrl=" + stsUrl
-                + ", serviceUser=" + serviceUser
-                + ", servicePwd=" + servicePwd + ", soapRequestTemplate=" + soapRequestTemplate + "]";
+        return "StsClient [restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", serviceUser=" + serviceUser
+                + ", servicePwd=" + "**********" + ", template=" + template + ", retry=" + retry + "]";
     }
 
 }

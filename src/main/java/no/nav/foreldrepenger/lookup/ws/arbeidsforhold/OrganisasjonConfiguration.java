@@ -1,14 +1,23 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
-import no.nav.foreldrepenger.lookup.ws.WsClient;
-import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
+import javax.xml.ws.soap.SOAPFaultException;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.github.resilience4j.retry.Retry;
+import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.ws.WsClient;
+import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
+
 @Configuration
 public class OrganisasjonConfiguration extends WsClient<OrganisasjonV5> {
+
+    private static final String ORGANISASJON_V5V3RETRY = "organisasjonV5V3retry";
 
     @Bean
     @Qualifier("organisasjonV5")
@@ -26,7 +35,15 @@ public class OrganisasjonConfiguration extends WsClient<OrganisasjonV5> {
 
     @Bean
     public OrganisasjonClient organisasjonClientWs(@Qualifier("organisasjonV5") OrganisasjonV5 organisasjonV5,
-                                              @Qualifier("healthIndicatorOrganisasjon") OrganisasjonV5 healthIndicator) {
-        return new OrganisasjonClientWs(organisasjonV5, healthIndicator);
+            @Qualifier("healthIndicatorOrganisasjon") OrganisasjonV5 healthIndicator, TokenHandler tokenHandler,
+            @Qualifier(ORGANISASJON_V5V3RETRY) Retry retry) {
+        return new OrganisasjonClientWs(organisasjonV5, healthIndicator, tokenHandler, retry);
+    }
+
+    @Bean
+    @Qualifier(ORGANISASJON_V5V3RETRY)
+    public Retry retryConfig(@Value("${retry.organisasjon.max:2}") int max) {
+        return RetryUtil.retry(max, "Organisasjon", SOAPFaultException.class,
+                LoggerFactory.getLogger(OrganisasjonClientWs.class));
     }
 }

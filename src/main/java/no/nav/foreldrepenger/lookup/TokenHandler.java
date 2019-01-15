@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.errorhandling.UnauthenticatedException;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
 import no.nav.security.oidc.context.TokenContext;
+import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @Component
 public class TokenHandler {
@@ -55,8 +55,8 @@ public class TokenHandler {
                 .orElseThrow(unauthenticated("Fant ikke subject"));
     }
 
-    private static Supplier<? extends UnauthenticatedException> unauthenticated(String msg) {
-        return () -> new UnauthenticatedException(msg);
+    private static Supplier<? extends OIDCTokenValidatorException> unauthenticated(String msg) {
+        return () -> new OIDCTokenValidatorException(msg);
     }
 
     private JWTClaimsSet claimSet() {

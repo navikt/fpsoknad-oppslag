@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
 import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.soapFault;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -14,10 +15,6 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPFactory;
-import javax.xml.soap.SOAPFault;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +74,7 @@ public class HentPersonInfoTest {
     }
 
     @Test
-    public void testPersonIkkeFunnetTriggerIngenRetry() throws Exception {
+    public void testPersonIkkeFunnetIngenRetry() throws Exception {
         when(tps.hentPerson(any()))
                 .thenThrow(new HentPersonPersonIkkeFunnet("Fant ikke", new PersonIkkeFunnet()));
         assertThrows(NotFoundException.class, () -> {
@@ -157,14 +154,6 @@ public class HentPersonInfoTest {
         }
         foedselsdato.setFoedselsdato(xcal);
         return foedselsdato;
-    }
-
-    private SOAPFaultException soapFault() throws SOAPException {
-        SOAPFactory soapFactory = SOAPFactory.newInstance();
-        SOAPFault soapFault = soapFactory.createFault(
-                "Your custom message",
-                new QName("http://schemas.xmlsoap.org/soap/envelope/", "Client"));
-        return new SOAPFaultException(soapFault);
     }
 
     private Personnavn navn() {
