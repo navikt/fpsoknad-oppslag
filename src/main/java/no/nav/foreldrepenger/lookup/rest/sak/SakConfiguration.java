@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.lookup.rest.sak;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,10 +29,10 @@ public class SakConfiguration {
     private static final String STS_RETRY_CONFIG = "stsRetryConfig";
 
     @Value("${SAK_SAKER_URL}")
-    private String sakBaseUrl;
+    private URI sakBaseUrl;
 
     @Value("${SECURITYTOKENSERVICE_URL}")
-    private String stsUrl;
+    private URI stsUrl;
 
     @Value("${FPSELVBETJENING_USERNAME}")
     private String serviceUser;

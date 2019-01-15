@@ -9,6 +9,7 @@ import static org.springframework.http.MediaType.TEXT_XML_VALUE;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.Base64;
 
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import no.nav.foreldrepenger.lookup.util.RetryUtil;
 
 public class StsClient {
 
+    private static final String TEMPLATE_STSENVELOPE_TXT = "/template/stsenvelope.txt";
+
     private static final String PASSWORDPLACEHOLDER = "%THEPASSWORD%";
 
     private static final String USERPLACEHOLDER = "%SOMESERVICEUSER%";
@@ -30,15 +33,15 @@ public class StsClient {
     private static final Logger LOG = LoggerFactory.getLogger(StsClient.class);
 
     private final RestOperations restOperations;
-    private final String stsUrl;
+    private final URI stsUrl;
     private final String template;
     private final Retry retry;
 
-    StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd) {
+    StsClient(RestOperations restOperations, URI stsUrl, String serviceUser, String servicePwd) {
         this(restOperations, stsUrl, serviceUser, servicePwd, retry());
     }
 
-    public StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd, Retry retry) {
+    public StsClient(RestOperations restOperations, URI stsUrl, String serviceUser, String servicePwd, Retry retry) {
         this.restOperations = restOperations;
         this.stsUrl = stsUrl;
         this.retry = retry;
@@ -48,7 +51,7 @@ public class StsClient {
     String oidcToSamlToken(String oidcToken) {
         LOG.trace("Attempting OIDC to SAML token exchange from {}", stsUrl);
         String respons = postWithRetry(new HttpEntity<>(body(oidcToken), headers()));
-        LOG.trace("Got SAML token OK");
+        LOG.trace("SAML Token veksling OK");
         return samlAssertionFra(respons);
     }
 
@@ -76,7 +79,7 @@ public class StsClient {
     }
 
     private static String readTemplate(String serviceUser, String servicePwd) {
-        try (InputStream stream = StsClient.class.getResourceAsStream("/template/stsenvelope.txt");
+        try (InputStream stream = StsClient.class.getResourceAsStream(TEMPLATE_STSENVELOPE_TXT);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             return reader.lines()
                     .collect(joining("\n"))
@@ -100,5 +103,4 @@ public class StsClient {
         return "StsClient [restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", template=" + template
                 + ", retry=" + retry + "]";
     }
-
 }

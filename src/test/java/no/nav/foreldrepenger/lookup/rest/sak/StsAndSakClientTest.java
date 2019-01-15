@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +11,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -39,19 +39,20 @@ import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class StsClientTest {
+public class StsAndSakClientTest {
 
     private static final String ID = "222222222";
     private static final AktorId AKTOR = new AktorId(ID);
     private static final SignedJWT SIGNED_JWT = JwtTokenGenerator.createSignedJWT("22222222222");
     private static final String MY_OIDC_TOKEN = "MY.OIDC.TOKEN";
-    private static final String STSURL = "http://sts";
     private static final String MYPW = "mypw";
     private static final String MYUSER = "myuser";
     private static final String ASSERTION = "<saml2:Assertion .......... </saml2:Assertion>";
     private static final String ENVELOPE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<soapenv:Envelope  ..." + ASSERTION + "</wst:blabla</soapenv:Envelope>";
-    private static final String SAKURL = "http://sak";
+    private static final URI SAKURL = URI.create("http://sak");
+    private static final URI STSURL = URI.create("http://sts");
+
     @Mock
     private RestOperations restOperations;
     @Mock
@@ -69,7 +70,7 @@ public class StsClientTest {
     @Test
     public void testSakAndSTSRetryRecovery() {
         when(tokenHandler.getToken()).thenReturn(SIGNED_JWT.serialize());
-        when(restOperations.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),
+        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class)))
                         .thenThrow(internalServerError())
                         .thenReturn(remoteSaker());
@@ -77,9 +78,24 @@ public class StsClientTest {
                 .thenThrow(internalServerError())
                 .thenReturn(ENVELOPE);
         assertEquals(sakclient.sakerFor(AKTOR).size(), 1);
-        verify(restOperations, times(2)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),
+        verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
         verify(restOperations, times(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testVanilla() {
+        when(tokenHandler.getToken()).thenReturn(SIGNED_JWT.serialize());
+        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
+                any(ParameterizedTypeReference.class)))
+                        .thenReturn(remoteSaker());
+        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
+                .thenReturn(ENVELOPE);
+        assertEquals(sakclient.sakerFor(AKTOR).size(), 1);
+        verify(restOperations).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
+                any(ParameterizedTypeReference.class));
+        verify(restOperations).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
     }
 
     @SuppressWarnings("unchecked")
@@ -88,11 +104,11 @@ public class StsClientTest {
         when(tokenHandler.getToken()).thenReturn(SIGNED_JWT.serialize());
         when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
                 .thenReturn(ENVELOPE);
-        when(restOperations.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),
+        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class)))
                         .thenThrow(internalServerError());
         assertThrows(HttpServerErrorException.class, () -> sakclient.sakerFor(AKTOR));
-        verify(restOperations, times(2)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class),
+        verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
     }
 

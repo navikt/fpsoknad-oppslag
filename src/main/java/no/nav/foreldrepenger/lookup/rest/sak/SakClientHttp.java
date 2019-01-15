@@ -10,6 +10,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
@@ -35,17 +37,17 @@ public class SakClientHttp implements SakClient {
     private static final Logger LOG = LoggerFactory.getLogger(SakClientHttp.class);
 
     private final RestOperations restOperations;
-    private final String sakBaseUrl;
+    private final URI sakBaseUrl;
     private final StsClient stsClient;
     private final TokenHandler tokenHandler;
     private final Retry retry;
 
-    public SakClientHttp(String sakBaseUrl, RestOperations restOperations, StsClient stsClient,
+    public SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
             TokenHandler tokenHandler) {
         this(sakBaseUrl, restOperations, stsClient, tokenHandler, retry());
     }
 
-    public SakClientHttp(String sakBaseUrl, RestOperations restOperations, StsClient stsClient,
+    public SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
             TokenHandler tokenHandler, Retry retry) {
         this.restOperations = restOperations;
         this.sakBaseUrl = sakBaseUrl;
@@ -81,8 +83,14 @@ public class SakClientHttp implements SakClient {
 
     private ResponseEntity<List<RemoteSak>> sakerFor(String aktor, HttpEntity<String> request) {
         return decorateSupplier(retry, () -> {
-            String url = sakBaseUrl + "?aktoerId=" + aktor + "&applikasjon=IT01&tema=FOR";
-            LOG.trace("henter saker fra {}", url);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("aktoerId", aktor);
+            headers.add("applikasjon", "IT01");
+            headers.add("tema", "FOR");
+            URI url = uriFra(sakBaseUrl, headers);
+            // String url = sakBaseUrl + "?aktoerId=" + aktor +
+            // "&applikasjon=IT01&tema=FOR";
+            LOG.trace("Henter saker fra {}", url);
             return restOperations.exchange(
                     url,
                     HttpMethod.GET,
@@ -90,6 +98,13 @@ public class SakClientHttp implements SakClient {
                     new ParameterizedTypeReference<List<RemoteSak>>() {
                     });
         }).get();
+    }
+
+    private static URI uriFra(URI base, HttpHeaders queryParams) {
+        return UriComponentsBuilder
+                .fromUri(base)
+                .queryParams(queryParams).build().toUri();
+
     }
 
     private static HttpHeaders headers(String samlToken) {
