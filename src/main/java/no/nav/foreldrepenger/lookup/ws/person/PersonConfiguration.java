@@ -17,16 +17,18 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 @Configuration
 public class PersonConfiguration extends WsClient<PersonV3> {
 
+    private static final String PERSON_V3 = "personV3";
+    private static final String HEALTH_INDICATOR_PERSON = "healthIndicatorPerson";
     private static final String PERSONV3_RETRY = "personV3retry";
 
     @Bean
-    @Qualifier("personV3")
+    @Qualifier(PERSON_V3)
     public PersonV3 personV3(@Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") String serviceUrl) {
         return createPortForExternalUser(serviceUrl, PersonV3.class);
     }
 
     @Bean
-    @Qualifier("healthIndicatorPerson")
+    @Qualifier(HEALTH_INDICATOR_PERSON)
     public PersonV3 healthIndicatorPerson(@Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") String serviceUrl) {
         return createPortForSystemUser(serviceUrl, PersonV3.class);
     }
@@ -38,8 +40,8 @@ public class PersonConfiguration extends WsClient<PersonV3> {
     }
 
     @Bean
-    public PersonClient personKlientTpsWs(@Qualifier("personV3") PersonV3 personV3,
-            @Qualifier("healthIndicatorPerson") PersonV3 healthIndicator, TokenHandler handler,
+    public PersonClient personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
+            @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenHandler handler,
             Barnutvelger barnutvelger, @Qualifier(PERSONV3_RETRY) Retry retry) {
         return new PersonClientTpsWs(personV3, healthIndicator, handler, barnutvelger, retry);
     }

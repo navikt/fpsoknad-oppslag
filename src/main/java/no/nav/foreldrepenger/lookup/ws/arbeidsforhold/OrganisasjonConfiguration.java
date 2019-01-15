@@ -17,25 +17,27 @@ import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
 @Configuration
 public class OrganisasjonConfiguration extends WsClient<OrganisasjonV5> {
 
+    private static final String ORGANISASJON_V5 = "organisasjonV5";
+    private static final String HEALTH_INDICATOR_ORGANISASJON = "healthIndicatorOrganisasjon";
     private static final String ORGANISASJON_V5V3RETRY = "organisasjonV5V3retry";
 
     @Bean
-    @Qualifier("organisasjonV5")
+    @Qualifier(ORGANISASJON_V5)
     public OrganisasjonV5 organisasjonV5(
             @Value("${VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL}") String serviceUrl) {
         return createPortForExternalUser(serviceUrl, OrganisasjonV5.class);
     }
 
     @Bean
-    @Qualifier("healthIndicatorOrganisasjon")
+    @Qualifier(HEALTH_INDICATOR_ORGANISASJON)
     public OrganisasjonV5 healthIndicatorOrganissjon(
             @Value("${VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL}") String serviceUrl) {
         return createPortForSystemUser(serviceUrl, OrganisasjonV5.class);
     }
 
     @Bean
-    public OrganisasjonClient organisasjonClientWs(@Qualifier("organisasjonV5") OrganisasjonV5 organisasjonV5,
-            @Qualifier("healthIndicatorOrganisasjon") OrganisasjonV5 healthIndicator, TokenHandler tokenHandler,
+    public OrganisasjonClient organisasjonClientWs(@Qualifier(ORGANISASJON_V5) OrganisasjonV5 organisasjonV5,
+            @Qualifier(HEALTH_INDICATOR_ORGANISASJON) OrganisasjonV5 healthIndicator, TokenHandler tokenHandler,
             @Qualifier(ORGANISASJON_V5V3RETRY) Retry retry) {
         return new OrganisasjonClientWs(organisasjonV5, healthIndicator, tokenHandler, retry);
     }

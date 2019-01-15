@@ -17,23 +17,25 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 @Configuration
 public class AktorIdConfiguration extends WsClient<AktoerV2> {
 
+    private static final String HEALTH_INDICATOR_AKTØR = "healthIndicatorAktør";
+    private static final String AKTOER_V2 = "aktoerV2";
     private static final String AKTOER_V2RETRY = "aktoerV2retry";
 
     @Bean
-    @Qualifier("aktoerV2")
+    @Qualifier(AKTOER_V2)
     public AktoerV2 aktoerV2(@Value("${AKTOER_V2_ENDPOINTURL}") String serviceUrl) {
         return createPortForExternalUser(serviceUrl, AktoerV2.class);
     }
 
     @Bean
-    @Qualifier("healthIndicatorAktør")
+    @Qualifier(HEALTH_INDICATOR_AKTØR)
     public AktoerV2 healthIndicatorAktør(@Value("${AKTOER_V2_ENDPOINTURL}") String serviceUrl) {
         return createPortForSystemUser(serviceUrl, AktoerV2.class);
     }
 
     @Bean
-    public AktorIdClient aktorIdClientWs(@Qualifier("aktoerV2") AktoerV2 aktoerV2,
-            @Qualifier("healthIndicatorAktør") AktoerV2 healthIndicator, TokenHandler tokenHandler,
+    public AktorIdClient aktorIdClientWs(@Qualifier(AKTOER_V2) AktoerV2 aktoerV2,
+            @Qualifier(HEALTH_INDICATOR_AKTØR) AktoerV2 healthIndicator, TokenHandler tokenHandler,
             @Qualifier(AKTOER_V2RETRY) Retry retryConfig) {
         return new AktorIdClientWs(aktoerV2, healthIndicator, tokenHandler, retryConfig);
     }

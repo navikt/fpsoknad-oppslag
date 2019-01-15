@@ -17,25 +17,27 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 @Configuration
 public class AaregConfiguration extends WsClient<ArbeidsforholdV3> {
 
+    private static final String HEALTH_INDICATOR_AAREG = "healthIndicatorAareg";
+    private static final String ARBEIDSFORHOLD_V3 = "arbeidsforholdV3";
     private static final String ARBEIDSFORHOLD_V3RETRY = "arbeidsforholdV3retry";
 
     @Bean
-    @Qualifier("arbeidsforholdV3")
+    @Qualifier(ARBEIDSFORHOLD_V3)
     public ArbeidsforholdV3 arbeidsforholdV3(
             @Value("${VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL}") String serviceUrl) {
         return createPortForExternalUser(serviceUrl, ArbeidsforholdV3.class);
     }
 
     @Bean
-    @Qualifier("healthIndicatorAareg")
+    @Qualifier(HEALTH_INDICATOR_AAREG)
     public ArbeidsforholdV3 healthIndicatorAareg(
             @Value("${VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL}") String serviceUrl) {
         return createPortForSystemUser(serviceUrl, ArbeidsforholdV3.class);
     }
 
     @Bean
-    public ArbeidsforholdClient aaregClientWs(@Qualifier("arbeidsforholdV3") ArbeidsforholdV3 arbeidsforholdV3,
-            @Qualifier("healthIndicatorAareg") ArbeidsforholdV3 healthIndicator,
+    public ArbeidsforholdClient aaregClientWs(@Qualifier(ARBEIDSFORHOLD_V3) ArbeidsforholdV3 arbeidsforholdV3,
+            @Qualifier(HEALTH_INDICATOR_AAREG) ArbeidsforholdV3 healthIndicator,
             OrganisasjonClient organisasjonClient, TokenHandler tokenHandler,
             @Qualifier(ARBEIDSFORHOLD_V3RETRY) Retry retryConfig) {
         return new ArbeidsforholdClientWs(arbeidsforholdV3, healthIndicator, organisasjonClient, tokenHandler,

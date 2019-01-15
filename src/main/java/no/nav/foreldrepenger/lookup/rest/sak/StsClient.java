@@ -23,12 +23,14 @@ import no.nav.foreldrepenger.lookup.util.RetryUtil;
 
 public class StsClient {
 
+    private static final String PASSWORDPLACEHOLDER = "%THEPASSWORD%";
+
+    private static final String USERPLACEHOLDER = "%SOMESERVICEUSER%";
+
     private static final Logger LOG = LoggerFactory.getLogger(StsClient.class);
 
     private final RestOperations restOperations;
     private final String stsUrl;
-    private final String serviceUser;
-    private final String servicePwd;
     private final String template;
     private final Retry retry;
 
@@ -39,17 +41,19 @@ public class StsClient {
     public StsClient(RestOperations restOperations, String stsUrl, String serviceUser, String servicePwd, Retry retry) {
         this.restOperations = restOperations;
         this.stsUrl = stsUrl;
-        this.serviceUser = serviceUser;
-        this.servicePwd = servicePwd;
         this.retry = retry;
         this.template = readTemplate(serviceUser, servicePwd);
     }
 
-    public String oidcToSamlToken(String oidcToken) {
+    String oidcToSamlToken(String oidcToken) {
         LOG.trace("Attempting OIDC to SAML token exchange from {}", stsUrl);
         String respons = postWithRetry(new HttpEntity<>(body(oidcToken), headers()));
         LOG.trace("Got SAML token OK");
         return samlAssertionFra(respons);
+    }
+
+    String injectToken(String oidcToken) {
+        return template.replace("%OIDCTOKEN%", oidcToken);
     }
 
     private String postWithRetry(HttpEntity<String> request) {
@@ -76,21 +80,15 @@ public class StsClient {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             return reader.lines()
                     .collect(joining("\n"))
-                    .replace("%SOMESERVICEUSER%", serviceUser)
-                    .replace("%THEPASSWORD%", servicePwd);
+                    .replace(USERPLACEHOLDER, serviceUser)
+                    .replace(PASSWORDPLACEHOLDER, servicePwd);
         } catch (Exception e) {
             throw new IllegalStateException("Error while reading SOAP request template", e);
         }
     }
 
-    String injectToken(String oidcToken) {
-        return template.replace("%OIDCTOKEN%", oidcToken);
-    }
-
     static String samlAssertionFra(String envelope) {
-        int startIdx = envelope.indexOf("<saml2:Assertion");
-        int endIdx = envelope.indexOf("</saml2:Assertion>") + 18;
-        return envelope.substring(startIdx, endIdx);
+        return envelope.substring(envelope.indexOf("<saml2:Assertion"), envelope.indexOf("</saml2:Assertion>") + 18);
     }
 
     private static Retry retry() {
@@ -99,8 +97,8 @@ public class StsClient {
 
     @Override
     public String toString() {
-        return "StsClient [restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", serviceUser=" + serviceUser
-                + ", servicePwd=" + "**********" + ", template=" + template + ", retry=" + retry + "]";
+        return "StsClient [restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", template=" + template
+                + ", retry=" + retry + "]";
     }
 
 }
