@@ -67,14 +67,14 @@ public class SakConfiguration {
 
     @Bean
     @Qualifier(SAK_RETRY_CONFIG)
-    public Retry sakRetryConfig(@Value("${retry.sak.max:2}") int max) {
+    public Retry sakRetry(@Value("${retry.sak.max:2}") int max) {
         return RetryUtil.retry(max, "saker", HttpServerErrorException.class,
                 LoggerFactory.getLogger(SakClientHttp.class));
     }
 
     @Bean
     @Qualifier(STS_RETRY_CONFIG)
-    public Retry stsRetryConfig(@Value("${retry.sts.max:2}") int max) {
+    public Retry stsRetry(@Value("${retry.sts.max:2}") int max) {
         return RetryUtil.retry(max, "STS", HttpServerErrorException.class, LoggerFactory.getLogger(StsClient.class));
     }
 

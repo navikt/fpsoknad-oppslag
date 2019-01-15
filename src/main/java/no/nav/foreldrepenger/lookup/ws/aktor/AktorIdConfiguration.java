@@ -40,7 +40,7 @@ public class AktorIdConfiguration extends WsClient<AktoerV2> {
 
     @Bean
     @Qualifier(AKTOER_V2RETRY)
-    public Retry retryConfig(@Value("${retry.aktør.max:2}") int max) {
+    public Retry aktørRetry(@Value("${retry.aktør.max:2}") int max) {
         return RetryUtil.retry(max, "aktør/fnr", SOAPFaultException.class,
                 LoggerFactory.getLogger(AktorIdClientWs.class));
     }

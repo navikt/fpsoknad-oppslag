@@ -46,7 +46,7 @@ public class PersonConfiguration extends WsClient<PersonV3> {
 
     @Bean
     @Qualifier(PERSONV3_RETRY)
-    public Retry retryConfig(@Value("${retry.tps.max:2}") int max) {
+    public Retry personRetry(@Value("${retry.tps.max:2}") int max) {
         return RetryUtil.retry(max, "person", SOAPFaultException.class,
                 LoggerFactory.getLogger(PersonClientTpsWs.class));
     }

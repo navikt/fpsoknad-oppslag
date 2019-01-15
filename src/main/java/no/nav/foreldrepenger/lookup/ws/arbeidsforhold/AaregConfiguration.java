@@ -44,7 +44,7 @@ public class AaregConfiguration extends WsClient<ArbeidsforholdV3> {
 
     @Bean
     @Qualifier(ARBEIDSFORHOLD_V3RETRY)
-    public Retry retryConfig(@Value("${retry.aareg.max:2}") int max) {
+    public Retry aaregRetry(@Value("${retry.aareg.max:2}") int max) {
         return RetryUtil.retry(max, "AAREG", SOAPFaultException.class,
                 LoggerFactory.getLogger(ArbeidsforholdClientWs.class));
     }
