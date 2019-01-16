@@ -37,6 +37,8 @@ fasitResources:
         url: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
     - alias: virksomhet:foreldrepengesak_v1
       resourceType: webserviceendpoint
+    - alias: InnsynJournal_v2
+      resourceType: webserviceendpoint
     - alias: Aktoer_V2
       resourceType: webserviceendpoint
     - alias: virksomhet:Person_v3

@@ -15,6 +15,7 @@ securitytokenservice.uri:  http://localhost
 http.proxy:
 
 AKTOER_V2_ENDPOINTURL: http://localhost
+JOURNAL_V2_ENDPOINTURL: http://localhost
 VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL: http://localhost
 VIRKSOMHET_INNTEKT_V3_ENDPOINTURL:  http://localhost
 VIRKSOMHET_PERSON_V3_ENDPOINTURL:  http://localhost
