@@ -62,6 +62,19 @@
                     <encoding>utf-8</encoding>
                 </configuration>
                 <executions>
+                <execution>
+                        <id>joark</id>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
+                                <wsdlFile>Binding.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <wsdlDirectory>src/main/resources/wsdl/joark/</wsdlDirectory>
+                            <sourceDestDir>target/generated-sources</sourceDestDir>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>WsdlAktor</id>
                         <goals>
