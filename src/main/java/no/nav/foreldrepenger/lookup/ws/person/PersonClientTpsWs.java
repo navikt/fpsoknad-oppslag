@@ -76,6 +76,7 @@ public class PersonClientTpsWs implements PersonClient {
         LOG.info(CONFIDENTIAL, "Fra ID {}", id);
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = tpsPersonWithRetry(request);
         Person p = person(id, tpsPerson, barnFor(tpsPerson));
+        LOG.info("Slo opp person OK");
         LOG.info(CONFIDENTIAL, "Person er {}", p);
         return p;
     }
