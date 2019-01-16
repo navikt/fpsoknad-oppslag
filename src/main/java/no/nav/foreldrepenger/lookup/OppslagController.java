@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.lookup;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,10 +24,11 @@ import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.lookup.ws.person.ID;
 import no.nav.foreldrepenger.lookup.ws.person.Person;
 import no.nav.foreldrepenger.lookup.ws.person.PersonClient;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.api.Unprotected;
 
 @RestController
-@no.nav.security.oidc.api.ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
+@ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(OppslagController.OPPSLAG)
 public class OppslagController {
 
@@ -42,7 +42,7 @@ public class OppslagController {
 
     private final ArbeidsforholdClient arbeidsforholdClient;
 
-    private final TokenUtil tokenHandler;
+    private final TokenUtil tokenUtil;
 
     @Inject
     public OppslagController(AktorIdClient aktorClient, PersonClient personClient,
@@ -51,11 +51,11 @@ public class OppslagController {
         this.aktorClient = aktorClient;
         this.personClient = personClient;
         this.arbeidsforholdClient = arbeidsforholdClient;
-        this.tokenHandler = tokenHandler;
+        this.tokenUtil = tokenHandler;
     }
 
     @Unprotected
-    @GetMapping(value = "/ping", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/ping")
     public String ping(
             @RequestParam(name = "register", defaultValue = "all", required = false) PingableRegisters register) {
         LOG.info("Vil pinge register {}", register);
@@ -80,24 +80,24 @@ public class OppslagController {
 
     @GetMapping
     public Søkerinfo essensiellSøkerinfo() {
-        Fødselsnummer fnr = tokenHandler.autentisertBruker();
+        Fødselsnummer fnr = tokenUtil.autentisertBruker();
         AktorId aktorId = aktorClient.aktorIdForFnr(fnr);
         Person person = personClient.hentPersonInfo(new ID(aktorId, fnr));
         List<Arbeidsforhold> arbeidsforhold = arbeidsforholdClient.aktiveArbeidsforhold(fnr);
         return new Søkerinfo(person, arbeidsforhold);
     }
 
-    @GetMapping(value = "/aktor")
+    @GetMapping("/aktor")
     public AktorId getAktørId() {
-        return getAktørIdForFNR(tokenHandler.autentisertBruker());
+        return getAktørIdForFNR(tokenUtil.autentisertBruker());
     }
 
-    @GetMapping(value = "/aktorfnr")
+    @GetMapping("/aktorfnr")
     public AktorId getAktørIdForFNR(@RequestParam(name = "fnr") Fødselsnummer fnr) {
         return aktorClient.aktorIdForFnr(fnr);
     }
 
-    @GetMapping(value = "/fnr")
+    @GetMapping("/fnr")
     public Fødselsnummer getFNRforAktørIdR(@RequestParam(name = "aktorId") AktorId aktorId) {
         return aktorClient.fnrForAktørId(aktorId);
     }

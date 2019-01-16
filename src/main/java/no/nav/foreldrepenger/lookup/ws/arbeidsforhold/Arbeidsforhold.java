@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Arbeidsforhold extends TidsAvgrensetBrukerInfo {
 
-    private String arbeidsgiverId;
-    private String arbeidsgiverIdType;
-    private Double stillingsprosent;
+    private final String arbeidsgiverId;
+    private final String arbeidsgiverIdType;
+    private final Double stillingsprosent;
     private String arbeidsgiverNavn;
 
     @JsonCreator

@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -105,12 +104,10 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> logAndRespond(HttpStatus status, Exception e, WebRequest req,
             List<Object> messages) {
-        if (!CollectionUtils.isEmpty(messages)) {
-            LOG.warn("{}", messages, e);
-        }
-        return handleExceptionInternal(e,
-                new ApiError(status, e, messages),
-                new HttpHeaders(), status, req);
+
+        ApiError apiError = new ApiError(status, e, messages);
+        LOG.warn("{} [{}]", status.value(), apiError.getMessages(), e);
+        return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
     private static List<String> validationErrors(MethodArgumentNotValidException e) {

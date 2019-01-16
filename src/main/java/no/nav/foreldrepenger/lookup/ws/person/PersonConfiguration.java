@@ -1,15 +1,16 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.retry;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -17,7 +18,7 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 @Configuration
 public class PersonConfiguration extends WsClient<PersonV3> {
 
-    private static final String PERSON_V3 = "personV3";
+    private static final String PERSON_V3 = "person";
     private static final String HEALTH_INDICATOR_PERSON = "healthIndicatorPerson";
     private static final String PERSONV3_RETRY = "personV3retry";
 
@@ -49,8 +50,7 @@ public class PersonConfiguration extends WsClient<PersonV3> {
     @Bean
     @Qualifier(PERSONV3_RETRY)
     public Retry personRetry(@Value("${retry.tps.max:2}") int max) {
-        return RetryUtil.retry(max, "person", SOAPFaultException.class,
-                LoggerFactory.getLogger(PersonClientTpsWs.class));
+        return retry(max, PERSON_V3, SOAPFaultException.class, getLogger(PersonClientTpsWs.class));
     }
 
 }

@@ -2,9 +2,9 @@ package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
 import java.util.Optional;
 
-public interface OrganisasjonClient {
+import no.nav.foreldrepenger.lookup.Pingable;
 
-    void ping();
+public interface OrganisasjonClient extends Pingable {
 
     Optional<String> nameFor(String orgnr);
 

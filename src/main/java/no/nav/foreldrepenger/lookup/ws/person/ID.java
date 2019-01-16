@@ -44,9 +44,6 @@ public class ID {
 
     @Override
     public String toString() {
-        return "ID{" +
-                "aktorId=" + aktorId +
-                ", fnr=" + fnr +
-                '}';
+        return getClass().getSimpleName() + " [aktorId=" + aktorId + ", fnr=" + fnr + "]";
     }
 }

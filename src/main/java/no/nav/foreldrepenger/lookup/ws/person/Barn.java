@@ -1,11 +1,11 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import static java.util.Objects.requireNonNull;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static java.util.Objects.requireNonNull;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class Barn {
 
@@ -16,7 +16,8 @@ public class Barn {
     private final Kjønn kjønn;
     private final AnnenForelder annenForelder;
 
-    public Barn(Fødselsnummer fnrSøker, Fødselsnummer fnr, LocalDate fødselsdato, Navn navn, Kjønn kjønn, AnnenForelder annenForelder) {
+    public Barn(Fødselsnummer fnrSøker, Fødselsnummer fnr, LocalDate fødselsdato, Navn navn, Kjønn kjønn,
+            AnnenForelder annenForelder) {
         this.fnr = fnr;
         this.fnrSøker = fnrSøker;
         this.fødselsdato = requireNonNull(fødselsdato);
@@ -71,6 +72,8 @@ public class Barn {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + fnr + "]";
+        return getClass().getSimpleName() + " [fnr=" + fnr + ", fnrSøker=" + fnrSøker + ", fødselsdato=" + fødselsdato
+                + ", navn=" + navn + ", kjønn=" + kjønn + ", annenForelder=" + annenForelder + "]";
     }
+
 }

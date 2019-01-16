@@ -27,29 +27,29 @@ public class AktorIdClientWs implements AktorIdClient {
 
     private final AktoerV2 aktoerV2;
     private final AktoerV2 healthIndicator;
-    private final TokenUtil tokenHandler;
-    private final Retry retry;
+    private final TokenUtil tokenUtil;
+    private final Retry retryConfig;
 
-    AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenHandler) {
-        this(aktoerV2, healthIndicator, tokenHandler, retry());
+    AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil) {
+        this(aktoerV2, healthIndicator, tokenUtil, defaultRetryConfig());
     }
 
-    public AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenHandler, Retry retry) {
+    public AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil, Retry retryConfig) {
         this.aktoerV2 = Objects.requireNonNull(aktoerV2);
         this.healthIndicator = Objects.requireNonNull(healthIndicator);
-        this.tokenHandler = tokenHandler;
-        this.retry = retry;
+        this.tokenUtil = tokenUtil;
+        this.retryConfig = retryConfig;
     }
 
     @Override
     @Cacheable(cacheNames = "aktoer")
     public AktorId aktorIdForFnr(Fødselsnummer fnr) {
-        return new AktorId(decorateSupplier(retry, () -> hentAktør(fnr)).get());
+        return new AktorId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
     }
 
     @Override
     public Fødselsnummer fnrForAktørId(AktorId aktørId) {
-        return new Fødselsnummer(decorateSupplier(retry, () -> hentId(aktørId)).get());
+        return new Fødselsnummer(decorateSupplier(retryConfig, () -> hentId(aktørId)).get());
     }
 
     @Override
@@ -68,8 +68,8 @@ public class AktorIdClientWs implements AktorIdClient {
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(e);
         } catch (SOAPFaultException e) {
-            if (tokenHandler.isExpired()) {
-                throw new TokenExpiredException(tokenHandler.getExp(), e);
+            if (tokenUtil.isExpired()) {
+                throw new TokenExpiredException(tokenUtil.getExp(), e);
             }
             throw e;
         }
@@ -82,8 +82,8 @@ public class AktorIdClientWs implements AktorIdClient {
             LOG.warn("Henting av fnr har feilet", e);
             throw new NotFoundException(e);
         } catch (SOAPFaultException e) {
-            if (tokenHandler.isExpired()) {
-                throw new TokenExpiredException(tokenHandler.getExp(), e);
+            if (tokenUtil.isExpired()) {
+                throw new TokenExpiredException(tokenUtil.getExp(), e);
             }
             throw e;
         }
@@ -101,13 +101,13 @@ public class AktorIdClientWs implements AktorIdClient {
         return req;
     }
 
-    private static Retry retry() {
+    private static Retry defaultRetryConfig() {
         return RetryUtil.retry(2, "aktør/fnr", SOAPFaultException.class, LOG);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [aktoerV2=" + aktoerV2 + ", healthIndicator=" + healthIndicator
-                + ", tokenHandler=" + tokenHandler + ", retry=" + retry + "]";
+                + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig + "]";
     }
 }

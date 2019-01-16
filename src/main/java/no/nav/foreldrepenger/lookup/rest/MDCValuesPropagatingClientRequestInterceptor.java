@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.lookup.rest;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.lookup.Constants.X_CORRELATION_ID;
+import static no.nav.foreldrepenger.lookup.util.MDCUtil.callId;
 
 import java.io.IOException;
 
@@ -28,7 +29,7 @@ public class MDCValuesPropagatingClientRequestInterceptor implements ClientHttpR
     public ClientHttpResponse intercept(HttpRequest req, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         propagateIfSet(req, NAV_CALL_ID, NAV_CONSUMER_ID);
-        propagate(req, X_CORRELATION_ID, MDC.get(NAV_CALL_ID));
+        propagate(req, X_CORRELATION_ID, callId());
         return execution.execute(req, body);
     }
 

@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
-import no.nav.foreldrepenger.lookup.util.DateUtil;
-import no.nav.foreldrepenger.lookup.util.Pair;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.*;
+import static java.time.LocalDate.now;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,9 +8,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.time.LocalDate.now;
+import no.nav.foreldrepenger.lookup.util.DateUtil;
+import no.nav.foreldrepenger.lookup.util.Pair;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Aktoer;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsavtale;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.HistoriskArbeidsgiverMedArbeidsgivernummer;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Organisasjon;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Person;
 
-public class ArbeidsforholdMapper {
+public final class ArbeidsforholdMapper {
+
+    private ArbeidsforholdMapper() {
+
+    }
 
     public static Arbeidsforhold map(
             no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold forhold) {
@@ -25,28 +33,25 @@ public class ArbeidsforholdMapper {
     }
 
     private static Pair<String, String> arbeidsgiverIdOgType(Aktoer aktor) {
-        Pair<String, String> pair;
         if (aktor instanceof Organisasjon) {
             Organisasjon org = (Organisasjon) aktor;
-            pair = Pair.of(org.getOrgnummer(), "orgnr");
-        } else if (aktor instanceof HistoriskArbeidsgiverMedArbeidsgivernummer) {
-            HistoriskArbeidsgiverMedArbeidsgivernummer h = (HistoriskArbeidsgiverMedArbeidsgivernummer) aktor;
-            pair = Pair.of(h.getArbeidsgivernummer(), "arbeidsgivernr");
-        } else {
-            Person person = (Person) aktor;
-            pair = Pair.of(person.getIdent().getIdent(), "fnr");
+            return Pair.of(org.getOrgnummer(), "orgnr");
         }
-
-        return pair;
+        if (aktor instanceof HistoriskArbeidsgiverMedArbeidsgivernummer) {
+            HistoriskArbeidsgiverMedArbeidsgivernummer h = (HistoriskArbeidsgiverMedArbeidsgivernummer) aktor;
+            return Pair.of(h.getArbeidsgivernummer(), "arbeidsgivernr");
+        }
+        Person person = (Person) aktor;
+        return Pair.of(person.getIdent().getIdent(), "fnr");
     }
 
     private static Double stillingsprosent(List<Arbeidsavtale> avtaler) {
         return avtaler.stream()
-            .filter(ArbeidsforholdMapper::gjeldendeAvtale)
-            .map(Arbeidsavtale::getStillingsprosent)
-            .filter(Objects::nonNull)
-            .map(BigDecimal::doubleValue)
-            .findFirst().orElse(null);
+                .filter(ArbeidsforholdMapper::gjeldendeAvtale)
+                .map(Arbeidsavtale::getStillingsprosent)
+                .filter(Objects::nonNull)
+                .map(BigDecimal::doubleValue)
+                .findFirst().orElse(null);
     }
 
     private static boolean gjeldendeAvtale(Arbeidsavtale avtale) {
@@ -54,7 +59,8 @@ public class ArbeidsforholdMapper {
         LocalDate tom;
         if (avtale.getTomGyldighetsperiode() != null) {
             tom = DateUtil.toLocalDate(avtale.getTomGyldighetsperiode());
-        } else {
+        }
+        else {
             tom = now();
         }
 

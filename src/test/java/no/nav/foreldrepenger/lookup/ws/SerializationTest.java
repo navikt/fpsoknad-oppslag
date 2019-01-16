@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.lookup.ws;
 
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,8 +24,6 @@ import no.nav.foreldrepenger.lookup.ws.person.ID;
 import no.nav.foreldrepenger.lookup.ws.person.Kjønn;
 import no.nav.foreldrepenger.lookup.ws.person.Navn;
 import no.nav.foreldrepenger.lookup.ws.person.Person;
-import no.nav.foreldrepenger.lookup.ws.person.PoststedFinner;
-import no.nav.foreldrepenger.lookup.ws.person.StatiskPoststedFinner;
 
 @SpringJUnitConfig
 @AutoConfigureJsonTesters
@@ -34,13 +31,6 @@ public class SerializationTest {
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Test
-    public void testPostnr() {
-        PoststedFinner finner = new StatiskPoststedFinner();
-        assertTrue(finner.poststed("1353").equalsIgnoreCase("Bærums Verk"));
-        assertTrue(finner.poststed("1332").equalsIgnoreCase("Østerås"));
-    }
 
     @Test
     public void testArbeidsforholdSerialization() throws IOException {

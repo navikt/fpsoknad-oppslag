@@ -36,21 +36,21 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     private final ArbeidsforholdV3 arbeidsforholdV3;
     private final ArbeidsforholdV3 healthIndicator;
     private final OrganisasjonClient orgClient;
-    private final TokenUtil tokenHandler;
-    private final Retry retry;
+    private final TokenUtil tokenUtil;
+    private final Retry retryConfig;
 
     ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenUtil tokenHandler) {
-        this(arbeidsforholdV3, healthIndicator, orgClient, tokenHandler, retry());
+            OrganisasjonClient orgClient, TokenUtil tokenUtil) {
+        this(arbeidsforholdV3, healthIndicator, orgClient, tokenUtil, retryConfig());
     }
 
     public ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenUtil tokenHandler, Retry retry) {
+            OrganisasjonClient orgClient, TokenUtil tokenUtil, Retry retry) {
         this.arbeidsforholdV3 = arbeidsforholdV3;
         this.healthIndicator = healthIndicator;
         this.orgClient = orgClient;
-        this.tokenHandler = tokenHandler;
-        this.retry = retry;
+        this.tokenUtil = tokenUtil;
+        this.retryConfig = retry;
     }
 
     @Override
@@ -66,9 +66,9 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     @Override
     @Timed("lookup.arbeidsforhold")
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retry, () -> aktiveArbeidsforhold(fnr.getFnr())).get();
+        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr())).get();
         for (Arbeidsforhold forhold : arbeidsforhold) {
-            Optional<String> navn = navn(forhold.getArbeidsgiverId());
+            Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             if (navn.isPresent()) {
                 forhold.setArbeidsgiverNavn(navn.get());
             }
@@ -76,7 +76,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
         return arbeidsforhold;
     }
 
-    private Optional<String> navn(String orgnr) {
+    private Optional<String> navnFor(String orgnr) {
         try {
             return arbeidsgiverNavn(orgnr);
         } catch (SOAPFaultException e) {
@@ -98,8 +98,8 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
         } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput e) {
             throw new IncompleteRequestException(e);
         } catch (SOAPFaultException e) {
-            if (tokenHandler.isExpired()) {
-                throw new TokenExpiredException(tokenHandler.getExp(), e);
+            if (tokenUtil.isExpired()) {
+                throw new TokenExpiredException(tokenUtil.getExp(), e);
             }
             throw e;
         }
@@ -120,7 +120,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
         return orgClient.nameFor(orgnr);
     }
 
-    private static Retry retry() {
+    private static Retry retryConfig() {
         return RetryUtil.retry(DEFAULT_RETRIES, "arbeidforhold", SOAPFaultException.class, LOG);
     }
 
@@ -134,7 +134,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [arbeidsforholdV3=" + arbeidsforholdV3 + ", healthIndicator="
-                + healthIndicator + ", orgClient=" + orgClient + ", tokenHandler=" + tokenHandler + ", retry=" + retry
+                + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig
                 + "]";
     }
 

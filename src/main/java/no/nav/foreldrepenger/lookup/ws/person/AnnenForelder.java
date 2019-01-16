@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import java.time.LocalDate;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class AnnenForelder {
 
@@ -33,8 +33,10 @@ public class AnnenForelder {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         AnnenForelder that = (AnnenForelder) o;
         return Objects.equals(fnr, that.fnr);
     }
@@ -42,5 +44,10 @@ public class AnnenForelder {
     @Override
     public int hashCode() {
         return Objects.hash(fnr);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " [navn=" + navn + ", fnr=" + fnr + ", fødselsdato=" + fødselsdato + "]";
     }
 }

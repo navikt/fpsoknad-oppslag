@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.lookup.ws;
 
 import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
+import static org.apache.cxf.phase.Phase.SETUP;
 import static org.apache.cxf.rt.security.SecurityConstants.STS_TOKEN_ON_BEHALF_OF;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -15,7 +16,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
-import org.apache.cxf.phase.Phase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -32,17 +32,17 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     private static final Logger LOG = LoggerFactory.getLogger(OnBehalfOfOutInterceptor.class);
 
     private static final String OIDC_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:jwt";
-    private final TokenUtil tokenHandler;
+    private final TokenUtil tokenUtil;
 
-    public OnBehalfOfOutInterceptor(TokenUtil tokenHandler) {
-        super(Phase.SETUP);
-        this.tokenHandler = tokenHandler;
+    public OnBehalfOfOutInterceptor(TokenUtil tokenUtil) {
+        super(SETUP);
+        this.tokenUtil = tokenUtil;
     }
 
     @Override
     public void handleMessage(Message message) throws Fault {
         LOG.debug("Slår opp OnBehalfOfToken");
-        String token = tokenHandler.getToken();
+        String token = tokenUtil.getToken();
         LOG.debug(CONFIDENTIAL, "Fant token {}", token);
         message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(token));
     }
@@ -68,6 +68,6 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [tokenHandler=" + tokenHandler + "]";
+        return getClass().getSimpleName() + " [tokenHandler=" + tokenUtil + "]";
     }
 }

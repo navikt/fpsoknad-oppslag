@@ -6,7 +6,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 
-public class RequestUtils {
+public class PersonRequestUtil {
 
     static final String OFFISIELL_ADRESSE = "OFFISIELL ADRESSE";
     static final String FNR = "FNR";

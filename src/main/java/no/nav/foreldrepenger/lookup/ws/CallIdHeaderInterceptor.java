@@ -16,11 +16,11 @@ import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CallIdHeader extends AbstractPhaseInterceptor<Message> {
+public class CallIdHeaderInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CallIdHeader.class);
+    private static final Logger logger = LoggerFactory.getLogger(CallIdHeaderInterceptor.class);
 
-    public CallIdHeader() {
+    public CallIdHeaderInterceptor() {
         super(Phase.PRE_STREAM);
     }
 

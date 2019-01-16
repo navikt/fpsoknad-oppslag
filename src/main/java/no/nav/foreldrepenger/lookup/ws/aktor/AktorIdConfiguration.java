@@ -1,8 +1,9 @@
 package no.nav.foreldrepenger.lookup.ws.aktor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +44,6 @@ public class AktorIdConfiguration extends WsClient<AktoerV2> {
     @Bean
     @Qualifier(AKTOER_V2RETRY)
     public Retry aktørRetry(@Value("${retry.aktør.max:2}") int max) {
-        return RetryUtil.retry(max, "aktør/fnr", SOAPFaultException.class,
-                LoggerFactory.getLogger(AktorIdClientWs.class));
+        return RetryUtil.retry(max, "aktør/fnr", SOAPFaultException.class, getLogger(AktorIdClientWs.class));
     }
 }
