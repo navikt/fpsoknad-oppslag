@@ -1,13 +1,13 @@
 package no.nav.foreldrepenger.lookup.rest.sak;
 
 import static java.util.stream.Collectors.toCollection;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -41,13 +41,7 @@ public class SakConfiguration {
     private String servicePwd;
 
     @Bean
-    public SakClientHttp sakClient(RestOperations restOperations, StsClient stsClient, TokenUtil tokenHandler,
-            @Qualifier(SAK_RETRY_CONFIG) Retry retry) {
-        return new SakClientHttp(sakBaseUrl, restOperations, stsClient, tokenHandler, retry);
-    }
-
-    @Bean
-    public RestOperations restTemplateSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restOperationsSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
         List<ClientHttpRequestInterceptor> interceptorListWithoutAuth = Arrays.stream(interceptors)
                 // We'll add our own auth header with SAML elsewhere
                 .filter(i -> !(i instanceof BearerTokenClientHttpRequestInterceptor))
@@ -62,21 +56,25 @@ public class SakConfiguration {
     }
 
     @Bean
-    public StsClient stsClient(RestOperations restTemplate, @Qualifier(STS_RETRY_CONFIG) Retry retry) {
-        return new StsClient(restTemplate, stsUrl, serviceUser, servicePwd, retry);
+    public StsClient stsClient(RestOperations restOperations, @Qualifier(STS_RETRY_CONFIG) Retry retry) {
+        return new StsClient(restOperations, stsUrl, serviceUser, servicePwd, retry);
+    }
+
+    @Bean
+    public SakClientHttp sakClient(RestOperations restOperations, StsClient stsClient, TokenUtil tokenUtil,
+            @Qualifier(SAK_RETRY_CONFIG) Retry retry) {
+        return new SakClientHttp(sakBaseUrl, restOperations, stsClient, tokenUtil, retry);
     }
 
     @Bean
     @Qualifier(SAK_RETRY_CONFIG)
     public Retry sakRetry(@Value("${retry.sak.max:2}") int max) {
-        return RetryUtil.retry(max, "saker", HttpServerErrorException.class,
-                LoggerFactory.getLogger(SakClientHttp.class));
+        return RetryUtil.retry(max, "saker", HttpServerErrorException.class, getLogger(SakClientHttp.class));
     }
 
     @Bean
     @Qualifier(STS_RETRY_CONFIG)
     public Retry stsRetry(@Value("${retry.sts.max:2}") int max) {
-        return RetryUtil.retry(max, "STS", HttpServerErrorException.class, LoggerFactory.getLogger(StsClient.class));
+        return RetryUtil.retry(max, "STS", HttpServerErrorException.class, getLogger(StsClient.class));
     }
-
 }
