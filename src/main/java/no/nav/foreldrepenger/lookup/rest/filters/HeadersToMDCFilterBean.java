@@ -4,7 +4,7 @@ import static no.nav.foreldrepenger.lookup.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
-import static no.nav.foreldrepenger.lookup.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.lookup.CallIdGenerator;
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
 
 @Component
@@ -34,11 +34,11 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private final CallIdGenerator generator;
     private final String applicationName;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
     private final AktorIdClient aktørIdClient;
 
     @Inject
-    public HeadersToMDCFilterBean(CallIdGenerator generator, TokenHandler tokenHandler, AktorIdClient aktørIdClient,
+    public HeadersToMDCFilterBean(CallIdGenerator generator, TokenUtil tokenHandler, AktorIdClient aktørIdClient,
             @Value("${spring.application.name}") String applicationName) {
         this.generator = generator;
         this.tokenHandler = tokenHandler;

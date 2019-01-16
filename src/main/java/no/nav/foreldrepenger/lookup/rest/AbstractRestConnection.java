@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
-import no.nav.foreldrepenger.lookup.EnvUtil;
+import no.nav.foreldrepenger.lookup.util.EnvUtil;
 
 public abstract class AbstractRestConnection implements EnvironmentAware {
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 
 @RestController
@@ -21,7 +21,7 @@ public class ArbeidsforholdController {
     private ArbeidsforholdClient arbeidsforholdClient;
 
     @Inject
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
 
     @RequestMapping(method = { RequestMethod.GET }, value = ARBEIDSFORHOLD)
     public ResponseEntity<List<Arbeidsforhold>> workHistory() {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.Søkerinfo;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
@@ -41,12 +42,12 @@ public class OppslagController {
 
     private final ArbeidsforholdClient arbeidsforholdClient;
 
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
 
     @Inject
     public OppslagController(AktorIdClient aktorClient, PersonClient personClient,
             ArbeidsforholdClient arbeidsforholdClient,
-            TokenHandler tokenHandler) {
+            TokenUtil tokenHandler) {
         this.aktorClient = aktorClient;
         this.personClient = personClient;
         this.arbeidsforholdClient = arbeidsforholdClient;

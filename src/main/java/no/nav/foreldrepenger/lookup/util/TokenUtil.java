@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.lookup;
+package no.nav.foreldrepenger.lookup.util;
 
 import static no.nav.foreldrepenger.lookup.Constants.ISSUER;
 import static no.nav.foreldrepenger.lookup.util.StreamUtil.not;
@@ -20,11 +20,11 @@ import no.nav.security.oidc.context.TokenContext;
 import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
 
 @Component
-public class TokenHandler {
+public class TokenUtil {
 
     private final OIDCRequestContextHolder ctxHolder;
 
-    public TokenHandler(OIDCRequestContextHolder ctxHolder) {
+    public TokenUtil(OIDCRequestContextHolder ctxHolder) {
         this.ctxHolder = ctxHolder;
     }
 

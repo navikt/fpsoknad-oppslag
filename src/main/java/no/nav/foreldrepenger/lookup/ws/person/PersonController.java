@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
 
@@ -21,11 +21,11 @@ public class PersonController {
     public static final String PERSON = "/person";
     private final AktorIdClient aktorClient;
     private final PersonClient personClient;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
 
     @Inject
     public PersonController(AktorIdClient aktorClient, PersonClient personClient,
-            TokenHandler tokenHandler) {
+            TokenUtil tokenHandler) {
         this.aktorClient = aktorClient;
         this.personClient = personClient;
         this.tokenHandler = tokenHandler;

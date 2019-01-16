@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
 import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.lookup.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
 import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
 import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
@@ -24,8 +24,8 @@ import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -42,17 +42,17 @@ public class PersonClientTpsWs implements PersonClient {
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
     private final Barnutvelger barnutvelger;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
     private final Retry retry;
 
     private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.tps");
 
-    PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenHandler tokenHandler,
+    PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenHandler,
             Barnutvelger barnutvelger) {
         this(person, healthIndicator, tokenHandler, barnutvelger, retry());
     }
 
-    public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenHandler tokenHandler,
+    public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenHandler,
             Barnutvelger barnutvelger, Retry retry) {
         this.person = Objects.requireNonNull(person);
         this.healthIndicator = healthIndicator;

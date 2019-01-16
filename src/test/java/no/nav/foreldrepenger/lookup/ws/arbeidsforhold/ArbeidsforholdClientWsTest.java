@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
@@ -61,7 +61,7 @@ public class ArbeidsforholdClientWsTest {
     private ArbeidsforholdV3 healthIndicator;
     private OrganisasjonClient orgClient;
     @Mock
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
     @Mock
     private OrganisasjonV5 organisasjonV5;
     @Mock

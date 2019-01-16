@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonOrganisasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
@@ -30,16 +30,16 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
 
     private OrganisasjonV5 organisasjonV5;
     private OrganisasjonV5 healthIndicator;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
     private final Retry retry;
 
     OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
-            TokenHandler tokenHandler) {
+            TokenUtil tokenHandler) {
         this(organisasjonV5, healthIndicator, tokenHandler, retry());
     }
 
     public OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
-            TokenHandler tokenHandler, Retry retry) {
+            TokenUtil tokenHandler, Retry retry) {
         this.organisasjonV5 = organisasjonV5;
         this.healthIndicator = healthIndicator;
         this.tokenHandler = tokenHandler;

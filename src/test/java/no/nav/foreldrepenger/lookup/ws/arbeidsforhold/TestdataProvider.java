@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
-import no.nav.foreldrepenger.time.DateUtil;
+import no.nav.foreldrepenger.lookup.util.DateUtil;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.*;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold;
 

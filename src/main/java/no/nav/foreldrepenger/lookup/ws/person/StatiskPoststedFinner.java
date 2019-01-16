@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import no.nav.foreldrepenger.lookup.Pair;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
+
+import no.nav.foreldrepenger.lookup.util.Pair;
 
 public class StatiskPoststedFinner implements PoststedFinner {
 

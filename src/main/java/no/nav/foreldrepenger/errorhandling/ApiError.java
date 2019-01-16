@@ -4,13 +4,12 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_E
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.lookup.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.lookup.util.MDCUtil.callId;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,7 +35,7 @@ class ApiError {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.messages = messages(t, objects);
-        this.uuid = MDC.get(NAV_CALL_ID);
+        this.uuid = callId();
     }
 
     public String getUuid() {

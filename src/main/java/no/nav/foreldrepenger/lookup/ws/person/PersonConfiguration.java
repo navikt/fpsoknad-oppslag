@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 
@@ -41,7 +41,7 @@ public class PersonConfiguration extends WsClient<PersonV3> {
 
     @Bean
     public PersonClient personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
-            @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenHandler handler,
+            @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler,
             Barnutvelger barnutvelger, @Qualifier(PERSONV3_RETRY) Retry retry) {
         return new PersonClientTpsWs(personV3, healthIndicator, handler, barnutvelger, retry);
     }

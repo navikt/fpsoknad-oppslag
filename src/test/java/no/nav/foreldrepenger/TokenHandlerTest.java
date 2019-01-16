@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
@@ -42,13 +42,13 @@ public class TokenHandlerTest {
     @Mock
     private TokenContext tokenContext;
 
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
 
     @Before
     public void before() {
         when(holder.getOIDCValidationContext()).thenReturn(context);
         when(context.getClaims(eq(ISSUER))).thenReturn(claims);
-        tokenHandler = new TokenHandler(holder);
+        tokenHandler = new TokenUtil(holder);
     }
 
     @Test

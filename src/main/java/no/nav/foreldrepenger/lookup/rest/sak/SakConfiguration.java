@@ -18,8 +18,8 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.security.spring.oidc.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 
 @Configuration
@@ -41,13 +41,13 @@ public class SakConfiguration {
     private String servicePwd;
 
     @Bean
-    public SakClientHttp sakClient(RestOperations restOperations, StsClient stsClient, TokenHandler tokenHandler,
+    public SakClientHttp sakClient(RestOperations restOperations, StsClient stsClient, TokenUtil tokenHandler,
             @Qualifier(SAK_RETRY_CONFIG) Retry retry) {
         return new SakClientHttp(sakBaseUrl, restOperations, stsClient, tokenHandler, retry);
     }
 
     @Bean
-    public RestOperations restTemplateSak(TokenHandler tokenHandler, ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restTemplateSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
         List<ClientHttpRequestInterceptor> interceptorListWithoutAuth = Arrays.stream(interceptors)
                 // We'll add our own auth header with SAML elsewhere
                 .filter(i -> !(i instanceof BearerTokenClientHttpRequestInterceptor))

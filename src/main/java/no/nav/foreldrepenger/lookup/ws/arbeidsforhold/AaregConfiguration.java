@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 
@@ -38,7 +38,7 @@ public class AaregConfiguration extends WsClient<ArbeidsforholdV3> {
     @Bean
     public ArbeidsforholdClient aaregClientWs(@Qualifier(ARBEIDSFORHOLD_V3) ArbeidsforholdV3 arbeidsforholdV3,
             @Qualifier(HEALTH_INDICATOR_AAREG) ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient organisasjonClient, TokenHandler tokenHandler,
+            OrganisasjonClient organisasjonClient, TokenUtil tokenHandler,
             @Qualifier(ARBEIDSFORHOLD_V3RETRY) Retry retryConfig) {
         return new ArbeidsforholdClientWs(arbeidsforholdV3, healthIndicator, organisasjonClient, tokenHandler,
                 retryConfig);

@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws;
 
 import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
-import static no.nav.foreldrepenger.lookup.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
 import static org.apache.cxf.rt.security.SecurityConstants.STS_TOKEN_ON_BEHALF_OF;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
@@ -32,9 +32,9 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     private static final Logger LOG = LoggerFactory.getLogger(OnBehalfOfOutInterceptor.class);
 
     private static final String OIDC_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:jwt";
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
 
-    public OnBehalfOfOutInterceptor(TokenHandler tokenHandler) {
+    public OnBehalfOfOutInterceptor(TokenUtil tokenHandler) {
         super(Phase.SETUP);
         this.tokenHandler = tokenHandler;
     }

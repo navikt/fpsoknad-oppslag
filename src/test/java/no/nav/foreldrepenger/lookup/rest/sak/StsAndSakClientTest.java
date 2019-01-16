@@ -34,7 +34,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
@@ -58,7 +58,7 @@ public class StsAndSakClientTest {
     @Mock
     private RestOperations restOperations;
     @Mock
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
     private StsClient stsclient;
     private SakClient sakclient;
 

@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 
@@ -35,7 +35,7 @@ public class AktorIdConfiguration extends WsClient<AktoerV2> {
 
     @Bean
     public AktorIdClient aktorIdClientWs(@Qualifier(AKTOER_V2) AktoerV2 aktoerV2,
-            @Qualifier(HEALTH_INDICATOR_AKTØR) AktoerV2 healthIndicator, TokenHandler tokenHandler,
+            @Qualifier(HEALTH_INDICATOR_AKTØR) AktoerV2 healthIndicator, TokenUtil tokenHandler,
             @Qualifier(AKTOER_V2RETRY) Retry retryConfig) {
         return new AktorIdClientWs(aktoerV2, healthIndicator, tokenHandler, retryConfig);
     }

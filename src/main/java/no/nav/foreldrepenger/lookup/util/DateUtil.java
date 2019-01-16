@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.time;
+package no.nav.foreldrepenger.lookup.util;
 
 import java.time.LocalDate;
 

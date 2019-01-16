@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger;
 
-import static no.nav.foreldrepenger.lookup.EnvUtil.DEV;
-import static no.nav.foreldrepenger.lookup.EnvUtil.PREPROD;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.DEV;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.PREPROD;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

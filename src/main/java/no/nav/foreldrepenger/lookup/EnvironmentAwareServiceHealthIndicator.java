@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.lookup;
 
-import static no.nav.foreldrepenger.lookup.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
 
 import java.net.URI;
 

@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.time;
 
 import org.junit.jupiter.api.Test;
 
+import no.nav.foreldrepenger.lookup.util.DateUtil;
+
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;

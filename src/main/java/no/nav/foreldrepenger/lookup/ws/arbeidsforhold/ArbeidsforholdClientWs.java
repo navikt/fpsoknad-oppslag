@@ -15,13 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
 import no.nav.foreldrepenger.errorhandling.IncompleteRequestException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
@@ -38,18 +36,16 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     private final ArbeidsforholdV3 arbeidsforholdV3;
     private final ArbeidsforholdV3 healthIndicator;
     private final OrganisasjonClient orgClient;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
     private final Retry retry;
 
-    private static final Counter ERROR_COUNTER = Metrics.counter("errors.lookup.aareg");
-
     ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenHandler tokenHandler) {
+            OrganisasjonClient orgClient, TokenUtil tokenHandler) {
         this(arbeidsforholdV3, healthIndicator, orgClient, tokenHandler, retry());
     }
 
     public ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenHandler tokenHandler, Retry retry) {
+            OrganisasjonClient orgClient, TokenUtil tokenHandler, Retry retry) {
         this.arbeidsforholdV3 = arbeidsforholdV3;
         this.healthIndicator = healthIndicator;
         this.orgClient = orgClient;
@@ -63,7 +59,6 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
             LOG.info("Pinger AAreg");
             healthIndicator.ping();
         } catch (Exception ex) {
-            ERROR_COUNTER.increment();
             throw ex;
         }
     }
@@ -96,7 +91,6 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
             return response.getArbeidsforhold().stream()
                     .map(ArbeidsforholdMapper::map)
                     .filter(this::isOngoing)
-                    // .map(this::addArbeidsgiverNavn)
                     .collect(toList());
         } catch (FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning e) {
             LOG.warn("Sikkerhetsfeil fra AAREG", e);
@@ -104,7 +98,6 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
         } catch (FinnArbeidsforholdPrArbeidstakerUgyldigInput e) {
             throw new IncompleteRequestException(e);
         } catch (SOAPFaultException e) {
-            ERROR_COUNTER.increment();
             if (tokenHandler.isExpired()) {
                 throw new TokenExpiredException(tokenHandler.getExp(), e);
             }

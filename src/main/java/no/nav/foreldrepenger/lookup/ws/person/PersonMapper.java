@@ -1,8 +1,9 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
 import com.neovisionaries.i18n.CountryCode;
-import no.nav.foreldrepenger.lookup.Pair;
-import no.nav.foreldrepenger.time.DateUtil;
+
+import no.nav.foreldrepenger.lookup.util.DateUtil;
+import no.nav.foreldrepenger.lookup.util.Pair;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
 
 import java.time.LocalDate;

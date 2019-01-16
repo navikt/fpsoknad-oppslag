@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.lookup;
+package no.nav.foreldrepenger.lookup.util;
 
 import java.util.Objects;
 

@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
-import no.nav.foreldrepenger.lookup.Pair;
-import no.nav.foreldrepenger.time.DateUtil;
+import no.nav.foreldrepenger.lookup.util.DateUtil;
+import no.nav.foreldrepenger.lookup.util.Pair;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.*;
 
 import java.math.BigDecimal;

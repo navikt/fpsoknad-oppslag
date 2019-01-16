@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
@@ -34,7 +34,7 @@ public class AktørWSClientTest {
     private static final AktorId AKTOR = new AktorId("222222222");
     private static final Fødselsnummer FNR = new Fødselsnummer("22222222222");
     @Mock
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
     @Mock
     private AktoerV2 healthIndicator;
     @Mock

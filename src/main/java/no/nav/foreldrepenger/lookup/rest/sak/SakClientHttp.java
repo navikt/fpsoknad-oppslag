@@ -28,8 +28,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 
 public class SakClientHttp implements SakClient {
@@ -39,16 +39,16 @@ public class SakClientHttp implements SakClient {
     private final RestOperations restOperations;
     private final URI sakBaseUrl;
     private final StsClient stsClient;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
     private final Retry retry;
 
     public SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
-            TokenHandler tokenHandler) {
+            TokenUtil tokenHandler) {
         this(sakBaseUrl, restOperations, stsClient, tokenHandler, retry());
     }
 
     public SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
-            TokenHandler tokenHandler, Retry retry) {
+            TokenUtil tokenHandler, Retry retry) {
         this.restOperations = restOperations;
         this.sakBaseUrl = sakBaseUrl;
         this.stsClient = stsClient;
@@ -64,7 +64,7 @@ public class SakClientHttp implements SakClient {
     }
 
     private HttpEntity<String> request() {
-        return new HttpEntity<>("", headers(stsClient.oidcToSamlToken(tokenHandler.getToken())));
+        return new HttpEntity<>(headers(stsClient.oidcToSamlToken(tokenHandler.getToken())));
     }
 
     private static List<Sak> sisteSakFra(List<RemoteSak> saker) {
@@ -88,8 +88,6 @@ public class SakClientHttp implements SakClient {
             headers.add("applikasjon", "IT01");
             headers.add("tema", "FOR");
             URI url = uriFra(sakBaseUrl, headers);
-            // String url = sakBaseUrl + "?aktoerId=" + aktor +
-            // "&applikasjon=IT01&tema=FOR";
             LOG.trace("Henter saker fra {}", url);
             return restOperations.exchange(
                     url,

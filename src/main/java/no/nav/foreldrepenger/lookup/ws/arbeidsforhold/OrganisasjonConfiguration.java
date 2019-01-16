@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.lookup.TokenHandler;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.OrganisasjonV5;
 
@@ -37,7 +37,7 @@ public class OrganisasjonConfiguration extends WsClient<OrganisasjonV5> {
 
     @Bean
     public OrganisasjonClient organisasjonClientWs(@Qualifier(ORGANISASJON_V5) OrganisasjonV5 organisasjonV5,
-            @Qualifier(HEALTH_INDICATOR_ORGANISASJON) OrganisasjonV5 healthIndicator, TokenHandler tokenHandler,
+            @Qualifier(HEALTH_INDICATOR_ORGANISASJON) OrganisasjonV5 healthIndicator, TokenUtil tokenHandler,
             @Qualifier(ORGANISASJON_V5V3RETRY) Retry retry) {
         return new OrganisasjonClientWs(organisasjonV5, healthIndicator, tokenHandler, retry);
     }

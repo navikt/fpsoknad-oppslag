@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 
 import static java.time.LocalDate.of;
-import static no.nav.foreldrepenger.time.DateUtil.dateWithinPeriod;
+import static no.nav.foreldrepenger.lookup.util.DateUtil.dateWithinPeriod;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DateUtilTest {

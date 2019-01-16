@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
+import no.nav.foreldrepenger.lookup.util.DateUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
-import no.nav.foreldrepenger.time.DateUtil;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
 import org.junit.jupiter.api.Test;
 

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
@@ -18,10 +18,10 @@ public class SakController {
     public static final String SAK = "/sak";
     private final SakClient sakClient;
     private final AktorIdClient aktorClient;
-    private final TokenHandler tokenHandler;
+    private final TokenUtil tokenHandler;
 
     @Inject
-    public SakController(SakClient sakClient, AktorIdClient aktorClient, TokenHandler tokenHandler) {
+    public SakController(SakClient sakClient, AktorIdClient aktorClient, TokenUtil tokenHandler) {
         this.sakClient = sakClient;
         this.tokenHandler = tokenHandler;
         this.aktorClient = aktorClient;

@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
-import no.nav.foreldrepenger.lookup.TokenHandler;
+import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -60,7 +60,7 @@ public class HentPersonInfoTest {
     private PersonV3 healthIndicator;
 
     @Mock
-    private TokenHandler tokenHandler;
+    private TokenUtil tokenHandler;
 
     @BeforeEach
     public void setUp() {
