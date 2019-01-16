@@ -1,9 +1,9 @@
 package no.nav.foreldrepenger.lookup.ws.aktor;
 
+import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.retriedOK;
 import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.soapFault;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
@@ -28,7 +28,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRespon
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdResponse;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(SpringRunner.class)
 public class AktørWSClientTest {
 
     private static final AktorId AKTOR = new AktorId("222222222");
@@ -53,7 +53,7 @@ public class AktørWSClientTest {
         assertThrows(SOAPFaultException.class, () -> {
             aktørClient.aktorIdForFnr(FNR);
         });
-        verify(aktoerV2, times(2)).hentAktoerIdForIdent(any());
+        verify(aktoerV2, retriedOK()).hentAktoerIdForIdent(any());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AktørWSClientTest {
                 .thenThrow(soapFault())
                 .thenReturn(aktørResponse());
         aktørClient.aktorIdForFnr(FNR);
-        verify(aktoerV2, times(2)).hentAktoerIdForIdent(any());
+        verify(aktoerV2, retriedOK()).hentAktoerIdForIdent(any());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class AktørWSClientTest {
         assertThrows(SOAPFaultException.class, () -> {
             aktørClient.fnrForAktørId(AKTOR);
         });
-        verify(aktoerV2, times(2)).hentIdentForAktoerId(any());
+        verify(aktoerV2, retriedOK()).hentIdentForAktoerId(any());
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AktørWSClientTest {
                 .thenThrow(soapFault())
                 .thenReturn(fnrResponse());
         aktørClient.fnrForAktørId(AKTOR);
-        verify(aktoerV2, times(2)).hentIdentForAktoerId(any());
+        verify(aktoerV2, retriedOK()).hentIdentForAktoerId(any());
     }
 
     @Test

@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.lookup.ws.arbeidsforhold;
 
+import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.retriedOK;
 import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.soapFault;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
@@ -44,7 +44,7 @@ import no.nav.tjeneste.virksomhet.organisasjon.v5.informasjon.UstrukturertNavn;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.meldinger.HentOrganisasjonResponse;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class ArbeidsforholdClientWsTest {
 
     private static final String LURIUM_AS = "Lurium AS";
@@ -83,7 +83,7 @@ public class ArbeidsforholdClientWsTest {
         assertThrows(SOAPFaultException.class, () -> {
             client.aktiveArbeidsforhold(FNR);
         });
-        verify(arbeidsforhold, times(2)).finnArbeidsforholdPrArbeidstaker(any());
+        verify(arbeidsforhold, retriedOK()).finnArbeidsforholdPrArbeidstaker(any());
     }
 
     @Test
@@ -118,8 +118,8 @@ public class ArbeidsforholdClientWsTest {
         List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
         assertEquals(aktiveArbeidsforhold.size(), 1);
         assertEquals(aktiveArbeidsforhold.get(0).getArbeidsgiverNavn(), LURIUM_AS);
-        verify(arbeidsforhold, times(2)).finnArbeidsforholdPrArbeidstaker(any());
-        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+        verify(arbeidsforhold, retriedOK()).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5, retriedOK()).hentOrganisasjon(any());
     }
 
     @Test
@@ -156,7 +156,7 @@ public class ArbeidsforholdClientWsTest {
         List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
         assertEquals(aktiveArbeidsforhold.size(), 1);
         verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
-        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+        verify(organisasjonV5, retriedOK()).hentOrganisasjon(any());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class ArbeidsforholdClientWsTest {
                 .thenReturn(respons());
         client.aktiveArbeidsforhold(FNR);
         verify(arbeidsforhold).finnArbeidsforholdPrArbeidstaker(any());
-        verify(organisasjonV5, times(2)).hentOrganisasjon(any());
+        verify(organisasjonV5, retriedOK()).hentOrganisasjon(any());
     }
 
     @Test

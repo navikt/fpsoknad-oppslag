@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
 import static java.time.LocalDate.now;
+import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.retriedOK;
 import static no.nav.foreldrepenger.lookup.ws.WSTestUtil.soapFault;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,8 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.lookup.TokenHandler;
@@ -44,7 +45,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class HentPersonInfoTest {
 
     private PersonClientTpsWs klient;
@@ -70,7 +71,7 @@ public class HentPersonInfoTest {
     public void testHentingAvPersonMedBarnSkalKallePåTpsToGanger() throws Exception {
         when(tps.hentPerson(any())).thenReturn(response(barn("11111898765", "FNR")));
         klient.hentPersonInfo(id());
-        verify(tps, times(2)).hentPerson(any());
+        verify(tps, retriedOK()).hentPerson(any());
     }
 
     @Test
@@ -87,11 +88,8 @@ public class HentPersonInfoTest {
     public void testRetryUntilFail() throws Exception {
         when(tps.hentPerson(any()))
                 .thenThrow(soapFault());
-        try {
-            klient.hentPersonInfo(id());
-        } catch (SOAPFaultException e) {
-            verify(tps, times(2)).hentPerson(any());
-        }
+        assertThrows(SOAPFaultException.class, () -> klient.hentPersonInfo(id()));
+        verify(tps, retriedOK()).hentPerson(any());
     }
 
     @Test
