@@ -8,14 +8,13 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.WsClient;
 import no.nav.tjeneste.virksomhet.innsynjournal.v2.binding.InnsynJournalV2;
 
-@Configuration
+//@Configuration
 public class JoarkConfiguration extends WsClient<InnsynJournalV2> {
 
     private static final String JOARK_V2 = "joarkV2";
