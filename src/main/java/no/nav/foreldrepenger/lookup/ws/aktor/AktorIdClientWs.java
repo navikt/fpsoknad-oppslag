@@ -54,12 +54,8 @@ public class AktorIdClientWs implements AktorIdClient {
 
     @Override
     public void ping() {
-        try {
-            LOG.info("Pinger Aktørregisteret");
-            healthIndicator.ping();
-        } catch (Exception e) {
-            throw e;
-        }
+        LOG.info("Pinger Aktørregisteret");
+        healthIndicator.ping();
     }
 
     private String hentAktør(Fødselsnummer fnr) {
