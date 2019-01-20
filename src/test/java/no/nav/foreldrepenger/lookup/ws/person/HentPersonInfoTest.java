@@ -21,10 +21,8 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
@@ -45,7 +43,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
 @ExtendWith(MockitoExtension.class)
-@RunWith(SpringRunner.class)
 public class HentPersonInfoTest {
 
     private PersonClientTpsWs klient;

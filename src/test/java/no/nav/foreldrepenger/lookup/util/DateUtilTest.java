@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.lookup.util;
 
-import org.junit.Test;
-
-import java.time.LocalDate;
-
 import static java.time.LocalDate.of;
 import static no.nav.foreldrepenger.lookup.util.DateUtil.dateWithinPeriod;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.Test;
 
 public class DateUtilTest {
 
