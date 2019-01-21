@@ -7,6 +7,8 @@ import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
+import org.apache.cxf.ext.logging.LoggingInInterceptor;
+import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.service.model.EndpointInfo;
 import org.apache.cxf.ws.policy.EndpointPolicy;
@@ -15,15 +17,20 @@ import org.apache.cxf.ws.policy.PolicyEngine;
 import org.apache.cxf.ws.policy.attachment.reference.RemoteReferenceResolver;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.apache.neethi.Policy;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import no.nav.foreldrepenger.lookup.util.EnvUtil;
+
 @Component
-public class EndpointSTSClientConfig {
+public class EndpointSTSClientConfig implements EnvironmentAware {
 
     private static final String POLICY_PATH = "classpath:policy/";
     private static final String STS_REQUEST_SAML_POLICY = POLICY_PATH + "requestSamlPolicy.xml";
 
     private STSClient stsClient;
+    private Environment env;
 
     public EndpointSTSClientConfig(STSClient stsClient) {
         this.stsClient = stsClient;
@@ -39,6 +46,10 @@ public class EndpointSTSClientConfig {
     public <T> T configureRequestSamlTokenOnBehalfOfOidc(T port, OnBehalfOfOutInterceptor onBehalfOfOutInterceptor) {
         Client client = ClientProxy.getClient(port);
         client.getOutInterceptors().add(onBehalfOfOutInterceptor);
+        if (EnvUtil.isDevOrPreprod(env)) {
+            client.getInInterceptors().add(new LoggingInInterceptor());
+            client.getOutInterceptors().add(new LoggingOutInterceptor());
+        }
         // want to cache the token with the OnBehalfOfToken, not per proxy
         configureEndpointWithPolicyForSTS(stsClient, client, STS_REQUEST_SAML_POLICY, false);
         return port;
@@ -69,5 +80,11 @@ public class EndpointSTSClientConfig {
         SoapMessage message = new SoapMessage(Soap12.getInstance());
         EndpointPolicy endpointPolicy = policyEngine.getClientEndpointPolicy(endpointInfo, null, message);
         policyEngine.setClientEndpointPolicy(endpointInfo, endpointPolicy.updatePolicy(policy, message));
+    }
+
+    @Override
+    public void setEnvironment(Environment env) {
+        this.env = env;
+
     }
 }
