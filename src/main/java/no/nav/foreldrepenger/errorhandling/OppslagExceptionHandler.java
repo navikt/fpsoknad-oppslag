@@ -106,7 +106,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
             List<Object> messages) {
 
         ApiError apiError = new ApiError(status, e, messages);
-        LOG.warn("{} [{}]", status.value(), apiError.getMessages(), e);
+        LOG.warn("{} {} ({})", status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
