@@ -26,11 +26,12 @@ public final class RetryUtil {
                 .maxAttempts(max)
                 .build()).retry(name);
         retry.getEventPublisher()
-                .onRetry(event -> LOG.warn("Prøver {} igjen for {}. gang av {} grunnet {}",
+                .onRetry(event -> LOG.warn("Prøver {} igjen for {}. gang av {} grunnet {} ({})",
                         name,
                         event.getNumberOfRetryAttempts(),
                         max,
-                        event.getLastThrowable().getClass().getSimpleName()))
+                        event.getLastThrowable().getClass().getSimpleName(),
+                        event.getLastThrowable().getMessage()))
                 .onSuccess(event -> LOG.info("Hentet fra {} på {}. forsøk av {}",
                         name,
                         event.getNumberOfRetryAttempts(),
