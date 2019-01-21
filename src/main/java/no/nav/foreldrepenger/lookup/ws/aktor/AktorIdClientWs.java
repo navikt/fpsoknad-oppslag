@@ -62,7 +62,7 @@ public class AktorIdClientWs implements AktorIdClient {
         try {
             return aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
-            throw new NotFoundException(e);
+            throw new NotFoundException(fnr.getFnr(), e);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
                 throw new TokenExpiredException(tokenUtil.getExp(), e);
@@ -76,7 +76,7 @@ public class AktorIdClientWs implements AktorIdClient {
             return aktoerV2.hentIdentForAktoerId(request(aktørId)).getIdent();
         } catch (HentIdentForAktoerIdPersonIkkeFunnet e) {
             LOG.warn("Henting av fnr har feilet", e);
-            throw new NotFoundException(e);
+            throw new NotFoundException(aktørId.getAktør(), e);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
                 throw new TokenExpiredException(tokenUtil.getExp(), e);
