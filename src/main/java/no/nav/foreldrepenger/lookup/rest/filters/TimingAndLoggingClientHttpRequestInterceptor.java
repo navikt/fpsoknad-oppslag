@@ -39,7 +39,7 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         timer.stop();
         if (hasError(respons.getStatusCode())) {
             LOG.warn("{} - {} - ({}). Dette tok {}ms. ({})", request.getMethodValue(), request.getURI(),
-                    respons.getRawStatusCode(), timer.getTime(MILLISECONDS), tokenUtil.getExp());
+                    respons.getRawStatusCode(), timer.getTime(MILLISECONDS), tokenUtil.getExpiryDate());
         }
         else {
             LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),

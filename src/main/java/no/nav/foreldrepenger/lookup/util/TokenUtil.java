@@ -33,11 +33,11 @@ public class TokenUtil {
     }
 
     public boolean isExpired() {
-        Date exp = getExp();
+        Date exp = getExpiryDate();
         return exp == null ? true : exp.before(new Date());
     }
 
-    public Date getExp() {
+    public Date getExpiryDate() {
         return Optional.ofNullable(claimSet())
                 .map(JWTClaimsSet::getExpirationTime)
                 .orElse(null);

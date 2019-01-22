@@ -80,7 +80,7 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
             return Optional.empty();
         } catch (SOAPFaultException e) {
             if (tokenHandler.isExpired()) {
-                throw new TokenExpiredException(tokenHandler.getExp(), e);
+                throw new TokenExpiredException(tokenHandler.getExpiryDate(), e);
             }
             throw e;
         }

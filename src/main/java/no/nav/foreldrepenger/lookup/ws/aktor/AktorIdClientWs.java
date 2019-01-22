@@ -65,7 +65,7 @@ public class AktorIdClientWs implements AktorIdClient {
             throw new NotFoundException(fnr.getFnr(), e);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
-                throw new TokenExpiredException(tokenUtil.getExp(), e);
+                throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
             }
             throw e;
         }
@@ -78,7 +78,7 @@ public class AktorIdClientWs implements AktorIdClient {
             throw new NotFoundException(aktørId.getAktør(), e);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
-                throw new TokenExpiredException(tokenUtil.getExp(), e);
+                throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
             }
             throw e;
         }

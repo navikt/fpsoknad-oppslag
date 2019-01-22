@@ -99,7 +99,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
             throw new IncompleteRequestException(e);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
-                throw new TokenExpiredException(tokenUtil.getExp(), e);
+                throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
             }
             throw e;
         }

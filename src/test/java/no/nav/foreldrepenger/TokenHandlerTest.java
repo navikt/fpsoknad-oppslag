@@ -61,7 +61,7 @@ public class TokenHandlerTest {
                 .subject(FNR.getFnr())
                 .expirationTime(toDate(LocalDateTime.now().plusHours(1)))
                 .build());
-        assertNotNull(tokenHandler.getExp());
+        assertNotNull(tokenHandler.getExpiryDate());
 
     }
 
@@ -82,7 +82,7 @@ public class TokenHandlerTest {
         when(holder.getOIDCValidationContext()).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
-        assertNull(tokenHandler.getExp());
+        assertNull(tokenHandler.getExpiryDate());
         assertThrows(OIDCTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
     }
 

@@ -42,7 +42,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndRespond(e.getStatusCode(), e, request, tokenHelper.getExp());
+            return logAndRespond(e.getStatusCode(), e, request, tokenHelper.getExpiryDate());
         }
         return logAndRespond(e.getStatusCode(), e, request);
     }

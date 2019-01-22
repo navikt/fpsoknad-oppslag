@@ -147,7 +147,7 @@ public class PersonClientTpsWs implements PersonClient {
             return person.hentPerson(request);
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
-                throw new TokenExpiredException(tokenUtil.getExp(), e);
+                throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
             }
             throw e;
         } catch (HentPersonPersonIkkeFunnet e) {
