@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.lookup.ws;
 
 import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
 import static org.apache.cxf.phase.Phase.SETUP;
 import static org.apache.cxf.rt.security.SecurityConstants.STS_TOKEN_ON_BEHALF_OF;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -41,10 +40,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        LOG.debug("Slår opp OnBehalfOfToken");
-        String token = tokenUtil.getToken();
-        LOG.debug(CONFIDENTIAL, "Fant token {}", token);
-        message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(token));
+        message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(tokenUtil.getToken()));
     }
 
     private static Element createOnBehalfOfElement(String token) {
