@@ -20,10 +20,11 @@ import org.apache.cxf.ws.policy.PolicyEngine;
 import org.apache.cxf.ws.policy.attachment.reference.RemoteReferenceResolver;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.apache.neethi.Policy;
-import org.assertj.core.util.Lists;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
 
 import no.nav.foreldrepenger.lookup.util.EnvUtil;
 
