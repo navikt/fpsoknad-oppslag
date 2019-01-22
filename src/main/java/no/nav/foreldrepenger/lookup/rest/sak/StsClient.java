@@ -49,7 +49,7 @@ public class StsClient {
     }
 
     String oidcToSamlToken(String oidcToken) {
-        LOG.trace("Attempting OIDC to SAML token exchange from {}", stsUrl);
+        LOG.trace("Utfører OIDC til SAML veksling fra {}", stsUrl);
         String respons = postWithRetry(new HttpEntity<>(body(oidcToken), headers()));
         LOG.trace("SAML Token veksling OK");
         return samlAssertionFra(respons);
