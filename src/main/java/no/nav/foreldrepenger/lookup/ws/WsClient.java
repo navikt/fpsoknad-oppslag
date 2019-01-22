@@ -8,10 +8,12 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.ext.logging.LoggingFeature;
 import org.apache.cxf.ext.logging.LoggingInInterceptor;
 import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.feature.Feature;
+import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
@@ -46,16 +48,17 @@ public class WsClient<T> implements EnvironmentAware {
         jaxWsProxyFactoryBean.setServiceClass(portType);
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
         T port = (T) jaxWsProxyFactoryBean.create();
-        // Client client = ClientProxy.getClient(port);
+        Client client = ClientProxy.getClient(port);
         jaxWsProxyFactoryBean.getOutInterceptors().add(new CallIdHeaderInterceptor());
         if (isDevOrPreprod(env)) {
             jaxWsProxyFactoryBean.setFeatures(devAndPreprodFeatures());
         }
         else {
-            jaxWsProxyFactoryBean.getInFaultInterceptors().add(new LoggingInInterceptor());
-            jaxWsProxyFactoryBean.getOutFaultInterceptors().add(new LoggingOutInterceptor());
+            client.getInFaultInterceptors().add(new LoggingInInterceptor());
+            client.getOutFaultInterceptors().add(new LoggingOutInterceptor());
         }
-        jaxWsProxyFactoryBean.getOutInterceptors().add(new CallIdHeaderInterceptor());
+
+        client.getOutInterceptors().add(new CallIdHeaderInterceptor());
         return port;
     }
 
