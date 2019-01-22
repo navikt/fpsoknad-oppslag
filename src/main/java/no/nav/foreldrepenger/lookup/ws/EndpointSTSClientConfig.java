@@ -3,15 +3,12 @@ package no.nav.foreldrepenger.lookup.ws;
 import static org.apache.cxf.rt.security.SecurityConstants.CACHE_ISSUED_TOKEN_IN_ENDPOINT;
 import static org.apache.cxf.rt.security.SecurityConstants.STS_CLIENT;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
-import org.apache.cxf.ext.logging.LoggingFeature;
-import org.apache.cxf.feature.Feature;
+import org.apache.cxf.ext.logging.LoggingInInterceptor;
+import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.service.model.EndpointInfo;
 import org.apache.cxf.ws.policy.EndpointPolicy;
@@ -23,8 +20,6 @@ import org.apache.neethi.Policy;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import com.google.common.collect.Lists;
 
 import no.nav.foreldrepenger.lookup.util.EnvUtil;
 
@@ -39,20 +34,6 @@ public class EndpointSTSClientConfig implements EnvironmentAware {
 
     public EndpointSTSClientConfig(STSClient stsClient) {
         this.stsClient = stsClient;
-        stsClient.setFeatures(features());
-    }
-
-    private List<? extends Feature> features() {
-        if (EnvUtil.isDevOrPreprod(env)) {
-            return Lists.newArrayList(loggingFeature());
-        }
-        return Collections.emptyList();
-    }
-
-    private Feature loggingFeature() {
-        LoggingFeature loggingFeature = new LoggingFeature();
-        loggingFeature.setPrettyLogging(true);
-        return loggingFeature;
     }
 
     public <T> T configureRequestSamlToken(T port) {
@@ -65,7 +46,10 @@ public class EndpointSTSClientConfig implements EnvironmentAware {
     public <T> T configureRequestSamlTokenOnBehalfOfOidc(T port, OnBehalfOfOutInterceptor onBehalfOfOutInterceptor) {
         Client client = ClientProxy.getClient(port);
         client.getOutInterceptors().add(onBehalfOfOutInterceptor);
-
+        if (EnvUtil.isDevOrPreprod(env)) {
+            client.getInInterceptors().add(new LoggingInInterceptor());
+            client.getOutInterceptors().add(new LoggingOutInterceptor());
+        }
         // want to cache the token with the OnBehalfOfToken, not per proxy
         configureEndpointWithPolicyForSTS(stsClient, client, STS_REQUEST_SAML_POLICY, false);
         return port;
