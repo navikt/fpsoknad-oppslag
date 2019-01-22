@@ -7,5 +7,7 @@ management :
 spring :
     http.log-request-details : true      
     jackson.deserialization.fail-on-unknown-properties: false
+    
+org.apache.cxf.logging.enable : true
                
        
