@@ -23,6 +23,7 @@
         </turboFilter>
     </springProfile>
     <springProfile name="dev,preprod">
+        <logger name="org.apache.cxf.services.PersonV3" level="trace" />
         <logger name="no.nav.foreldrepenger.lookup.ws.OnBehalfOfOutInterceptor" level="warn" />
         <logger name="no.nav.foreldrepenger" level="trace"/>
     </springProfile>
