@@ -7,8 +7,6 @@ import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
-import org.apache.cxf.ext.logging.LoggingInInterceptor;
-import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.service.model.EndpointInfo;
 import org.apache.cxf.ws.policy.EndpointPolicy;
@@ -20,8 +18,6 @@ import org.apache.neethi.Policy;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import no.nav.foreldrepenger.lookup.util.EnvUtil;
 
 @Component
 public class EndpointSTSClientConfig implements EnvironmentAware {
@@ -46,10 +42,6 @@ public class EndpointSTSClientConfig implements EnvironmentAware {
     public <T> T configureRequestSamlTokenOnBehalfOfOidc(T port, OnBehalfOfOutInterceptor onBehalfOfOutInterceptor) {
         Client client = ClientProxy.getClient(port);
         client.getOutInterceptors().add(onBehalfOfOutInterceptor);
-        if (EnvUtil.isDevOrPreprod(env)) {
-            client.getInInterceptors().add(new LoggingInInterceptor());
-            client.getOutInterceptors().add(new LoggingOutInterceptor());
-        }
         // want to cache the token with the OnBehalfOfToken, not per proxy
         configureEndpointWithPolicyForSTS(stsClient, client, STS_REQUEST_SAML_POLICY, false);
         return port;
