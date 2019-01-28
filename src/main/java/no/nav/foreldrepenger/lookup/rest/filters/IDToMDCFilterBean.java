@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.lookup.rest.filters;
 
 import static no.nav.foreldrepenger.lookup.Constants.NAV_AKTØR_ID;
+import static no.nav.foreldrepenger.lookup.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
@@ -52,6 +53,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             Fødselsnummer fnr = helper.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
                 MDC.put(NAV_USER_ID, fnr.getFnr());
+            }
+            if (helper.getExpiryDate() != null) {
+                putValue(NAV_TOKEN_EXPIRY_ID, helper.getExpiryDate().toString(), null);
             }
             putValue(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(fnr).getAktør());
         } catch (Exception e) {
