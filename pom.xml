@@ -25,7 +25,7 @@
         <maven.jaxb-plugin.version>0.13.3</maven.jaxb-plugin.version>
         <cxf.version>3.2.6</cxf.version>
         <springfox.swagger.version>2.9.2</springfox.swagger.version>
-        <oidc-spring-support.version>0.2.13</oidc-spring-support.version>
+        <oidc-spring-support.version>0.2.15</oidc-spring-support.version>
     </properties>
 
     <scm>
