@@ -8,7 +8,6 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
@@ -42,7 +41,7 @@ public class AktorIdClientWs implements AktorIdClient {
     }
 
     @Override
-    @Cacheable(cacheNames = "aktoer")
+    // @Cacheable(cacheNames = "aktoer")
     public AktorId aktorIdForFnr(Fødselsnummer fnr) {
         return new AktorId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
     }
