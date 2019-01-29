@@ -59,12 +59,15 @@ public class AktorIdClientWs implements AktorIdClient {
     }
 
     private String hentAktør(Fødselsnummer fnr) {
+        LOG.trace("Henter aktør fra fnr {}", fnr.getFnr());
         try {
             return aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);
         } catch (SOAPFaultException e) {
+            LOG.trace("Feil ved henting av aktør", e);
             if (tokenUtil.isExpired()) {
+                LOG.trace("Token expired: {}", tokenUtil.getExpiryDate());
                 throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
             }
             throw e;
