@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 
-import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.security.oidc.context.OIDCClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.oidc.context.OIDCValidationContext;
@@ -43,14 +42,13 @@ public class TokenUtil {
                 .orElse(null);
     }
 
-    public Fødselsnummer getSubject() {
+    public String getSubject() {
         return Optional.ofNullable(claimSet())
                 .map(JWTClaimsSet::getSubject)
-                .map(Fødselsnummer::new)
                 .orElse(null);
     }
 
-    public Fødselsnummer autentisertBruker() {
+    public String autentisertBruker() {
         return Optional.ofNullable(getSubject())
                 .orElseThrow(unauthenticated("Fant ikke subject"));
     }

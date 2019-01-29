@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -29,7 +30,7 @@ public class SakController {
 
     @GetMapping(SAK)
     public List<Sak> saker() {
-        return sakClient.sakerFor(aktorClient.aktorIdForFnr(tokenHandler.autentisertBruker()));
+        return sakClient.sakerFor(aktorClient.aktorIdForFnr(new Fødselsnummer(tokenHandler.autentisertBruker())));
     }
 
     @Override

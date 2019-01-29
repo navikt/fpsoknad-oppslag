@@ -2,10 +2,10 @@ package no.nav.foreldrepenger.lookup.rest.filters;
 
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.lookup.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -49,15 +48,12 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private void putValues(HttpServletRequest request) {
         try {
-            putValue(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            putValue(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+            toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
+            toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {
-            LOG.warn("Noe gikk feil ved propagering av header-verdier, MDC-verdier er inkomplette", e);
+            LOG.warn("Noe gikk feil ved propagering av header-verdier for request {}, MDC-verdier er inkomplette",
+                    request.getRequestURL(), e);
         }
-    }
-
-    private static void putValue(String key, String value, String defaultValue) {
-        MDC.put(key, Optional.ofNullable(value).orElse(defaultValue));
     }
 
     @Override

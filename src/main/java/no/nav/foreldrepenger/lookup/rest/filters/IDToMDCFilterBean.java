@@ -4,19 +4,19 @@ import static no.nav.foreldrepenger.lookup.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -43,32 +43,25 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         if (helper.erAutentisert()) {
-            copyHeadersToMDC();
+            copyHeadersToMDC(HttpServletRequest.class.cast(req));
         }
         chain.doFilter(req, res);
     }
 
-    private void copyHeadersToMDC() {
+    private void copyHeadersToMDC(HttpServletRequest req) {
         try {
-            Fødselsnummer fnr = helper.getSubject();
+            String fnr = helper.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
-                MDC.put(NAV_USER_ID, fnr.getFnr());
+                toMDC(NAV_USER_ID, fnr);
             }
             if (helper.getExpiryDate() != null) {
-                putValue(NAV_TOKEN_EXPIRY_ID, helper.getExpiryDate().toString(), null);
+                toMDC(NAV_TOKEN_EXPIRY_ID, helper.getExpiryDate().toString(), null);
             }
-            putValue(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(fnr).getAktør());
+            toMDC(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(new Fødselsnummer(fnr)).getAktør());
         } catch (Exception e) {
-            LOG.info("Noe gikk feil ved henting av aktørId. ikke kritisk, men MDC-verdier er inkomplette", e);
+            LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
+                    req.getRequestURI(), e);
         }
-    }
-
-    private static void putValue(String key, String value) {
-        putValue(key, value, null);
-    }
-
-    private static void putValue(String key, String value, String defaultValue) {
-        MDC.put(key, Optional.ofNullable(value).orElse(defaultValue));
     }
 
     @Override

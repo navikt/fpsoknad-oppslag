@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
+import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 
 @RestController
@@ -25,7 +26,7 @@ public class ArbeidsforholdController {
 
     @GetMapping(ARBEIDSFORHOLD)
     public List<Arbeidsforhold> workHistory() {
-        return arbeidsforholdClient.aktiveArbeidsforhold(tokenUtil.autentisertBruker());
+        return arbeidsforholdClient.aktiveArbeidsforhold(new Fødselsnummer(tokenUtil.autentisertBruker()));
     }
 
     @Override

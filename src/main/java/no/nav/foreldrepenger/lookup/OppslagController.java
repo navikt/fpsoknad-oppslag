@@ -80,7 +80,7 @@ public class OppslagController {
 
     @GetMapping
     public Søkerinfo essensiellSøkerinfo() {
-        Fødselsnummer fnr = tokenUtil.autentisertBruker();
+        Fødselsnummer fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
         AktorId aktorId = aktorClient.aktorIdForFnr(fnr);
         Person person = personClient.hentPersonInfo(new ID(aktorId, fnr));
         List<Arbeidsforhold> arbeidsforhold = arbeidsforholdClient.aktiveArbeidsforhold(fnr);
@@ -89,7 +89,7 @@ public class OppslagController {
 
     @GetMapping("/aktor")
     public AktorId getAktørId() {
-        return getAktørIdForFNR(tokenUtil.autentisertBruker());
+        return getAktørIdForFNR(new Fødselsnummer(tokenUtil.autentisertBruker()));
     }
 
     @GetMapping("/aktorfnr")
