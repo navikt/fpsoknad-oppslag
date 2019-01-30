@@ -5,7 +5,7 @@ import static no.nav.foreldrepenger.lookup.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
 import static no.nav.foreldrepenger.lookup.util.MDCUtil.toMDC;
-import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
 
@@ -25,24 +25,24 @@ import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 
-@Order(LOWEST_PRECEDENCE)
+@Order(HIGHEST_PRECEDENCE)
 @Component
 public class IDToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
 
     private final AktorIdClient aktørIdClient;
-    private final TokenUtil helper;
+    private final TokenUtil tokenUtil;
 
-    public IDToMDCFilterBean(TokenUtil helper, AktorIdClient aktørIdClient) {
-        this.helper = helper;
+    public IDToMDCFilterBean(TokenUtil tokenUtil, AktorIdClient aktørIdClient) {
+        this.tokenUtil = tokenUtil;
         this.aktørIdClient = aktørIdClient;
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        if (helper.erAutentisert()) {
+        if (tokenUtil.erAutentisert()) {
             copyHeadersToMDC(HttpServletRequest.class.cast(req));
         }
         chain.doFilter(req, res);
@@ -50,12 +50,12 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private void copyHeadersToMDC(HttpServletRequest req) {
         try {
-            String fnr = helper.getSubject();
+            String fnr = tokenUtil.getSubject();
             if (isDevOrPreprod(getEnvironment())) {
                 toMDC(NAV_USER_ID, fnr);
             }
-            if (helper.getExpiryDate() != null) {
-                toMDC(NAV_TOKEN_EXPIRY_ID, helper.getExpiryDate().toString(), null);
+            if (tokenUtil.getExpiryDate() != null) {
+                toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
             }
             toMDC(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(new Fødselsnummer(fnr)).getAktør());
         } catch (Exception e) {
@@ -66,6 +66,6 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [aktørIdClient=" + aktørIdClient + ", helper=" + helper + "]";
+        return getClass().getSimpleName() + " [aktørIdClient=" + aktørIdClient + ", tokenUtil=" + tokenUtil + "]";
     }
 }

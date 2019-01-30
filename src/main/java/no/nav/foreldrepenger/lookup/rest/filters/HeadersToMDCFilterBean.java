@@ -3,7 +3,7 @@ package no.nav.foreldrepenger.lookup.rest.filters;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_CONSUMER_ID;
 import static no.nav.foreldrepenger.lookup.util.MDCUtil.toMDC;
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ import org.springframework.web.filter.GenericFilterBean;
 import no.nav.foreldrepenger.lookup.CallIdGenerator;
 
 @Component
-@Order(HIGHEST_PRECEDENCE)
+@Order(LOWEST_PRECEDENCE)
 public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
