@@ -40,11 +40,12 @@ node {
                 color  : 'good',
                 message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${application}@master by ${committer} passed"
             ])
-        } catch (Exception ex) {
+        } catch (Exception e) {
             slackSend([
                 color  : 'danger',
                 message: "Build <${env.BUILD_URL}|#${env.BUILD_NUMBER}> (<${commitUrl}|${commitHashShort}>) of ${repo}/${application}@master by ${committer} failed"
             ])
+            throw new Exception("Bygget har feilet", e)
         } finally {
             junit '**/target/surefire-reports/*.xml'
         }
