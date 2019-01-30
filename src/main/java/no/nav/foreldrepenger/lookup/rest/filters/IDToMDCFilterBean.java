@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.lookup.rest.filters;
 
-import static no.nav.foreldrepenger.lookup.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
@@ -23,7 +22,6 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
-import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
 
 @Order(HIGHEST_PRECEDENCE)
 @Component
@@ -57,7 +55,8 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (tokenUtil.getExpiryDate() != null) {
                 toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
             }
-            toMDC(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(new Fødselsnummer(fnr)).getAktør());
+            // toMDC(NAV_AKTØR_ID, aktørIdClient.aktorIdForFnr(new
+            // Fødselsnummer(fnr)).getAktør());
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
                     req.getRequestURI(), e);
