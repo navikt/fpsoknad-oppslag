@@ -72,8 +72,8 @@ public class TokenHandlerTest {
     @Test
     public void testOK() {
         when(claims.getClaimSet()).thenReturn(new JWTClaimsSet.Builder().subject(FNR.getFnr()).build());
-        assertEquals(FNR, tokenHandler.autentisertBruker());
-        assertEquals(FNR, tokenHandler.getSubject());
+        assertEquals(FNR.getFnr(), tokenHandler.autentisertBruker());
+        assertEquals(FNR.getFnr(), tokenHandler.getSubject());
         assertTrue(tokenHandler.erAutentisert());
     }
 
