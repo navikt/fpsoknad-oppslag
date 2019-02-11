@@ -36,7 +36,7 @@ public class PersonClientTpsWs implements PersonClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
 
-    private static final String STRENGT_FORTROLIG_ADRESSE = "6";
+    private static final String STRENGT_FORTROLIG_ADRESSE = "SPSF";
 
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
@@ -137,7 +137,6 @@ public class PersonClientTpsWs implements PersonClient {
     private boolean harStrengtFortroligAdresse(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
-            LOG.info("Diskresjonskode for {} er {}", person.getPersonnavn().getFornavn(), diskresjonskode.getValue());
             String verdi = diskresjonskode.getValue();
             return verdi != null && verdi.equals(STRENGT_FORTROLIG_ADRESSE);
         }
