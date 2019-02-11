@@ -1,23 +1,5 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
-import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
-import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
-import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.BANKKONTO;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.FAMILIERELASJONER;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.KOMMUNIKASJON;
-
-import java.util.List;
-import java.util.Objects;
-
-import javax.xml.ws.soap.SOAPFaultException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
@@ -28,15 +10,33 @@ import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.ws.soap.SOAPFaultException;
+import java.util.List;
+import java.util.Objects;
+
+import static io.github.resilience4j.retry.Retry.decorateSupplier;
+import static java.util.stream.Collectors.toList;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.*;
+import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.*;
 
 public class PersonClientTpsWs implements PersonClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
+
+    private static final String STRENGT_FORTROLIG_ADRESSE = "6";
 
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
@@ -60,18 +60,14 @@ public class PersonClientTpsWs implements PersonClient {
 
     @Override
     public void ping() {
-        try {
-            LOG.info("Pinger TPS");
-            healthIndicator.ping();
-        } catch (Exception e) {
-            throw e;
-        }
+        LOG.info("Pinger TPS");
+        healthIndicator.ping();
     }
 
     @Override
     @Timed("lookup.person")
     public Person hentPersonInfo(ID id) {
-        HentPersonRequest request = PersonRequestUtil.request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
+        HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.info("Slår opp person");
         LOG.info(CONFIDENTIAL, "Fra ID {}", id);
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = tpsPersonWithRetry(request);
@@ -89,8 +85,8 @@ public class PersonClientTpsWs implements PersonClient {
         PersonIdent id = (PersonIdent) person.getAktoer();
         String idType = id.getIdent().getType().getValue();
         switch (idType) {
-        case PersonRequestUtil.FNR:
-        case PersonRequestUtil.DNR:
+        case FNR:
+        case DNR:
             Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
             return person.getHarFraRolleI().stream()
                     .filter(this::isBarn)
@@ -104,39 +100,52 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     private boolean isBarn(Familierelasjon rel) {
-        return rel.getTilRolle().getValue().equals(PersonRequestUtil.BARN);
+        return rel.getTilRolle().getValue().equals(BARN);
     }
 
     private boolean isForelder(Familierelasjon rel) {
         String rolle = rel.getTilRolle().getValue();
-        return rolle.equals(PersonRequestUtil.MOR) || rolle.equals(PersonRequestUtil.FAR);
+        return rolle.equals(MOR) || rolle.equals(FAR);
     }
 
     private Barn hentBarn(Familierelasjon rel, Fødselsnummer fnrSøker) {
         NorskIdent id = ((PersonIdent) rel.getTilPerson().getAktoer()).getIdent();
-        if (PersonRequestUtil.isFnr(id)) {
-            Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
-                    PersonRequestUtil.request(fnrBarn, FAMILIERELASJONER));
-
-            AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
-                    .filter(this::isForelder)
-                    .map(this::toFødselsnummer)
-                    .filter(Objects::nonNull)
-                    .filter(fnr -> !fnr.equals(fnrSøker))
-                    .map(fnr -> tpsPersonWithRetry(PersonRequestUtil.request(fnr)))
-                    .map(PersonMapper::annenForelder)
-                    .findFirst()
-                    .orElse(null);
-
-            return barn(id, fnrSøker, tpsBarn, annenForelder);
+        if (!isFnr(id)) {
+            return null;
         }
-        return null;
+
+        Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(request(fnrBarn, FAMILIERELASJONER));
+        if (harStrengtFortroligAdresse(tpsBarn)) {
+            return null;
+        }
+
+        AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
+                .filter(this::isForelder)
+                .map(this::toFødselsnummer)
+                .filter(Objects::nonNull)
+                .filter(fnr -> !fnr.equals(fnrSøker))
+                .map(fnr -> tpsPersonWithRetry(request(fnr)))
+                .filter(p -> !harStrengtFortroligAdresse(p))
+                .map(PersonMapper::annenForelder)
+                .findFirst()
+                .orElse(null);
+
+        return barn(id, fnrSøker, tpsBarn, annenForelder);
+    }
+
+    private boolean harStrengtFortroligAdresse(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+        Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
+        if (diskresjonskode != null) {
+            String verdi = diskresjonskode.getValue();
+            return verdi != null && verdi.equals(STRENGT_FORTROLIG_ADRESSE);
+        }
+        return false;
     }
 
     private Fødselsnummer toFødselsnummer(Familierelasjon rel) {
         NorskIdent id = ((PersonIdent) rel.getTilPerson().getAktoer()).getIdent();
-        if (PersonRequestUtil.isFnr(id)) {
+        if (isFnr(id)) {
             return new Fødselsnummer(id.getIdent());
         }
         return null;
