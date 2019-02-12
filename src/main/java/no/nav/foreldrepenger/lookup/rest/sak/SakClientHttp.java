@@ -28,7 +28,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
 import io.github.resilience4j.retry.Retry;
-import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
@@ -58,7 +57,7 @@ public class SakClientHttp implements SakClient {
     }
 
     @Override
-    @Timed("lookup.sak")
+    // @Timed("lookup.sak")
     public List<Sak> sakerFor(AktorId aktor) {
         ResponseEntity<List<RemoteSak>> response = sakerFor(aktor.getAktør(), request());
         return sisteSakFra(Optional.ofNullable(response.getBody()).orElse(emptyList()));
