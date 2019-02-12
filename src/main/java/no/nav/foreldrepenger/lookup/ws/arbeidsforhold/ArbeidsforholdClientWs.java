@@ -63,7 +63,6 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     }
 
     @Override
-    // @Timed("lookup.arbeidsforhold")
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
         List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr()))
                 .get();

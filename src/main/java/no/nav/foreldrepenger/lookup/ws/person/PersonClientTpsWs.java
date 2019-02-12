@@ -74,7 +74,6 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     @Override
-    // @Timed("lookup.person")
     public Person hentPersonInfo(ID id) {
         HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.info("Slår opp person");

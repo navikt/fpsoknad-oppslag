@@ -56,7 +56,6 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
     }
 
     @Override
-    // @Timed("lookup.organisasjon")
     public Optional<String> nameFor(String orgnr) {
         if (orgnr.length() != 9) {
             LOG.warn("{} ser ikke ut som et organisasjonsnummer, slår ikke opp navn", orgnr);
