@@ -1,7 +1,31 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
+import static io.github.resilience4j.retry.Retry.decorateSupplier;
+import static java.util.stream.Collectors.toList;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.BARN;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.DNR;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.FAR;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.FNR;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.MOR;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.isFnr;
+import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.request;
+import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.BANKKONTO;
+import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.FAMILIERELASJONER;
+import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.KOMMUNIKASJON;
+
+import java.util.List;
+import java.util.Objects;
+
+import javax.xml.ws.soap.SOAPFaultException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.resilience4j.retry.Retry;
-import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
@@ -16,21 +40,6 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.xml.ws.soap.SOAPFaultException;
-import java.util.List;
-import java.util.Objects;
-
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
-import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
-import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.barn;
-import static no.nav.foreldrepenger.lookup.ws.person.PersonMapper.person;
-import static no.nav.foreldrepenger.lookup.ws.person.PersonRequestUtil.*;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.*;
 
 public class PersonClientTpsWs implements PersonClient {
 
@@ -65,7 +74,7 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     @Override
-    @Timed("lookup.person")
+    // @Timed("lookup.person")
     public Person hentPersonInfo(ID id) {
         HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.info("Slår opp person");
@@ -115,7 +124,8 @@ public class PersonClientTpsWs implements PersonClient {
         }
 
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(request(fnrBarn, FAMILIERELASJONER));
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
+                request(fnrBarn, FAMILIERELASJONER));
         if (harStrengtFortroligAdresse(tpsBarn)) {
             return null;
         }

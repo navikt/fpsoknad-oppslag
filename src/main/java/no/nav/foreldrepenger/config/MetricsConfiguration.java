@@ -1,7 +1,8 @@
 package no.nav.foreldrepenger.config;
 
-import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -10,8 +11,6 @@ import io.micrometer.core.instrument.binder.logging.LogbackMetrics;
 import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import io.micrometer.core.instrument.binder.system.UptimeMetrics;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MetricsConfiguration {
@@ -55,10 +54,9 @@ public class MetricsConfiguration {
     public FileDescriptorMetrics fileDescriptorMetrics() {
         return new FileDescriptorMetrics();
     }
-
-    @Bean
-    public TimedAspect timedAspect(MeterRegistry registry) {
-        return new TimedAspect(registry);
-    }
+    /*
+     * @Bean public TimedAspect timedAspect(MeterRegistry registry) { return new
+     * TimedAspect(registry); }
+     */
 
 }

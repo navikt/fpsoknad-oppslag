@@ -52,10 +52,6 @@ public class WsClient<T> implements EnvironmentAware {
             client.getInFaultInterceptors().add(new LoggingInInterceptor());
             client.getOutFaultInterceptors().add(new LoggingOutInterceptor());
         }
-        else {
-            client.getInFaultInterceptors().add(new LoggingInInterceptor());
-            client.getOutFaultInterceptors().add(new LoggingOutInterceptor());
-        }
         client.getOutInterceptors().add(new CallIdHeaderInterceptor());
         return port;
     }
