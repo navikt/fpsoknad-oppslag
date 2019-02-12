@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.resilience4j.retry.Retry;
-import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.errorhandling.IncompleteRequestException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.errorhandling.UnauthorizedException;
@@ -64,9 +63,10 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     }
 
     @Override
-    @Timed("lookup.arbeidsforhold")
+    // @Timed("lookup.arbeidsforhold")
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr())).get();
+        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr()))
+                .get();
         for (Arbeidsforhold forhold : arbeidsforhold) {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             if (navn.isPresent()) {
@@ -134,7 +134,8 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [arbeidsforholdV3=" + arbeidsforholdV3 + ", healthIndicator="
-                + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig
+                + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + ", retryConfig="
+                + retryConfig
                 + "]";
     }
 
