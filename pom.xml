@@ -141,12 +141,17 @@
     </build>
 
     <dependencies>
-      <dependency>
+        <dependency>
+            <groupId>no.nav.helse</groupId>
+            <artifactId>cxf-prometheus-metrics</artifactId>
+            <version>dd7d125</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <scope>test</scope>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
@@ -217,7 +222,7 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
@@ -300,7 +305,7 @@
             <version>${oidc-spring-support.version}</version>
             <scope>test</scope>
         </dependency>
-       
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
