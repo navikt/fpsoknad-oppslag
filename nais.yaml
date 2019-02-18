@@ -1,5 +1,5 @@
 name: fpsoknad-oppslag
-team: nais
+team: bris
 image: repo.adeo.no:5443/fpsoknad-oppslag
 replicas:
     min: 2
