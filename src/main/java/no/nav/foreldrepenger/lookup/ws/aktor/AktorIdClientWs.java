@@ -1,6 +1,8 @@
 package no.nav.foreldrepenger.lookup.ws.aktor;
 
 import static io.github.resilience4j.retry.Retry.decorateSupplier;
+import static no.nav.foreldrepenger.lookup.Constants.NAV_AKTØR_ID;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
 
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.errorhandling.TokenExpiredException;
+import no.nav.foreldrepenger.lookup.util.MDCUtil;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
@@ -58,9 +61,12 @@ public class AktorIdClientWs implements AktorIdClient {
     }
 
     private String hentAktør(Fødselsnummer fnr) {
-        LOG.trace("Henter aktør fra fnr {}", fnr.getFnr());
+        LOG.info(CONFIDENTIAL, "Henter aktør for fnr {}", fnr.getFnr());
         try {
-            return aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
+            String aktørId = aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
+            MDCUtil.toMDC(NAV_AKTØR_ID, aktørId);
+            LOG.info(CONFIDENTIAL, "Aktørid for {} er {}", fnr.getFnr(), aktørId);
+            return aktørId;
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);
         } catch (SOAPFaultException e) {
