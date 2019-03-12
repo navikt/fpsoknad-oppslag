@@ -64,13 +64,10 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
 
     @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr()))
-                .get();
+        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr())).get();
         for (Arbeidsforhold forhold : arbeidsforhold) {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
-            if (navn.isPresent()) {
-                forhold.setArbeidsgiverNavn(navn.get());
-            }
+            navn.ifPresent(forhold::setArbeidsgiverNavn);
         }
         return arbeidsforhold;
     }

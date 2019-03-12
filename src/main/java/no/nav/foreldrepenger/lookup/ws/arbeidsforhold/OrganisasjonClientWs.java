@@ -47,12 +47,8 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
 
     @Override
     public void ping() {
-        try {
-            LOG.info("Pinger organisasjonstjenesten");
-            healthIndicator.ping();
-        } catch (Exception e) {
-            throw e;
-        }
+        LOG.info("Pinger organisasjonstjenesten");
+        healthIndicator.ping();
     }
 
     @Override
@@ -85,10 +81,10 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
     }
 
     private static String name(SammensattNavn sammensattNavn) {
-        return UstrukturertNavn.class.cast(sammensattNavn).getNavnelinje()
+        return ((UstrukturertNavn) sammensattNavn).getNavnelinje()
                 .stream()
                 .filter(OrganisasjonClientWs::isNotEmpty)
-                .collect(joining(","));
+                .collect(joining(", "));
     }
 
     private static boolean isNotEmpty(String str) {
