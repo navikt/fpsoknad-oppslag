@@ -6,6 +6,6 @@ import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 
 public interface SakClient {
 
-    List<Sak> sakerFor(AktorId aktor);
+    List<Sak> sakerFor(AktorId aktor, String tema);
 
 }

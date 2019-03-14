@@ -9,6 +9,7 @@ public final class Constants {
     public static final String ISSUER = "selvbetjening";
     public static final String INFOTRYGD = "IT01";
     public static final String FORELDREPENGER = "FOR";
+    public static final String SVANGERSKAPSPENGER = "SVP";
     public static final String NAV_TOKEN_EXPIRY_ID = "Nav-Token-Expiry";
 
     private Constants() {

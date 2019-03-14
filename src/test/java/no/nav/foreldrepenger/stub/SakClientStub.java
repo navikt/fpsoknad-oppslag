@@ -12,7 +12,7 @@ import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 public class SakClientStub implements SakClient {
     @Override
     @Timed("lookup.sak")
-    public List<Sak> sakerFor(AktorId aktor) {
+    public List<Sak> sakerFor(AktorId aktor, String tema) {
         return Arrays.asList(
                 new Sak("sak1", "typen", "systemet", "fsid1",
                         "status", LocalDate.of(2018, 9, 19), ""),

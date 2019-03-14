@@ -5,7 +5,6 @@ import static java.time.LocalDate.now;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
-import static no.nav.foreldrepenger.lookup.Constants.FORELDREPENGER;
 import static no.nav.foreldrepenger.lookup.Constants.INFOTRYGD;
 import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
 import static no.nav.foreldrepenger.lookup.util.StringUtil.encode;
@@ -59,8 +58,8 @@ public class SakClientHttp implements SakClient {
 
     @Override
     @Timed("lookup.sak")
-    public List<Sak> sakerFor(AktorId aktor) {
-        ResponseEntity<List<RemoteSak>> response = sakerFor(aktor.getAktør(), request());
+    public List<Sak> sakerFor(AktorId aktor, String tema) {
+        ResponseEntity<List<RemoteSak>> response = sakerFor(aktor.getAktør(), tema, request());
         return sisteSakFra(Optional.ofNullable(response.getBody()).orElse(emptyList()));
     }
 
@@ -82,9 +81,9 @@ public class SakClientHttp implements SakClient {
         return sisteSak != null ? singletonList(sisteSak) : emptyList();
     }
 
-    private ResponseEntity<List<RemoteSak>> sakerFor(String aktor, HttpEntity<String> request) {
+    private ResponseEntity<List<RemoteSak>> sakerFor(String aktor, String tema, HttpEntity<String> request) {
         return decorateSupplier(retryConfig, () -> {
-            URI url = uri(sakBaseUrl, queryParams(aktor));
+            URI url = uri(sakBaseUrl, queryParams(aktor, tema));
             LOG.info("Henter saker fra {}", url);
             return restOperations.exchange(
                     url,
@@ -95,11 +94,11 @@ public class SakClientHttp implements SakClient {
         }).get();
     }
 
-    private static HttpHeaders queryParams(String aktor) {
+    private static HttpHeaders queryParams(String aktor, String tema) {
         HttpHeaders queryParams = new HttpHeaders();
         queryParams.add("aktoerId", aktor);
         queryParams.add("applikasjon", INFOTRYGD);
-        queryParams.add("tema", FORELDREPENGER);
+        queryParams.add("tema", tema);
         return queryParams;
     }
 

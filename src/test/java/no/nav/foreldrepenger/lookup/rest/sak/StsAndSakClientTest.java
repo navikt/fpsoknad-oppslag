@@ -32,6 +32,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 
+import no.nav.foreldrepenger.lookup.Constants;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
@@ -76,7 +77,7 @@ public class StsAndSakClientTest {
         when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
                 .thenThrow(internalServerError())
                 .thenReturn(ENVELOPE);
-        assertEquals(sakclient.sakerFor(AKTOR).size(), 1);
+        assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
         verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
         verify(restOperations, retriedOK()).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
@@ -90,7 +91,7 @@ public class StsAndSakClientTest {
                         .thenReturn(remoteSaker());
         when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
                 .thenReturn(ENVELOPE);
-        assertEquals(sakclient.sakerFor(AKTOR).size(), 1);
+        assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
         verify(restOperations).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
         verify(restOperations).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
@@ -104,7 +105,7 @@ public class StsAndSakClientTest {
         when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class)))
                         .thenThrow(internalServerError());
-        assertThrows(HttpServerErrorException.class, () -> sakclient.sakerFor(AKTOR));
+        assertThrows(HttpServerErrorException.class, () -> sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER));
         verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
     }

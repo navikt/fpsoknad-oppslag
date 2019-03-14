@@ -1,10 +1,13 @@
 package no.nav.foreldrepenger.lookup.rest.sak;
 
+import static no.nav.foreldrepenger.lookup.Constants.FORELDREPENGER;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
@@ -29,8 +32,8 @@ public class SakController {
     }
 
     @GetMapping(SAK)
-    public List<Sak> saker() {
-        return sakClient.sakerFor(aktorClient.aktorIdForFnr(new Fødselsnummer(tokenHandler.autentisertBruker())));
+    public List<Sak> saker(@RequestParam(name = "tema", defaultValue = FORELDREPENGER) String tema) {
+        return sakClient.sakerFor(aktorClient.aktorIdForFnr(new Fødselsnummer(tokenHandler.autentisertBruker())), tema);
     }
 
     @Override
