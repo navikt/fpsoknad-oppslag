@@ -151,6 +151,6 @@ public class StsAndSakClientTest {
 
     private static ResponseEntity<List<RemoteSak>> remoteSaker() {
         return new ResponseEntity<>(Collections.singletonList(
-                new RemoteSak(42, "FOR", "IT01", "42", ID, "42", "Donald Duck", LocalDateTime.now().toString())), OK);
+                new RemoteSak(42L, "FOR", "IT01", "42", ID, "42", "Donald Duck", LocalDateTime.now().toString())), OK);
     }
 }

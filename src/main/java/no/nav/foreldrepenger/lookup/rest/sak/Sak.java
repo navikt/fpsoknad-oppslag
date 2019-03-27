@@ -5,26 +5,26 @@ import java.util.Objects;
 
 public class Sak {
 
-    private String sakId;
+    private String saksnummer;
     private String sakstype;
     private String fagsystem;
-    private String saksnummer;
+    private String fagsakId;
     private String status;
     private LocalDate opprettet;
     private String opprettetAv;
 
-    public Sak(String sakId, String sakstype, String fagsystem, String saksnummer, String status, LocalDate opprettet, String opprettetAv) {
-        this.sakId = sakId;
+    public Sak(String saksnummer, String sakstype, String fagsystem, String fagsakId, String status, LocalDate opprettet, String opprettetAv) {
+        this.saksnummer = saksnummer;
         this.sakstype = sakstype;
         this.fagsystem = fagsystem;
-        this.saksnummer = saksnummer;
+        this.fagsakId = fagsakId;
         this.status = status;
         this.opprettet = opprettet;
         this.opprettetAv = opprettetAv;
     }
 
-    public String getSakId() {
-        return sakId;
+    public String getSaksnummer() {
+        return saksnummer;
     }
 
     public String getSakstype() {
@@ -35,8 +35,8 @@ public class Sak {
         return fagsystem;
     }
 
-    public String getSaksnummer() {
-        return saksnummer;
+    public String getFagsakId() {
+        return fagsakId;
     }
 
     public LocalDate getOpprettet() {
@@ -54,7 +54,7 @@ public class Sak {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Sak sak = (Sak) o;
-        return Objects.equals(sakId, sak.sakId) &&
+        return Objects.equals(fagsakId, sak.fagsakId) &&
             Objects.equals(sakstype, sak.sakstype) &&
             Objects.equals(fagsystem, sak.fagsystem) &&
             Objects.equals(saksnummer, sak.saksnummer) &&
@@ -63,13 +63,13 @@ public class Sak {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sakId, sakstype, fagsystem, saksnummer, opprettet);
+        return Objects.hash(fagsakId, sakstype, fagsystem, saksnummer, opprettet);
     }
 
     @Override
     public String toString() {
         return "Sak{" +
-            "sakId='" + sakId + '\'' +
+            "fagsakId='" + fagsakId + '\'' +
             ", sakstype='" + sakstype + '\'' +
             ", fagsystem='" + fagsystem + '\'' +
             ", saksnummer='" + saksnummer + '\'' +

@@ -19,7 +19,7 @@ public class RemoteSakMapper {
     }
 
     public static Sak map(RemoteSak remoteSak) {
-        return new Sak(Integer.toString(remoteSak.getId()),
+        return new Sak(Long.toString(remoteSak.getId()),
                 remoteSak.getTema(),
                 remoteSak.getApplikasjon(),
                 remoteSak.getFagsakNr(),
@@ -40,7 +40,7 @@ public class RemoteSakMapper {
         }
         String dato = opprettet.substring(0, index);
         try {
-            return Optional.ofNullable(dato)
+            return Optional.of(dato)
                     .map(s -> LocalDate.parse(s, FORMATTER)).orElse(null);
         } catch (Exception e) {
             LOG.warn("Kunne ikke parse dato {}", dato);

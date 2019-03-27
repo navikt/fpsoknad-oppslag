@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RemoteSak {
 
-    private int id;
+    private Long id;
     private String tema;
     private String applikasjon;
     private String aktoerId;
@@ -15,7 +15,7 @@ public class RemoteSak {
     private String opprettetAv;
     private String opprettetTidspunkt;
 
-    public RemoteSak(@JsonProperty("id") int id,
+    public RemoteSak(@JsonProperty("id") Long id,
             @JsonProperty("tema") String tema,
             @JsonProperty("applikasjon") String applikasjon,
             @JsonProperty("aktoerId") String aktoerId,
@@ -33,7 +33,7 @@ public class RemoteSak {
         this.opprettetTidspunkt = opprettetTidspunkt;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -72,7 +72,7 @@ public class RemoteSak {
         if (o == null || getClass() != o.getClass())
             return false;
         RemoteSak remoteSak = (RemoteSak) o;
-        return id == remoteSak.id &&
+        return id.equals(remoteSak.id) &&
                 Objects.equals(tema, remoteSak.tema) &&
                 Objects.equals(applikasjon, remoteSak.applikasjon) &&
                 Objects.equals(aktoerId, remoteSak.aktoerId) &&
