@@ -43,6 +43,10 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
 public class PersonClientTpsWs implements PersonClient {
 
+    private static final String DØDD = "DØDD";
+
+    private static final String DØD = "DØD";
+
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
 
     private static final String STRENGT_FORTROLIG_ADRESSE = "SPSF";
@@ -125,6 +129,10 @@ public class PersonClientTpsWs implements PersonClient {
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
+
+        if (erDød(tpsBarn)) {
+            return null;
+        }
         if (harStrengtFortroligAdresse(tpsBarn)) {
             return null;
         }
@@ -136,11 +144,22 @@ public class PersonClientTpsWs implements PersonClient {
                 .filter(fnr -> !fnr.equals(fnrSøker))
                 .map(fnr -> tpsPersonWithRetry(request(fnr)))
                 .filter(p -> !harStrengtFortroligAdresse(p))
+                .filter(p -> !erDød(p))
                 .map(PersonMapper::annenForelder)
                 .findFirst()
                 .orElse(null);
 
         return barn(id, fnrSøker, tpsBarn, annenForelder);
+    }
+
+    private boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+        try {
+            String status = person.getPersonstatus().getPersonstatus().getValue();
+            return DØD.equals(status) || DØDD.equals(status);
+        } catch (Exception e) {
+            LOG.warn("Feil ved sjekking av personstatus", e);
+            return false;
+        }
     }
 
     private boolean harStrengtFortroligAdresse(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
