@@ -130,9 +130,9 @@ public class PersonClientTpsWs implements PersonClient {
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
 
-        if (erDød(tpsBarn)) {
-            return null;
-        }
+        /*
+         * if (erDød(tpsBarn)) { return null; }
+         */
         if (harStrengtFortroligAdresse(tpsBarn)) {
             return null;
         }
