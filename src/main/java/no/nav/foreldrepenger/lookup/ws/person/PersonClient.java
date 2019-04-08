@@ -6,4 +6,6 @@ public interface PersonClient extends Pingable {
 
     Person hentPersonInfo(ID id);
 
+    Navn navn(Fødselsnummer fnr);
+
 }

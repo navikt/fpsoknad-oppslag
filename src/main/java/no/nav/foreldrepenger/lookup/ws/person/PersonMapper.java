@@ -51,7 +51,7 @@ final class PersonMapper {
                 birthDate(annenForelder));
     }
 
-    private static Navn name(Personnavn navn) {
+    static Navn name(Personnavn navn) {
         return new Navn(navn.getFornavn(), navn.getMellomnavn(), navn.getEtternavn());
     }
 

@@ -19,6 +19,7 @@ import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -78,6 +79,21 @@ public class PersonClientTpsWs implements PersonClient {
     }
 
     @Override
+    public Navn navn(Fødselsnummer fnr) {
+        HentPersonRequest request = request(fnr);
+        LOG.info("Slår opp navn");
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person = tpsPersonWithRetry(request);
+        return navnFor(person);
+    }
+
+    private Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+        return Optional.ofNullable(person)
+                .map(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person::getPersonnavn)
+                .map(PersonMapper::name)
+                .orElse(null);
+    }
+
+    @Override
     public Person hentPersonInfo(ID id) {
         HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.info("Slår opp person");
@@ -130,9 +146,6 @@ public class PersonClientTpsWs implements PersonClient {
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
 
-        /*
-         * if (erDød(tpsBarn)) { return null; }
-         */
         if (harStrengtFortroligAdresse(tpsBarn)) {
             return null;
         }

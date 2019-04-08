@@ -34,6 +34,11 @@ public class PersonController {
         return personClient.hentPersonInfo(new ID(aktorClient.aktorIdForFnr(fnr), fnr));
     }
 
+    @GetMapping("/navn")
+    public Navn person(Fødselsnummer fnr) {
+        return personClient.navn(fnr);
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [aktorClient=" + aktorClient + ", personClient=" + personClient + "]";
