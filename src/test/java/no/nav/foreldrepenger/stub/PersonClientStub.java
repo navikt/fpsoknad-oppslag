@@ -1,15 +1,25 @@
 package no.nav.foreldrepenger.stub;
 
-import com.neovisionaries.i18n.CountryCode;
-import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.lookup.ws.person.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.time.LocalDate.now;
+import static java.util.Collections.singletonList;
 
 import java.util.List;
 
-import static java.time.LocalDate.now;
-import static java.util.Collections.singletonList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.neovisionaries.i18n.CountryCode;
+
+import io.micrometer.core.annotation.Timed;
+import no.nav.foreldrepenger.lookup.ws.person.AnnenForelder;
+import no.nav.foreldrepenger.lookup.ws.person.Bankkonto;
+import no.nav.foreldrepenger.lookup.ws.person.Barn;
+import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
+import no.nav.foreldrepenger.lookup.ws.person.ID;
+import no.nav.foreldrepenger.lookup.ws.person.Kjønn;
+import no.nav.foreldrepenger.lookup.ws.person.Navn;
+import no.nav.foreldrepenger.lookup.ws.person.Person;
+import no.nav.foreldrepenger.lookup.ws.person.PersonClient;
 
 public class PersonClientStub implements PersonClient {
 
@@ -44,6 +54,6 @@ public class PersonClientStub implements PersonClient {
 
     @Override
     public Navn navn(Fødselsnummer fnr) {
-      return new Navn("Ole", "Gunnar", "Solskjær")
+        return new Navn("Ole", "Gunnar", "Solskjær");
     }
 }
