@@ -20,13 +20,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EndpointSTSClientConfig implements EnvironmentAware {
+public class EndpointSTSClientConfig  {
 
     private static final String POLICY_PATH = "classpath:policy/";
     private static final String STS_REQUEST_SAML_POLICY = POLICY_PATH + "requestSamlPolicy.xml";
 
     private STSClient stsClient;
-    private Environment env;
 
     public EndpointSTSClientConfig(STSClient stsClient) {
         this.stsClient = stsClient;
@@ -74,9 +73,4 @@ public class EndpointSTSClientConfig implements EnvironmentAware {
         policyEngine.setClientEndpointPolicy(endpointInfo, endpointPolicy.updatePolicy(policy, message));
     }
 
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
-
-    }
 }
