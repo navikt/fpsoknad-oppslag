@@ -4,8 +4,5 @@ management :
      health.show-details : always
      security.enabled : false
 
-spring :
-    http.log-request-details : true
-    jackson.deserialization.fail-on-unknown-properties: false
-
+spring.http.log-request-details : true
 org.apache.cxf.logging.enable : true

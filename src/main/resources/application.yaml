@@ -11,12 +11,13 @@ info.app:
 http.proxy : http://webproxy-nais.nav.no:8088
 
 management:
+    metrics.web.server.auto-time-requests : true
     endpoints.web.exposure.include:  info, health, metrics, prometheus
-    health:
+    health :
       diskspace.enabled: false
       jms.enabled: false
-server.servlet:
-    context-path: /api
+server:
+    servlet.context-path: /api
     use-forward-headers: true
 spring:
     cache :
@@ -24,13 +25,10 @@ spring:
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
     application.name : fpsoknad-oppslag
     jackson:
-      default-property-inclusion: non_null
+      default-property-inclusion: non-null
       deserialization:
-         accept_single_value_as_array: true
+         accept-single-value-as-array: true
          fail-on-unknown-properties: false
       serialization:
          fail-on-empty-beans: false
     main.banner-mode: 'off'
-    metrics.web.server.auto-time-requests: true
-
-

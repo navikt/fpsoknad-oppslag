@@ -1,0 +1,105 @@
+{"properties": [
+  {
+    "name": "AKTOER_V2_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'AKTOER_V2_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_MEDLEMSKAP_V2_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_MEDLEMSKAP_V2_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL'"
+  },
+  {
+    "name": "SAK_SAKER_URL",
+    "type": "java.net.Uri",
+    "description": "A description for 'SAK_SAKER_URL'"
+  },
+  {
+    "name": "JOURNAL_V2_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'JOURNAL_V2_ENDPOINTURL'"
+  },
+  {
+    "name": "SECURITYTOKENSERVICE_URL",
+    "type": "java.net.Uri",
+    "description": "A description for 'SECURITYTOKENSERVICE_URL'"
+  },
+  {
+    "name": "VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_INNTEKT_V3_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_INNTEKT_V3_ENDPOINTURL'"
+  },
+  {
+    "name": "FPSELVBETJENING_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'FPSELVBETJENING_PASSWORD'"
+  },
+  {
+    "name": "FPSELVBETJENING_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'FPSELVBETJENING_USERNAME'"
+  },
+  {
+    "name": "VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_INFOTRYGDSAK_V1_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_INFOTRYGDSAK_V1_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_PERSON_V3_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_PERSON_V3_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_SAK_V2_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_SAK_V2_ENDPOINTURL'"
+  },
+  {
+    "name": "VIRKSOMHET_YTELSESKONTRAKT_V3_ENDPOINTURL",
+    "type": "java.net.Uri",
+    "description": "A description for 'VIRKSOMHET_YTELSESKONTRAKT_V3_ENDPOINTURL'"
+  },
+  {
+    "name": "http.proxy",
+    "type": "java.lang.String",
+    "description": "A description for 'http.proxy'"
+  },
+  {
+    "name": "management.endpoint.security.enabled",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'management.endpoint.security.enabled'"
+  },
+  {
+    "name": "no.nav.security.oidc",
+    "description": "A description for 'no.nav.security.oidc'"
+  },
+  {
+    "name": "securitytokenservice.uri",
+    "type": "java.net.Uri",
+    "description": "A description for 'securitytokenservice.uri'"
+  },
+  {
+    "name": "info.app",
+    "description": "A description for 'info.app'"
+  },
+  {
+    "name": "org.apache.cxf.logging.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'org.apache.cxf.logging.enable'"
+  }
+]}
