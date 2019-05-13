@@ -15,8 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
@@ -28,8 +26,6 @@ import no.nav.foreldrepenger.lookup.util.TokenUtil;
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> {
-    private static final Logger LOG = LoggerFactory.getLogger(OnBehalfOfOutInterceptor.class);
-
     private static final String OIDC_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:jwt";
     private final TokenUtil tokenUtil;
 

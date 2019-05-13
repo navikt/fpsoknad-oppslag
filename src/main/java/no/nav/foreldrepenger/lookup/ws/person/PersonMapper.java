@@ -15,9 +15,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 
 final class PersonMapper {
-
     private PersonMapper() {
-
     }
 
     public static no.nav.foreldrepenger.lookup.ws.person.Person person(ID id,
@@ -26,7 +24,7 @@ final class PersonMapper {
                 id,
                 countryCode(person),
                 Kjønn.valueOf(person.getKjoenn().getKjoenn().getValue()),
-                name(person.getPersonnavn()),
+                name(person.getPersonnavn(), Kjønn.valueOf(person.getKjoenn().getKjoenn().getValue())),
                 målform(person),
                 bankkonto(person),
                 birthDate(person),
@@ -39,20 +37,19 @@ final class PersonMapper {
                 fnrMor,
                 new Fødselsnummer(id.getIdent()),
                 birthDate(barn),
-                name(barn.getPersonnavn()),
-                Kjønn.valueOf(barn.getKjoenn().getKjoenn().getValue()),
+                name(barn.getPersonnavn(), Kjønn.valueOf(barn.getKjoenn().getKjoenn().getValue())),
                 annenForelder);
     }
 
     public static AnnenForelder annenForelder(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person annenForelder) {
         return new AnnenForelder(
-                name(annenForelder.getPersonnavn()),
+                name(annenForelder.getPersonnavn(), Kjønn.valueOf(annenForelder.getKjoenn().getKjoenn().getValue())),
                 new Fødselsnummer(PersonIdent.class.cast(annenForelder.getAktoer()).getIdent().getIdent()),
                 birthDate(annenForelder));
     }
 
-    static Navn name(Personnavn navn) {
-        return new Navn(navn.getFornavn(), navn.getMellomnavn(), navn.getEtternavn());
+    static Navn name(Personnavn navn, Kjønn kjønn) {
+        return new Navn(navn.getFornavn(), navn.getMellomnavn(), navn.getEtternavn(), kjønn);
     }
 
     private static CountryCode countryCode(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
@@ -102,8 +99,7 @@ final class PersonMapper {
         if (konto instanceof BankkontoNorge) {
             BankkontoNorge norskKonto = (BankkontoNorge) konto;
             return Pair.of(norskKonto.getBankkonto().getBankkontonummer(), norskKonto.getBankkonto().getBanknavn());
-        }
-        else {
+        } else {
             BankkontoUtland utenlandskKonto = (BankkontoUtland) konto;
             return Pair.of(utenlandskKonto.getBankkontoUtland().getSwift(),
                     utenlandskKonto.getBankkontoUtland().getBankkode());

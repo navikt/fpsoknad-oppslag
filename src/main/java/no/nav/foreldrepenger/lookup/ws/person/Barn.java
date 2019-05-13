@@ -8,21 +8,18 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class Barn {
-
     private final Fødselsnummer fnr;
     private final Fødselsnummer fnrSøker;
     private final LocalDate fødselsdato;
     private final Navn navn;
-    private final Kjønn kjønn;
     private final AnnenForelder annenForelder;
 
-    public Barn(Fødselsnummer fnrSøker, Fødselsnummer fnr, LocalDate fødselsdato, Navn navn, Kjønn kjønn,
+    public Barn(Fødselsnummer fnrSøker, Fødselsnummer fnr, LocalDate fødselsdato, Navn navn,
             AnnenForelder annenForelder) {
         this.fnr = fnr;
         this.fnrSøker = fnrSøker;
         this.fødselsdato = requireNonNull(fødselsdato);
         this.navn = navn;
-        this.kjønn = kjønn;
         this.annenForelder = annenForelder;
     }
 
@@ -46,7 +43,7 @@ public class Barn {
     }
 
     public Kjønn getKjønn() {
-        return kjønn;
+        return navn.getKjønn();
     }
 
     public AnnenForelder getAnnenForelder() {
@@ -73,7 +70,6 @@ public class Barn {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [fnr=" + fnr + ", fnrSøker=" + fnrSøker + ", fødselsdato=" + fødselsdato
-                + ", navn=" + navn + ", kjønn=" + kjønn + ", annenForelder=" + annenForelder + "]";
+                + ", navn=" + navn + ", annenForelder=" + annenForelder + "]";
     }
-
 }

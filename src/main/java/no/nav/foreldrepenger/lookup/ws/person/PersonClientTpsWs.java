@@ -43,15 +43,10 @@ import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
 public class PersonClientTpsWs implements PersonClient {
-
     private static final String DØDD = "DØDD";
-
     private static final String DØD = "DØD";
-
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
-
     private static final String STRENGT_FORTROLIG_ADRESSE = "SPSF";
-
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
     private final Barnutvelger barnutvelger;
@@ -88,8 +83,7 @@ public class PersonClientTpsWs implements PersonClient {
 
     private Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         return Optional.ofNullable(person)
-                .map(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person::getPersonnavn)
-                .map(PersonMapper::name)
+                .map(p -> PersonMapper.name(p.getPersonnavn(), Kjønn.valueOf(p.getKjoenn().getKjoenn().getValue())))
                 .orElse(null);
     }
 
@@ -113,17 +107,17 @@ public class PersonClientTpsWs implements PersonClient {
         PersonIdent id = (PersonIdent) person.getAktoer();
         String idType = id.getIdent().getType().getValue();
         switch (idType) {
-        case FNR:
-        case DNR:
-            Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
-            return person.getHarFraRolleI().stream()
-                    .filter(this::isBarn)
-                    .map(s -> hentBarn(s, fnrSøker))
-                    .filter(Objects::nonNull)
-                    .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
-                    .collect(toList());
-        default:
-            throw new IllegalStateException("ID type " + idType + " ikke støttet");
+            case FNR:
+            case DNR:
+                Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
+                return person.getHarFraRolleI().stream()
+                        .filter(this::isBarn)
+                        .map(s -> hentBarn(s, fnrSøker))
+                        .filter(Objects::nonNull)
+                        .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
+                        .collect(toList());
+            default:
+                throw new IllegalStateException("ID type " + idType + " ikke støttet");
         }
     }
 
@@ -141,15 +135,12 @@ public class PersonClientTpsWs implements PersonClient {
         if (!isFnr(id)) {
             return null;
         }
-
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
-
         if (harStrengtFortroligAdresse(tpsBarn)) {
             return null;
         }
-
         AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
                 .filter(this::isForelder)
                 .map(this::toFødselsnummer)
@@ -161,7 +152,6 @@ public class PersonClientTpsWs implements PersonClient {
                 .map(PersonMapper::annenForelder)
                 .findFirst()
                 .orElse(null);
-
         return barn(id, fnrSøker, tpsBarn, annenForelder);
     }
 
@@ -218,5 +208,4 @@ public class PersonClientTpsWs implements PersonClient {
         return getClass().getSimpleName() + " [person=" + person + ", healthIndicator=" + healthIndicator
                 + ", barnutvelger=" + barnutvelger + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig + "]";
     }
-
 }

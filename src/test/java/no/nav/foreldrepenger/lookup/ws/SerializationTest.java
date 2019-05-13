@@ -28,7 +28,6 @@ import no.nav.foreldrepenger.lookup.ws.person.Person;
 @SpringJUnitConfig
 @AutoConfigureJsonTesters
 public class SerializationTest {
-
     @Autowired
     private ObjectMapper mapper;
 
@@ -83,7 +82,7 @@ public class SerializationTest {
     }
 
     private static Navn name() {
-        return new Navn("Jan-Olav", "Kjørås", "Eide");
+        return new Navn("Jan-Olav", "Kjørås", "Eide", Kjønn.M);
     }
 
     private static Person person() {
