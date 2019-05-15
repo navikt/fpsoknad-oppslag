@@ -29,9 +29,7 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforhold
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerResponse;
 
 public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
-
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdClientWs.class);
-
     private final ArbeidsforholdV3 arbeidsforholdV3;
     private final ArbeidsforholdV3 healthIndicator;
     private final OrganisasjonClient orgClient;
@@ -64,7 +62,8 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
 
     @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr())).get();
+        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr()))
+                .get();
         for (Arbeidsforhold forhold : arbeidsforhold) {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             navn.ifPresent(forhold::setArbeidsgiverNavn);
@@ -74,7 +73,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
 
     private Optional<String> navnFor(String orgnr) {
         try {
-            return arbeidsgiverNavn(orgnr);
+            return nameFor(orgnr);
         } catch (SOAPFaultException e) {
             return Optional.empty();
         }
@@ -112,7 +111,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
         return request;
     }
 
-    private Optional<String> arbeidsgiverNavn(String orgnr) {
+    private Optional<String> nameFor(String orgnr) {
         return orgClient.nameFor(orgnr);
     }
 
@@ -135,4 +134,9 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
                 + "]";
     }
 
+    @Override
+    public String arbeidsgiverNavn(String orgnr) {
+        Optional<String> navn = navnFor(orgnr);
+        return navn.isPresent() ? navn.get() : null;
+    }
 }
