@@ -47,6 +47,7 @@ public class PersonClientTpsWs implements PersonClient {
     private static final String DØD = "DØD";
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
     private static final String STRENGT_FORTROLIG_ADRESSE = "SPSF";
+    private static final String FORTROLIG_ADRESSE = "SPFO";
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
     private final Barnutvelger barnutvelger;
@@ -138,7 +139,7 @@ public class PersonClientTpsWs implements PersonClient {
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
-        if (harStrengtFortroligAdresse(tpsBarn)) {
+        if (!skalKunneVises(tpsBarn)) {
             return null;
         }
         AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
@@ -147,7 +148,7 @@ public class PersonClientTpsWs implements PersonClient {
                 .filter(Objects::nonNull)
                 .filter(fnr -> !fnr.equals(fnrSøker))
                 .map(fnr -> tpsPersonWithRetry(request(fnr)))
-                .filter(p -> !harStrengtFortroligAdresse(p))
+                .filter(this::skalKunneVises)
                 .filter(p -> !erDød(p))
                 .map(PersonMapper::annenForelder)
                 .findFirst()
@@ -165,13 +166,13 @@ public class PersonClientTpsWs implements PersonClient {
         }
     }
 
-    private boolean harStrengtFortroligAdresse(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private boolean skalKunneVises(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
             String verdi = diskresjonskode.getValue();
-            return verdi != null && verdi.equals(STRENGT_FORTROLIG_ADRESSE);
+            return verdi != null && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);
         }
-        return false;
+        return true;
     }
 
     private Fødselsnummer toFødselsnummer(Familierelasjon rel) {
