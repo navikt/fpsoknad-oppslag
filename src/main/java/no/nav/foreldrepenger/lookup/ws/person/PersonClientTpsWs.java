@@ -1,6 +1,7 @@
 package no.nav.foreldrepenger.lookup.ws.person;
 
 import static io.github.resilience4j.retry.Retry.decorateSupplier;
+import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.lookup.util.RetryUtil.DEFAULT_RETRIES;
@@ -17,12 +18,15 @@ import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.FAMILIERELASJONER;
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.KOMMUNIKASJON;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +39,6 @@ import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
@@ -139,9 +139,10 @@ public class PersonClientTpsWs implements PersonClient {
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
-        if (!skalKunneVises(tpsBarn)) {
+        if (!skalKunneVises(tpsBarn) || harDøddForOverEttÅrSiden(tpsBarn)) {
             return null;
         }
+
         AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
                 .filter(this::isForelder)
                 .map(this::toFødselsnummer)
@@ -154,6 +155,15 @@ public class PersonClientTpsWs implements PersonClient {
                 .findFirst()
                 .orElse(null);
         return barn(id, fnrSøker, tpsBarn, annenForelder);
+    }
+
+    private boolean harDøddForOverEttÅrSiden(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+        Doedsdato dødsdato = person.getDoedsdato();
+        if(dødsdato == null) {
+            return false;
+        }
+        XMLGregorianCalendar dato = dødsdato.getDoedsdato();
+        return dato != null && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusYears(1));
     }
 
     private boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
