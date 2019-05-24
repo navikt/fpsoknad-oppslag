@@ -139,7 +139,7 @@ public class PersonClientTpsWs implements PersonClient {
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
                 request(fnrBarn, FAMILIERELASJONER));
-        if (!skalKunneVises(tpsBarn) || harDøddForOverEttÅrSiden(tpsBarn)) {
+        if (!skalKunneVises(tpsBarn) || harDøddForOverFireMånederSiden(tpsBarn)) {
             return null;
         }
 
@@ -157,13 +157,13 @@ public class PersonClientTpsWs implements PersonClient {
         return barn(id, fnrSøker, tpsBarn, annenForelder);
     }
 
-    private boolean harDøddForOverEttÅrSiden(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private boolean harDøddForOverFireMånederSiden(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Doedsdato dødsdato = person.getDoedsdato();
         if(dødsdato == null) {
             return false;
         }
         XMLGregorianCalendar dato = dødsdato.getDoedsdato();
-        return dato != null && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusYears(1));
+        return dato != null && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
     }
 
     private boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
