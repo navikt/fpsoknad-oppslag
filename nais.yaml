@@ -1,5 +1,5 @@
 name: fpsoknad-oppslag
-team: bris
+team: teamforeldrepenger
 image: repo.adeo.no:5443/fpsoknad-oppslag
 replicas:
     min: 2
