@@ -331,7 +331,7 @@
         <dependency>
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-annotations</artifactId>
-            <version>0.16.0</version>
+            <version>0.17.0</version>
         </dependency>
     </dependencies>
 
