@@ -7,13 +7,13 @@ jobs:
    build:
      working_directory: ~/fpsoknad-oppslag
      docker:
-       - image: circleci/openjdk:11-jdk
+       - image: circleci/openjdk:8-jdk
      steps:
        - checkout       
       
        - restore_cache: 
           name: Hente cache 
-          key: fpsoknad-mottak-{{ checksum "pom.xml" }}
+          key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
       
        - run:
           name: Lagre avhengigheter  
@@ -22,7 +22,7 @@ jobs:
        - save_cache:
           paths:
             - ~/.m2
-          key: fpsoknad-mottak-{{ checksum "pom.xml" }}
+          key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
           
        - run: 
            name: Bygge 
