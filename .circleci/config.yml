@@ -26,7 +26,7 @@ jobs:
           
        - run: 
            name: Bygge 
-           command: mvn clean package 
+           command: mvn -X clean package 
       
        - run:
            name: Flytte testresultater
