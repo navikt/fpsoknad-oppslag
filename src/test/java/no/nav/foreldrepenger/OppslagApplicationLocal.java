@@ -1,10 +1,12 @@
 package no.nav.foreldrepenger;
 
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.DEV;
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.LOCAL;
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 
 import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
@@ -12,12 +14,14 @@ import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
 
 @SpringBootApplication
 @EnableOIDCTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
+@ComponentScan(excludeFilters = { @Filter(type = ASSIGNABLE_TYPE, value = OppslagApplication.class) })
+
 @Import(value = TokenGeneratorConfiguration.class)
 public class OppslagApplicationLocal {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(OppslagApplicationLocal.class)
-                .profiles(DEV, LOCAL)
+                .profiles(LOCAL)
                 .run(args);
     }
 }
