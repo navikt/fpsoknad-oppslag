@@ -1,4 +1,5 @@
 {
+  "ingress": "https://fpsoknad-oppslag.nais.preprod.local",
   "application_name": "fpsoknad-oppslag",
   "env": {
     "jalla": "42"
