@@ -22,7 +22,7 @@
             <OnMatch>DENY</OnMatch>
         </turboFilter>
     </springProfile>
-    <springProfile name="dev,preprod">
+    <springProfile name="dev,local">
         <logger name="no.nav.security.spring.oidc" level="trace"/>
         <logger name="org.apache.cxf.services" level="trace" />
         <logger name="no.nav.foreldrepenger" level="trace"/>

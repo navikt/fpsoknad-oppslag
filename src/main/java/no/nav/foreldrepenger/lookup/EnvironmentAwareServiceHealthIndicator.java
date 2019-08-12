@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.lookup;
 
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrLocal;
 
 import java.net.URI;
 
@@ -24,9 +24,9 @@ public abstract class EnvironmentAwareServiceHealthIndicator implements Environm
     public Health health() {
         try {
             checkHealth();
-            return isDevOrPreprod(env) ? upWithDetails() : up();
+            return isDevOrLocal(env) ? upWithDetails() : up();
         } catch (Exception e) {
-            return isDevOrPreprod(env) ? downWithDetails(e) : down();
+            return isDevOrLocal(env) ? downWithDetails(e) : down();
         }
     }
 

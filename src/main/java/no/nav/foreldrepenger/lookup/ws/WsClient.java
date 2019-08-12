@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.lookup.ws;
 
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrLocal;
 
 import java.util.Objects;
 
@@ -48,7 +48,7 @@ public class WsClient<T> implements EnvironmentAware {
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
         T port = (T) jaxWsProxyFactoryBean.create();
         Client client = ClientProxy.getClient(port);
-        if (isDevOrPreprod(env)) {
+        if (isDevOrLocal(env)) {
             client.getInFaultInterceptors().add(new LoggingInInterceptor());
             client.getOutFaultInterceptors().add(new LoggingOutInterceptor());
         }

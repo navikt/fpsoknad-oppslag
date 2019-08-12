@@ -2,6 +2,14 @@
   "ingress": "https://fpsoknad-oppslag.nais.preprod.local",
   "application_name": "fpsoknad-oppslag",
   "env": {
-    "jalla": "42"
+   "VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL": "https://fpsak-q1.nais.preprod.local/fpsak/tjenester/sak/finnSak/v1",  
+   "INNSYNJOURNAL_V2_ENDPOINTURL": "https://wasapp-q1.adeo.no/joark/InnsynJournal/v2",
+   "AKTOER_V2_ENDPOINTURL": "https://app-q1.adeo.no/aktoerregister/ws/Aktoer/v2",
+   "VIRKSOMHET_PERSON_V3_ENDPOINTURL": "https://wasapp-q1.adeo.no/tpsws/ws/Person/v3",  
+   "SECURITYTOKENSERVICE_URL": "https://sts-q1.preprod.local/SecurityTokenServiceProvider/",
+   "VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL": "https://modapp-q1.adeo.no/ereg/ws/OrganisasjonService/v5", 
+   "VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL": "https://modapp-q1.adeo.no/aareg-services/ArbeidsforholdService/v3",   
+   "no_nav_security_oidc_issuer_selvbetjening_discoveryurl": "https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1",
+   "spring_profiles_active": "dev" 
   }
 }

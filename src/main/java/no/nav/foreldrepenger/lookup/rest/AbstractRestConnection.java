@@ -54,8 +54,8 @@ public abstract class AbstractRestConnection implements EnvironmentAware {
         return operations.postForObject(uri, payload, responseType);
     }
 
-    protected boolean isDevOrPreprod() {
-        return EnvUtil.isDevOrPreprod(env);
+    protected boolean isDevOrLocal() {
+        return EnvUtil.isDevOrLocal(env);
     }
 
     @Override

@@ -1,8 +1,0 @@
-management :
-   endpoints.web.exposure.include:  '*'
-   endpoint:
-     health.show-details : always
-     security.enabled : false
-
-spring.http.log-request-details : true
-org.apache.cxf.logging.enable : true

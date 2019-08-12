@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.lookup.rest.filters;
 
 import static no.nav.foreldrepenger.lookup.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.lookup.Constants.NAV_USER_ID;
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrPreprod;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.isDevOrLocal;
 import static no.nav.foreldrepenger.lookup.util.MDCUtil.toMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
@@ -49,7 +49,7 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     private void copyHeadersToMDC(HttpServletRequest req) {
         try {
             String fnr = tokenUtil.getSubject();
-            if (isDevOrPreprod(getEnvironment())) {
+            if (isDevOrLocal(getEnvironment())) {
                 toMDC(NAV_USER_ID, fnr);
             }
             if (tokenUtil.getExpiryDate() != null) {

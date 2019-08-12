@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger;
 
 import static no.nav.foreldrepenger.lookup.util.EnvUtil.DEV;
-import static no.nav.foreldrepenger.lookup.util.EnvUtil.PREPROD;
+import static no.nav.foreldrepenger.lookup.util.EnvUtil.LOCAL;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -17,7 +17,7 @@ public class OppslagApplicationLocal {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(OppslagApplicationLocal.class)
-                .profiles(DEV, PREPROD)
+                .profiles(DEV, LOCAL)
                 .run(args);
     }
 }
