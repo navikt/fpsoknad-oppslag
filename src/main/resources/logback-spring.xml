@@ -23,8 +23,6 @@
         </turboFilter>
     </springProfile>
     <springProfile name="dev,local">
-        <logger name="no.nav.security.spring.oidc" level="trace"/>
-        <logger name="org.apache.cxf.services" level="trace" />
         <logger name="no.nav.foreldrepenger" level="trace"/>
     </springProfile>
 </configuration>
