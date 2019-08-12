@@ -6,13 +6,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 import no.nav.foreldrepenger.lookup.rest.sak.SakClient;
+import no.nav.foreldrepenger.lookup.util.EnvUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorIdClient;
 import no.nav.foreldrepenger.lookup.ws.arbeidsforhold.ArbeidsforholdClient;
 import no.nav.foreldrepenger.lookup.ws.arbeidsforhold.OrganisasjonClient;
 import no.nav.foreldrepenger.lookup.ws.person.PersonClient;
 
 @Configuration
-@Profile("dev")
+@Profile(EnvUtil.LOCAL)
 public class StubConfiguration {
 
     @Bean
