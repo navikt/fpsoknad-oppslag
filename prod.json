@@ -1,6 +1,14 @@
 {
   "application_name": "fpsoknad-oppslag",
   "env": {
-    "jalla": "42"
+   "SAK_SAKER_URL": "https://sak.nais.adeo.no/api/v1/saker",
+   "VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL": "https://fpsak.nais.adeo.local/fpsak/tjenester/sak/finnSak/v1",  
+   "INNSYNJOURNAL_V2_ENDPOINTURL": "https://wasapp.adeo.no/joark/InnsynJournal/v2",
+   "AKTOER_V2_ENDPOINTURL": "https://app.adeo.no/aktoerregister/ws/Aktoer/v2",
+   "VIRKSOMHET_PERSON_V3_ENDPOINTURL": "https://wasapp.adeo.no/tpsws/ws/Person/v3",  
+   "SECURITYTOKENSERVICE_URL": "https://sts.adeo.no/SecurityTokenServiceProvider/",
+   "VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL": "https://modapp.adeo.no/ereg/ws/OrganisasjonService/v5", 
+   "VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL": "https://modapp.adeo.no/aareg-services/ArbeidsforholdService/v3",   
+   "no_nav_security_oidc_issuer_selvbetjening_discoveryurl": "https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten"
   }
 }

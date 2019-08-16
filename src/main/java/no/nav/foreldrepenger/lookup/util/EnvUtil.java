@@ -8,6 +8,7 @@ import org.springframework.core.env.Profiles;
 public final class EnvUtil {
 
     public static final String LOCAL = "local";
+    public static final String DEFAULT = "default";
     public static final String DEV = "dev";
     public static final Marker CONFIDENTIAL = MarkerFactory.getMarker("CONFIDENTIAL");
 
@@ -24,7 +25,7 @@ public final class EnvUtil {
     }
 
     public static boolean isLocal(Environment env) {
-        return env.acceptsProfiles(Profiles.of(DEV));
+        return env.acceptsProfiles(Profiles.of(LOCAL));
     }
 
     public static boolean isProd(Environment env) {
