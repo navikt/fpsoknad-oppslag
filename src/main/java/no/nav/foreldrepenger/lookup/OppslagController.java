@@ -106,7 +106,7 @@ public class OppslagController {
         return register.equals(PingableRegisters.all)
                 ? Arrays.stream(PingableRegisters.values())
                         .map(PingableRegisters::name)
-                        .filter(s -> s != "all")
+                        .filter(s -> !s.equals("all"))
                         .collect(Collectors.joining(","))
                 : register.name();
     }
