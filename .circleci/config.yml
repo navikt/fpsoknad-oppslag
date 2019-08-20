@@ -30,6 +30,7 @@ jobs:
        - save_cache:
            paths:
              - ~/.m2
+             - ~/.sonar/cache
            key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
        - run:
            name: Flytte testresultater
