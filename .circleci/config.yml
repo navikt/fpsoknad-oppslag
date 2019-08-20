@@ -10,41 +10,32 @@ jobs:
        - image: circleci/openjdk:8-jdk
      steps:
        - checkout       
-      
        - restore_cache: 
           name: Hente cache 
           key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
-      
        - run:
           name: Lagre avhengigheter  
           command : mvn dependency:go-offline
-      
        - save_cache:
           paths:
             - ~/.m2
           key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
-          
        - run: 
           name: Bygge 
           command: mvn clean package
-            
        -run :
           name : Sonar
           command : mvn sonar:sonar -Dsonar.projectKey=navikt_fpsoknad-oppslag -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
-           
        - run:
            name: Flytte testresultater
            command: |
              mkdir -p ~/test-results/junit/
              find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
            when: always
-
        - store_test_results:
           path: ~/test-results
-
        - store_artifacts:
           path: ~/test-results/junit  
-          
        - nais/docker-deploy:
           image: navikt/$CIRCLE_PROJECT_REPONAME	
           
