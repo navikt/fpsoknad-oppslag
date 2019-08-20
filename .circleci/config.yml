@@ -16,13 +16,16 @@ jobs:
        - run:
           name: Lagre avhengigheter  
           command : mvn dependency:go-offline
+          
        - save_cache:
           paths:
             - ~/.m2
           key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
+          
        - run: 
           name: Bygge 
           command: mvn clean package
+          
        - run :
           name : Sonar
           command : mvn sonar:sonar -Dsonar.projectKey=navikt_fpsoknad-oppslag -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
