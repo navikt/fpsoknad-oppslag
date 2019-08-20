@@ -9,7 +9,7 @@ jobs:
      docker:
        - image: circleci/openjdk:8-jdk
      steps:
-       - checkout       
+       - checkout      
        - restore_cache: 
           name: Hente cache 
           key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
@@ -23,7 +23,7 @@ jobs:
        - run: 
           name: Bygge 
           command: mvn clean package
-       -run :
+       - run :
           name : Sonar
           command : mvn sonar:sonar -Dsonar.projectKey=navikt_fpsoknad-oppslag -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
        - run:
