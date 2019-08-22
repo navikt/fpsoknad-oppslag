@@ -17,16 +17,9 @@ jobs:
           name: Lagre avhengigheter  
           command : mvn dependency:go-offline
           
-     
-          
        - run: 
-          name: Bygge 
-          command: mvn clean package
-          
-       - run :
-          name : Sonar
-          command : mvn sonar:sonar -Dsonar.projectKey=navikt_fpsoknad-oppslag -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
-  
+          command: mvn -Dsonar.projectKey=navikt_$CIRCLE_PROJECT_REPONAME -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR clean package sonar:sonar       
+               
        - save_cache:
            paths:
              - ~/.m2
