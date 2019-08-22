@@ -9,7 +9,11 @@ jobs:
      docker:
        - image: circleci/openjdk:8-jdk
      steps:
-       - checkout      
+       - checkout  
+       - run : 
+          name : Set environment variables
+          command : echo "export RELEASE_VERSION=\"$MAJOR_VERSION-$CIRCLE_BUILD_NUM-$(git rev-parse --short HEAD)\"" >> $BASH_ENV
+            
        - restore_cache: 
           name: Hente cache 
           key: fpsoknad-oppslag-{{ checksum "pom.xml" }}
