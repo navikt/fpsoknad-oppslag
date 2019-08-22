@@ -18,6 +18,7 @@ jobs:
           command : mvn dependency:go-offline
           
        - run: 
+          name : Bygge
           command: mvn -Dsonar.projectKey=navikt_$CIRCLE_PROJECT_REPONAME -Dsonar.organization=navit -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR clean package sonar:sonar       
                
        - save_cache:
