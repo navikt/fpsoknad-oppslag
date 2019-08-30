@@ -1,0 +1,15 @@
+spring:
+   cloud:
+      vault:
+         enabled: true
+         uri: https://vault.adeo.no
+         authentication: KUBERNETES
+         kubernetes:
+            role: fpsoknad-oppslag
+            kubernetes-path: kubernetes/prod/fss
+            service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
+         generic:
+            enabled: true
+            backend: kv/prod/fss
+            application-name: fpsoknad-oppslag/default
+            default-context: fpsoknad-oppslag/default 
