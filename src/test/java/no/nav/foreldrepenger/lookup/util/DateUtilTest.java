@@ -21,5 +21,4 @@ public class DateUtilTest {
         assertThat(dateWithinPeriod(end, start, end)).isTrue();
         assertThat(dateWithinPeriod(of(2018, 2, 1), start, end)).isFalse();
     }
-
 }
