@@ -5,11 +5,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 
 import no.nav.foreldrepenger.config.ClusterAwareSpringProfileResolver;
-import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
+import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 
 @SpringBootApplication
 @EnableCaching
-@EnableOIDCTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
+@EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class OppslagApplication {
 
     public static void main(String[] args) {

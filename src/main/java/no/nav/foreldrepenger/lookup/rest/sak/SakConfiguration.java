@@ -20,7 +20,7 @@ import org.springframework.web.client.RestOperations;
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.lookup.util.RetryUtil;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
-import no.nav.security.spring.oidc.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
+import no.nav.security.token.support.spring.validation.interceptor.BearerTokenClientHttpRequestInterceptor;
 
 @Configuration
 public class SakConfiguration {

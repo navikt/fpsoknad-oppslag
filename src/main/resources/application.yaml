@@ -1,8 +1,7 @@
-no.nav.security.oidc:
-    issuers: selvbetjening
-    issuer.selvbetjening:
-      discoveryurl: SET from FASIT
-      accepted_audience: Set from FASIT
+no.nav:
+     security.jwt.issuer.selvbetjening:
+        discoveryurl: https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
+        cookie_name: selvbetjening-idtoken
 
 info.app:
     version: '@project.version@'

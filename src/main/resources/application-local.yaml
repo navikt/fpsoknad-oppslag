@@ -4,8 +4,7 @@ management :
      health.show-details : always
      security.enabled : false
 
-no.nav.security.oidc:
-  issuers: selvbetjening
+no.nav.security.jwt:
   issuer:
     selvbetjening.discoveryurl: http://metadata
     selvbetjening.accepted_audience: aud-localhost

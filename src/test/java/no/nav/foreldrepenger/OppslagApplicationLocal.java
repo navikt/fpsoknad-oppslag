@@ -9,11 +9,11 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 
 import no.nav.foreldrepenger.config.ClusterAwareSpringProfileResolver;
-import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
-import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation;
+import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
+import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 
 @SpringBootApplication
-@EnableOIDCTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
+@EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 @ComponentScan(excludeFilters = { @Filter(type = ASSIGNABLE_TYPE, value = OppslagApplication.class) })
 
 @Import(value = TokenGeneratorConfiguration.class)

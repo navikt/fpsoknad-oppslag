@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
-import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.api.Unprotected;
+import no.nav.security.token.support.core.api.ProtectedWithClaims;
+import no.nav.security.token.support.core.api.Unprotected;
 
 @RequestMapping(path = ArbeidsforholdController.ARBEIDSFORHOLD, produces = APPLICATION_JSON_VALUE)
 @RestController

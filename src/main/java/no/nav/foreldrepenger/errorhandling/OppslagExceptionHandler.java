@@ -28,8 +28,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
-import no.nav.security.oidc.exceptions.OIDCTokenValidatorException;
-import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
+import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
 @ControllerAdvice
 public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
@@ -68,8 +68,8 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndRespond(NOT_FOUND, e, req);
     }
 
-    @ExceptionHandler(OIDCUnauthorizedException.class)
-    public ResponseEntity<Object> handleOIDCUnauthorizedException(OIDCUnauthorizedException e, WebRequest req) {
+    @ExceptionHandler(JwtTokenUnauthorizedException.class)
+    public ResponseEntity<Object> handleJwtUnauthorizedException(JwtTokenUnauthorizedException e, WebRequest req) {
         return logAndRespond(UNAUTHORIZED, e, req);
     }
 
@@ -78,8 +78,8 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
         return logAndRespond(UNAUTHORIZED, e, req, "Token utløper " + e.getExpiryDate());
     }
 
-    @ExceptionHandler(OIDCTokenValidatorException.class)
-    public ResponseEntity<Object> handleUnauthenticatedOIDCException(OIDCTokenValidatorException e, WebRequest req) {
+    @ExceptionHandler(JwtTokenValidatorException.class)
+    public ResponseEntity<Object> handleUnauthenticatedOIDCException(JwtTokenValidatorException e, WebRequest req) {
         return logAndRespond(FORBIDDEN, e, req, "Token utløper " + e.getExpiryDate());
     }
 

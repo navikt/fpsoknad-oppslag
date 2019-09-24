@@ -35,7 +35,7 @@ import org.springframework.web.client.RestOperations;
 import no.nav.foreldrepenger.lookup.Constants;
 import no.nav.foreldrepenger.lookup.util.TokenUtil;
 import no.nav.foreldrepenger.lookup.ws.aktor.AktorId;
-import no.nav.security.oidc.test.support.JwtTokenGenerator;
+import no.nav.security.token.support.test.JwtTokenGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
