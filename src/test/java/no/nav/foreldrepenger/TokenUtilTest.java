@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger;
 
-import static no.nav.foreldrepenger.lookup.Constants.ISSUER;
+import static no.nav.foreldrepenger.oppslag.config.Constants.ISSUER;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,8 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 
-import no.nav.foreldrepenger.lookup.util.TokenUtil;
-import no.nav.foreldrepenger.lookup.ws.person.Fødselsnummer;
+import no.nav.foreldrepenger.oppslag.util.TokenUtil;
+import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.security.token.support.core.context.TokenValidationContext;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;

@@ -8,7 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Import;
 
-import no.nav.foreldrepenger.config.ClusterAwareSpringProfileResolver;
+import no.nav.foreldrepenger.oppslag.OppslagApplication;
+import no.nav.foreldrepenger.oppslag.config.ClusterAwareSpringProfileResolver;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 
