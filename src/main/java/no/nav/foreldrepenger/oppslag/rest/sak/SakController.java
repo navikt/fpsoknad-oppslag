@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
@@ -21,11 +21,11 @@ public class SakController {
 
     public static final String SAK = "/sak";
     private final SakClient sakClient;
-    private final AktorIdClient aktorClient;
+    private final AktørTjeneste aktorClient;
     private final TokenUtil tokenHandler;
 
     @Inject
-    public SakController(SakClient sakClient, AktorIdClient aktorClient, TokenUtil tokenHandler) {
+    public SakController(SakClient sakClient, AktørTjeneste aktorClient, TokenUtil tokenHandler) {
         this.sakClient = sakClient;
         this.tokenHandler = tokenHandler;
         this.aktorClient = aktorClient;

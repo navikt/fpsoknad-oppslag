@@ -24,7 +24,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIk
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRequest;
 
-public class AktorIdClientWs implements AktorIdClient {
+public class AktorIdClientWs implements AktørTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(AktorIdClientWs.class);
 
     private final AktoerV2 aktoerV2;

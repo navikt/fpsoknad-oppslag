@@ -10,9 +10,9 @@ import no.nav.foreldrepenger.oppslag.rest.EnvironmentAwareServiceHealthIndicator
 @Component
 public class AaregHealthIndicator extends EnvironmentAwareServiceHealthIndicator {
 
-    private final ArbeidsforholdClient client;
+    private final ArbeidsforholdTjeneste client;
 
-    public AaregHealthIndicator(ArbeidsforholdClient client,
+    public AaregHealthIndicator(ArbeidsforholdTjeneste client,
             @Value("${VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;

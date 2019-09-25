@@ -36,7 +36,7 @@ public class AaregConfiguration extends WsClient<ArbeidsforholdV3> {
     }
 
     @Bean
-    public ArbeidsforholdClient aaregClientWs(@Qualifier(ARBEIDSFORHOLD_V3) ArbeidsforholdV3 arbeidsforholdV3,
+    public ArbeidsforholdTjeneste aaregClientWs(@Qualifier(ARBEIDSFORHOLD_V3) ArbeidsforholdV3 arbeidsforholdV3,
             @Qualifier(HEALTH_INDICATOR_AAREG) ArbeidsforholdV3 healthIndicator,
             OrganisasjonClient organisasjonClient, TokenUtil tokenHandler,
             @Qualifier(ARBEIDSFORHOLD_V3RETRY) Retry retryConfig) {

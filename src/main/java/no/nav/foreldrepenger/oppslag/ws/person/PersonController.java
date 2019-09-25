@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
@@ -16,12 +16,12 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 public class PersonController {
 
     public static final String PERSON = "/person";
-    private final AktorIdClient aktorClient;
-    private final PersonClient personClient;
+    private final AktørTjeneste aktorClient;
+    private final PersonTjeneste personClient;
     private final TokenUtil tokenHandler;
 
     @Inject
-    public PersonController(AktorIdClient aktorClient, PersonClient personClient,
+    public PersonController(AktørTjeneste aktorClient, PersonTjeneste personClient,
             TokenUtil tokenHandler) {
         this.aktorClient = aktorClient;
         this.personClient = personClient;

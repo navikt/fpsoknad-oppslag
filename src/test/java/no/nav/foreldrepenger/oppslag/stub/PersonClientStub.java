@@ -19,9 +19,9 @@ import no.nav.foreldrepenger.oppslag.ws.person.ID;
 import no.nav.foreldrepenger.oppslag.ws.person.Kjønn;
 import no.nav.foreldrepenger.oppslag.ws.person.Navn;
 import no.nav.foreldrepenger.oppslag.ws.person.Person;
-import no.nav.foreldrepenger.oppslag.ws.person.PersonClient;
+import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 
-public class PersonClientStub implements PersonClient {
+public class PersonClientStub implements PersonTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientStub.class);
 
     @Timed("lookup.person")

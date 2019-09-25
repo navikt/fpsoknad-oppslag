@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.oppslag.ws.person;
 
 import no.nav.foreldrepenger.oppslag.util.Pingable;
 
-public interface PersonClient extends Pingable {
+public interface PersonTjeneste extends Pingable {
 
     Person hentPersonInfo(ID id);
 

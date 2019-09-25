@@ -10,9 +10,9 @@ import no.nav.foreldrepenger.oppslag.rest.EnvironmentAwareServiceHealthIndicator
 @Component
 public class AktørHealthIndicator extends EnvironmentAwareServiceHealthIndicator {
 
-    private final AktorIdClient client;
+    private final AktørTjeneste client;
 
-    public AktørHealthIndicator(AktorIdClient client, @Value("${AKTOER_V2_ENDPOINTURL}") URI serviceUrl) {
+    public AktørHealthIndicator(AktørTjeneste client, @Value("${AKTOER_V2_ENDPOINTURL}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
     }

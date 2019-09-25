@@ -18,13 +18,13 @@ import no.nav.foreldrepenger.oppslag.util.PingableRegisters;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.Søkerinfo;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdClient;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.oppslag.ws.person.ID;
 import no.nav.foreldrepenger.oppslag.ws.person.Person;
-import no.nav.foreldrepenger.oppslag.ws.person.PersonClient;
+import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
 
@@ -37,21 +37,20 @@ public class OppslagController {
 
     private static final Logger LOG = getLogger(OppslagController.class);
 
-    private final AktorIdClient aktorClient;
+    private final AktørTjeneste aktør;
 
-    private final PersonClient personClient;
+    private final PersonTjeneste person;
 
-    private final ArbeidsforholdClient arbeidsforholdClient;
+    private final ArbeidsforholdTjeneste arbeid;
 
     private final TokenUtil tokenUtil;
 
     @Inject
-    public OppslagController(AktorIdClient aktorClient, PersonClient personClient,
-            ArbeidsforholdClient arbeidsforholdClient,
+    public OppslagController(AktørTjeneste aktør, PersonTjeneste person, ArbeidsforholdTjeneste arbeid,
             TokenUtil tokenHandler) {
-        this.aktorClient = aktorClient;
-        this.personClient = personClient;
-        this.arbeidsforholdClient = arbeidsforholdClient;
+        this.aktør = aktør;
+        this.person = person;
+        this.arbeid = arbeid;
         this.tokenUtil = tokenHandler;
     }
 
@@ -62,18 +61,18 @@ public class OppslagController {
         LOG.info("Vil pinge register {}", register);
         switch (register) {
         case aareg:
-            arbeidsforholdClient.ping();
+            arbeid.ping();
             break;
         case aktør:
-            aktorClient.ping();
+            aktør.ping();
             break;
         case tps:
-            personClient.ping();
+            person.ping();
             break;
         case all:
-            aktorClient.ping();
-            personClient.ping();
-            arbeidsforholdClient.ping();
+            aktør.ping();
+            person.ping();
+            arbeid.ping();
             break;
         }
         return registerNavn(register) + " er i toppform";
@@ -82,10 +81,10 @@ public class OppslagController {
     @GetMapping
     public Søkerinfo essensiellSøkerinfo() {
         Fødselsnummer fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
-        AktorId aktorId = aktorClient.aktorIdForFnr(fnr);
-        Person person = personClient.hentPersonInfo(new ID(aktorId, fnr));
-        List<Arbeidsforhold> arbeidsforhold = arbeidsforholdClient.aktiveArbeidsforhold(fnr);
-        return new Søkerinfo(person, arbeidsforhold);
+        AktorId aktorId = aktør.aktorIdForFnr(fnr);
+        Person p = person.hentPersonInfo(new ID(aktorId, fnr));
+        List<Arbeidsforhold> arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr);
+        return new Søkerinfo(p, arbeidsforhold);
     }
 
     @GetMapping("/aktor")
@@ -95,12 +94,12 @@ public class OppslagController {
 
     @GetMapping("/aktorfnr")
     public AktorId getAktørIdForFNR(@RequestParam(name = "fnr") Fødselsnummer fnr) {
-        return aktorClient.aktorIdForFnr(fnr);
+        return aktør.aktorIdForFnr(fnr);
     }
 
     @GetMapping("/fnr")
     public Fødselsnummer getFNRforAktørIdR(@RequestParam(name = "aktorId") AktorId aktorId) {
-        return aktorClient.fnrForAktørId(aktorId);
+        return aktør.fnrForAktørId(aktorId);
     }
 
     private static String registerNavn(PingableRegisters register) {
@@ -114,8 +113,7 @@ public class OppslagController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [aktorClient=" + aktorClient + ", personClient=" + personClient
-                + ", aaregClient=" + arbeidsforholdClient + "]";
+        return getClass().getSimpleName() + " [aktør=" + aktør + ", person=" + person + ", arbeid=" + arbeid + "]";
     }
 
 }

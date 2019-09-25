@@ -41,7 +41,7 @@ public class PersonConfiguration extends WsClient<PersonV3> {
     }
 
     @Bean
-    public PersonClient personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
+    public PersonTjeneste personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
             @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler,
             Barnutvelger barnutvelger, @Qualifier(PERSONV3_RETRY) Retry retry) {
         return new PersonClientTpsWs(personV3, healthIndicator, handler, barnutvelger, retry);

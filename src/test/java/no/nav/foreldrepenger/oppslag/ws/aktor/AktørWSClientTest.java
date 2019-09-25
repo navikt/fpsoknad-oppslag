@@ -19,7 +19,7 @@ import no.nav.foreldrepenger.oppslag.errorhandling.NotFoundException;
 import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClientWs;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
@@ -40,7 +40,7 @@ public class AktørWSClientTest {
     private AktoerV2 healthIndicator;
     @Mock
     private AktoerV2 aktoerV2;
-    private AktorIdClient aktørClient;
+    private AktørTjeneste aktørClient;
 
     @BeforeEach
     public void beforeEach() {

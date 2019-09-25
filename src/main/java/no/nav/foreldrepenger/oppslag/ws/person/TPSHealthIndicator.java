@@ -10,9 +10,9 @@ import no.nav.foreldrepenger.oppslag.rest.EnvironmentAwareServiceHealthIndicator
 @Component
 public class TPSHealthIndicator extends EnvironmentAwareServiceHealthIndicator {
 
-    private final PersonClient client;
+    private final PersonTjeneste client;
 
-    public TPSHealthIndicator(PersonClient client, @Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") URI serviceUrl) {
+    public TPSHealthIndicator(PersonTjeneste client, @Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
     }

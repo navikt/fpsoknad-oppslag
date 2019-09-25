@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 
 @Order(HIGHEST_PRECEDENCE)
 @Component
@@ -29,10 +29,10 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IDToMDCFilterBean.class);
 
-    private final AktorIdClient aktørIdClient;
+    private final AktørTjeneste aktørIdClient;
     private final TokenUtil tokenUtil;
 
-    public IDToMDCFilterBean(TokenUtil tokenUtil, AktorIdClient aktørIdClient) {
+    public IDToMDCFilterBean(TokenUtil tokenUtil, AktørTjeneste aktørIdClient) {
         this.tokenUtil = tokenUtil;
         this.aktørIdClient = aktørIdClient;
     }

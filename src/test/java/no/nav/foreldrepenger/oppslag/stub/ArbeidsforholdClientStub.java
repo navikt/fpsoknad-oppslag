@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdClient;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
-public class ArbeidsforholdClientStub implements ArbeidsforholdClient {
+public class ArbeidsforholdClientStub implements ArbeidsforholdTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdClientStub.class);
 
     @Override

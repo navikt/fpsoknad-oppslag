@@ -42,7 +42,7 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
-public class PersonClientTpsWs implements PersonClient {
+public class PersonClientTpsWs implements PersonTjeneste {
     private static final String DØDD = "DØDD";
     private static final String DØD = "DØD";
     private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);

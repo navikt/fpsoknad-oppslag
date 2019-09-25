@@ -20,10 +20,10 @@ import no.nav.security.token.support.core.api.Unprotected;
 @ProtectedWithClaims(issuer = ISSUER, claimMap = { "acr=Level4" })
 public class ArbeidsforholdController {
     public static final String ARBEIDSFORHOLD = "/arbeidsforhold";
-    private final ArbeidsforholdClient arbeidsforholdClient;
+    private final ArbeidsforholdTjeneste arbeidsforholdClient;
     private final TokenUtil tokenUtil;
 
-    public ArbeidsforholdController(ArbeidsforholdClient arbeidsforholdClient, TokenUtil tokenUtil) {
+    public ArbeidsforholdController(ArbeidsforholdTjeneste arbeidsforholdClient, TokenUtil tokenUtil) {
         this.arbeidsforholdClient = arbeidsforholdClient;
         this.tokenUtil = tokenUtil;
     }

@@ -35,7 +35,7 @@ public class AktorIdConfiguration extends WsClient<AktoerV2> {
     }
 
     @Bean
-    public AktorIdClient aktorIdClientWs(@Qualifier(AKTOER_V2) AktoerV2 aktoerV2,
+    public AktørTjeneste aktorIdClientWs(@Qualifier(AKTOER_V2) AktoerV2 aktoerV2,
             @Qualifier(HEALTH_INDICATOR_AKTØR) AktoerV2 healthIndicator, TokenUtil tokenHandler,
             @Qualifier(AKTOER_V2RETRY) Retry retryConfig) {
         return new AktorIdClientWs(aktoerV2, healthIndicator, tokenHandler, retryConfig);

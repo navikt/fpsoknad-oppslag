@@ -28,7 +28,7 @@ import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.R
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerResponse;
 
-public class ArbeidsforholdClientWs implements ArbeidsforholdClient {
+public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdClientWs.class);
     private final ArbeidsforholdV3 arbeidsforholdV3;
     private final ArbeidsforholdV3 healthIndicator;

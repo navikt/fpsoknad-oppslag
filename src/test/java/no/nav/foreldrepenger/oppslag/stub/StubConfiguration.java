@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Profile;
 
 import no.nav.foreldrepenger.oppslag.rest.sak.SakClient;
 import no.nav.foreldrepenger.oppslag.util.EnvUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
-import no.nav.foreldrepenger.oppslag.ws.person.PersonClient;
+import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 
 @Configuration
 @Profile(EnvUtil.LOCAL)
@@ -18,19 +18,19 @@ public class StubConfiguration {
 
     @Bean
     @Primary
-    public AktorIdClient getAktorIdClientStub() {
+    public AktørTjeneste getAktorIdClientStub() {
         return new AktorIdClientStub();
     }
 
     @Bean
     @Primary
-    public PersonClient getPersonClientStub() {
+    public PersonTjeneste getPersonClientStub() {
         return new PersonClientStub();
     }
 
     @Bean
     @Primary
-    public ArbeidsforholdClient getAaregClientStub() {
+    public ArbeidsforholdTjeneste getAaregClientStub() {
         return new ArbeidsforholdClientStub();
     }
 

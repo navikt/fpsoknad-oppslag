@@ -2,13 +2,13 @@ package no.nav.foreldrepenger.oppslag.stub;
 
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClient;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AktorIdClientStub implements AktorIdClient {
+public class AktorIdClientStub implements AktørTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(AktorIdClientStub.class);
 
