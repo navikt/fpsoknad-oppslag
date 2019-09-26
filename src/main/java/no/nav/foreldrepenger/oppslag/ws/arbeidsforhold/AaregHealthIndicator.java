@@ -19,7 +19,12 @@ public class AaregHealthIndicator extends PingableHealthIndicator {
     }
 
     @Override
-    protected void checkHealth() {
+    public void ping() {
         client.ping();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[client=" + client + "]";
     }
 }

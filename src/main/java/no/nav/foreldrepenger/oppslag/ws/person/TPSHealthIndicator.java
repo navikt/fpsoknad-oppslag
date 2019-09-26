@@ -18,7 +18,12 @@ public class TPSHealthIndicator extends PingableHealthIndicator {
     }
 
     @Override
-    protected void checkHealth() {
+    public void ping() {
         client.ping();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[client=" + client + "]";
     }
 }

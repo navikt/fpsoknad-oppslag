@@ -5,11 +5,11 @@ import java.net.URI;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
-public abstract class PingableHealthIndicator implements HealthIndicator {
+import no.nav.foreldrepenger.oppslag.util.Pingable;
+
+public abstract class PingableHealthIndicator implements HealthIndicator, Pingable {
 
     private final URI serviceUrl;
-
-    protected abstract void checkHealth();
 
     public PingableHealthIndicator(URI serviceUrl) {
         this.serviceUrl = serviceUrl;
@@ -18,19 +18,15 @@ public abstract class PingableHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         try {
-            checkHealth();
-            return upWithDetails();
+            ping();
+            return Health.up()
+                    .withDetail("url", serviceUrl)
+                    .build();
         } catch (Exception e) {
-            return downWithDetails(e);
+            return Health.down()
+                    .withDetail("url", serviceUrl)
+                    .withException(e).build();
         }
-    }
-
-    private Health downWithDetails(Exception e) {
-        return Health.down().withDetail("url", serviceUrl).withException(e).build();
-    }
-
-    private Health upWithDetails() {
-        return Health.up().withDetail("url", serviceUrl).build();
     }
 
     @Override
