@@ -7,16 +7,29 @@ info.app:
     version: '@project.version@'
     build.time:  '@timestamp@'
 
-http.proxy : http://webproxy-nais.nav.no:8088
+http:
+  proxy : http://webproxy-nais.nav.no:8088
 
 management:
-    metrics.web.server.auto-time-requests : true
-    endpoints.web.exposure.include:  info, health, metrics, prometheus
+    endpoint:
+      health:    
+         show-details : never
+    metrics:
+      web:
+        server:
+          auto-time-requests : true
+    endpoints:
+      web:
+        exposure:
+          include:  info, health, metrics, prometheus
     health :
-      diskspace.enabled: false
-      jms.enabled: false
+      diskspace:
+        enabled: false
+      jms:
+        enabled: false
 server:
-    servlet.context-path: /api
+    servlet:
+      context-path: /api
     use-forward-headers: true
 spring:
     cache :

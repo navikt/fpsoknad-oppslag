@@ -1,22 +1,17 @@
 package no.nav.foreldrepenger.oppslag.rest;
 
-import static no.nav.foreldrepenger.oppslag.util.EnvUtil.isDevOrLocal;
-
 import java.net.URI;
 
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 
-public abstract class EnvironmentAwareServiceHealthIndicator implements EnvironmentAware, HealthIndicator {
+public abstract class PingableHealthIndicator implements HealthIndicator {
 
     private final URI serviceUrl;
-    private Environment env;
 
     protected abstract void checkHealth();
 
-    public EnvironmentAwareServiceHealthIndicator(URI serviceUrl) {
+    public PingableHealthIndicator(URI serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
 
@@ -24,27 +19,14 @@ public abstract class EnvironmentAwareServiceHealthIndicator implements Environm
     public Health health() {
         try {
             checkHealth();
-            return isDevOrLocal(env) ? upWithDetails() : up();
+            return upWithDetails();
         } catch (Exception e) {
-            return isDevOrLocal(env) ? downWithDetails(e) : down();
+            return downWithDetails(e);
         }
-    }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
-    }
-
-    private static Health down() {
-        return Health.down().build();
     }
 
     private Health downWithDetails(Exception e) {
         return Health.down().withDetail("url", serviceUrl).withException(e).build();
-    }
-
-    private static Health up() {
-        return Health.up().build();
     }
 
     private Health upWithDetails() {

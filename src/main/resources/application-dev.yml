@@ -1,9 +1,20 @@
 no.nav.security.jwt.issuer.selvbetjening.discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
 management :
-   endpoints.web.exposure.include:  '*'
+   endpoints:
+     web:
+       exposure:
+         include:  '*'
    endpoint:
-     health.show-details : always
-     security.enabled : false
+     health:
+       show-details : always
+     security:
+       enabled : false
 
-spring.http.log-request-details : true
-org.apache.cxf.logging.enable : true
+spring:
+  http:
+    log-request-details : true
+org:
+  apache:
+    cxf:
+      logging:
+        enable : true

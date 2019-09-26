@@ -5,10 +5,10 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.oppslag.rest.EnvironmentAwareServiceHealthIndicator;
+import no.nav.foreldrepenger.oppslag.rest.PingableHealthIndicator;
 
 @Component
-public class TPSHealthIndicator extends EnvironmentAwareServiceHealthIndicator {
+public class TPSHealthIndicator extends PingableHealthIndicator {
 
     private final PersonTjeneste client;
 
