@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import no.nav.foreldrepenger.oppslag.rest.PingableHealthIndicator;
 
 @Component
-public class AaregHealthIndicator extends PingableHealthIndicator {
+public class ArbeidsforholdHealthIndicator extends PingableHealthIndicator {
 
     private final ArbeidsforholdTjeneste client;
 
-    public AaregHealthIndicator(ArbeidsforholdTjeneste client,
+    public ArbeidsforholdHealthIndicator(ArbeidsforholdTjeneste client,
             @Value("${VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
