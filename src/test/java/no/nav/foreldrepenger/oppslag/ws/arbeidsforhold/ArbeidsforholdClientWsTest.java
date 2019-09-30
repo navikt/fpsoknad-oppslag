@@ -173,18 +173,18 @@ public class ArbeidsforholdClientWsTest {
 
     @Test
     public void noEndDateSet() {
-        assertTrue(client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, yesterday, Optional.empty())));
+        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, yesterday, Optional.empty())));
     }
 
     @Test
     public void endDateInThePast() {
         assertFalse(
-                client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(yesterday))));
+                client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(yesterday))));
     }
 
     @Test
     public void endDateInTheFuture() {
-        assertTrue(client.isOngoing(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(tomorrow))));
+        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(tomorrow))));
     }
 
     private FinnArbeidsforholdPrArbeidstakerResponse respons() throws Exception {

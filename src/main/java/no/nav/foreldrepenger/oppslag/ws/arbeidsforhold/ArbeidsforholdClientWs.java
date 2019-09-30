@@ -62,7 +62,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
 
     @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> aktiveArbeidsforhold(fnr.getFnr()))
+        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> arbeidsforholdSiste3år(fnr.getFnr()))
                 .get();
         for (Arbeidsforhold forhold : arbeidsforhold) {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
@@ -79,13 +79,13 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
         }
     }
 
-    private List<Arbeidsforhold> aktiveArbeidsforhold(String fnr) {
+    private List<Arbeidsforhold> arbeidsforholdSiste3år(String fnr) {
         try {
             FinnArbeidsforholdPrArbeidstakerResponse response = arbeidsforholdV3
                     .finnArbeidsforholdPrArbeidstaker(request(fnr));
             return response.getArbeidsforhold().stream()
                     .map(ArbeidsforholdMapper::map)
-                    .filter(this::isOngoing)
+                    .filter(this::siste3år)
                     .collect(toList());
         } catch (FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning e) {
             LOG.warn("Sikkerhetsfeil fra AAREG", e);
@@ -119,11 +119,11 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
         return RetryUtil.retry(DEFAULT_RETRIES, "arbeidforhold", SOAPFaultException.class, LOG);
     }
 
-    boolean isOngoing(Arbeidsforhold arbeidsforhold) {
-        LocalDate today = LocalDate.now();
-        return arbeidsforhold.getTom()
-                .map(t -> t.isAfter(today) || t.equals(today))
-                .orElse(true);
+    boolean siste3år(Arbeidsforhold arbeidsforhold) {
+        if (arbeidsforhold.getTom().isPresent()) {
+            return arbeidsforhold.getTom().get().isAfter(LocalDate.now().minusYears(3));
+        }
+        return true;
     }
 
     @Override
