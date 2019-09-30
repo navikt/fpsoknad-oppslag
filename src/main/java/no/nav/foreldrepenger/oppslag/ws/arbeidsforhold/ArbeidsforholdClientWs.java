@@ -130,8 +130,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     public String toString() {
         return getClass().getSimpleName() + " [arbeidsforholdV3=" + arbeidsforholdV3 + ", healthIndicator="
                 + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + ", retryConfig="
-                + retryConfig
-                + "]";
+                + retryConfig + "]";
     }
 
     @Override

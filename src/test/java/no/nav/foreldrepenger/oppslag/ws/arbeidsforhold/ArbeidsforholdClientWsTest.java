@@ -28,10 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.errorhandling.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdClientWs;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClientWs;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
@@ -52,9 +48,11 @@ public class ArbeidsforholdClientWsTest {
     private static final String ORGNR = "999999999";
     private static final String YRKE = "snekker";
     private static final String NAVN = "S. Vindel & sønn";
-    private static final LocalDate yesterday = LocalDate.now().minusDays(1);
-    private static final LocalDate oneWeekAgo = LocalDate.now().minusDays(7);
-    private static final LocalDate tomorrow = LocalDate.now().plusDays(2);
+    private static final LocalDate FOURYEARSAGO = LocalDate.now().minusYears(4);
+    private static final LocalDate TWOYEARSAGO = LocalDate.now().minusYears(2);
+
+    private static final LocalDate LASTWEEK = LocalDate.now().minusDays(7);
+    private static final LocalDate TOMORROW = LocalDate.now().plusDays(2);
     private static final Fødselsnummer FNR = new Fødselsnummer("22222222222");
     @Mock
     private ArbeidsforholdV3 arbeidsforhold;
@@ -173,18 +171,24 @@ public class ArbeidsforholdClientWsTest {
 
     @Test
     public void noEndDateSet() {
-        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, yesterday, Optional.empty())));
+        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.empty())));
     }
 
     @Test
-    public void endDateInThePast() {
+    public void endDate4årSiden() {
         assertFalse(
-                client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(yesterday))));
+                client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.ofNullable(FOURYEARSAGO))));
+    }
+
+    @Test
+    public void endDate2årSiden() {
+        assertTrue(
+                client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.ofNullable(TWOYEARSAGO))));
     }
 
     @Test
     public void endDateInTheFuture() {
-        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, oneWeekAgo, Optional.ofNullable(tomorrow))));
+        assertTrue(client.siste3år(new Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.ofNullable(TOMORROW))));
     }
 
     private FinnArbeidsforholdPrArbeidstakerResponse respons() throws Exception {
