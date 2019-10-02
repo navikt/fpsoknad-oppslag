@@ -26,9 +26,9 @@ import java.util.Optional;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.errorhandling.NotFoundException;
@@ -39,6 +39,11 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Doedsdato;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
@@ -75,6 +80,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     @Override
+    @Cacheable(cacheNames = "navn")
     public Navn navn(Fødselsnummer fnr) {
         HentPersonRequest request = request(fnr);
         LOG.info("Slår opp navn");
@@ -108,17 +114,17 @@ public class PersonClientTpsWs implements PersonTjeneste {
         PersonIdent id = (PersonIdent) person.getAktoer();
         String idType = id.getIdent().getType().getValue();
         switch (idType) {
-            case FNR:
-            case DNR:
-                Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
-                return person.getHarFraRolleI().stream()
-                        .filter(this::isBarn)
-                        .map(s -> hentBarn(s, fnrSøker))
-                        .filter(Objects::nonNull)
-                        .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
-                        .collect(toList());
-            default:
-                throw new IllegalStateException("ID type " + idType + " ikke støttet");
+        case FNR:
+        case DNR:
+            Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
+            return person.getHarFraRolleI().stream()
+                    .filter(this::isBarn)
+                    .map(s -> hentBarn(s, fnrSøker))
+                    .filter(Objects::nonNull)
+                    .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
+                    .collect(toList());
+        default:
+            throw new IllegalStateException("ID type " + idType + " ikke støttet");
         }
     }
 
@@ -159,11 +165,12 @@ public class PersonClientTpsWs implements PersonTjeneste {
 
     private boolean harDøddForOverFireMånederSiden(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Doedsdato dødsdato = person.getDoedsdato();
-        if(dødsdato == null) {
+        if (dødsdato == null) {
             return false;
         }
         XMLGregorianCalendar dato = dødsdato.getDoedsdato();
-        return dato != null && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
+        return dato != null
+                && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
     }
 
     private boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
