@@ -35,14 +35,14 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Inject
-    TokenUtil tokenHelper;
+    TokenUtil tokenUtil;
 
     private static final Logger LOG = LoggerFactory.getLogger(OppslagExceptionHandler.class);
 
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndRespond(e.getStatusCode(), e, request, tokenHelper.getExpiryDate());
+            return logAndRespond(e.getStatusCode(), e, request, tokenUtil.getExpiryDate());
         }
         return logAndRespond(e.getStatusCode(), e, request);
     }
@@ -106,7 +106,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
             List<Object> messages) {
 
         ApiError apiError = new ApiError(status, e, messages);
-        LOG.warn("{} {} ({})", status, apiError.getMessages(), status.value(), e);
+        LOG.warn("({}) {} {} ({})", tokenUtil.getSubject(), status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
