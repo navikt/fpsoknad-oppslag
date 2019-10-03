@@ -34,6 +34,7 @@ public class ArbeidsforholdController {
     }
 
     @GetMapping("/navn")
+    @Unprotected
     public String arbeidsgiverNavn(@RequestParam(name = "orgnr") String orgnr) {
         return arbeidsforholdClient.arbeidsgiverNavn(orgnr);
     }
