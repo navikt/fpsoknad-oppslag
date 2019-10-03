@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.errorhandling;
+package no.nav.foreldrepenger.oppslag.error;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;

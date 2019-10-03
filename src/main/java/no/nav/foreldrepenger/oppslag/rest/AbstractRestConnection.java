@@ -8,7 +8,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestOperations;
 
-import no.nav.foreldrepenger.oppslag.errorhandling.NotFoundException;
+import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.EnvUtil;
 
 public abstract class AbstractRestConnection implements EnvironmentAware {

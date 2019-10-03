@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.oppslag.errorhandling.IncompleteRequestException;
-import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
-import no.nav.foreldrepenger.oppslag.errorhandling.UnauthorizedException;
+import no.nav.foreldrepenger.oppslag.error.IncompleteRequestException;
+import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
+import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;

@@ -25,8 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
-import no.nav.foreldrepenger.oppslag.errorhandling.UnauthorizedException;
+import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
+import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;

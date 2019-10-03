@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.errorhandling;
+package no.nav.foreldrepenger.oppslag.error;
 
 public class NotFoundException extends RuntimeException {
 

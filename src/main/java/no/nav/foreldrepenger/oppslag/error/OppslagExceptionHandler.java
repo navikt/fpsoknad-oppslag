@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.errorhandling;
+package no.nav.foreldrepenger.oppslag.error;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
@@ -106,8 +107,13 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
             List<Object> messages) {
 
         ApiError apiError = new ApiError(status, e, messages);
-        LOG.warn("({}) {} {} ({})", tokenUtil.getSubject(), status, apiError.getMessages(), status.value(), e);
+        LOG.warn("({}) {} {} ({})", subject(), status, apiError.getMessages(), status.value(), e);
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
+    }
+
+    private String subject() {
+        return Optional.ofNullable(tokenUtil.getSubject())
+                .orElse("Uautentisert");
     }
 
     private static List<String> validationErrors(MethodArgumentNotValidException e) {

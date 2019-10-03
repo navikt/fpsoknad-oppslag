@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.oppslag.errorhandling.NotFoundException;
-import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
-import no.nav.foreldrepenger.oppslag.errorhandling.UnauthorizedException;
+import no.nav.foreldrepenger.oppslag.error.NotFoundException;
+import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
+import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;

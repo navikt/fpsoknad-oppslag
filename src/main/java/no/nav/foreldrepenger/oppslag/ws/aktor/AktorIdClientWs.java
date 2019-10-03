@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.resilience4j.retry.Retry;
-import no.nav.foreldrepenger.oppslag.errorhandling.NotFoundException;
-import no.nav.foreldrepenger.oppslag.errorhandling.TokenExpiredException;
+import no.nav.foreldrepenger.oppslag.error.NotFoundException;
+import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.MDCUtil;
 import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
