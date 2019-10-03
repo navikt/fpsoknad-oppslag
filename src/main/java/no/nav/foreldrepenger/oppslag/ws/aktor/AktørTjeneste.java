@@ -5,8 +5,8 @@ import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
 public interface AktørTjeneste extends Pingable {
 
-    AktorId aktorIdForFnr(Fødselsnummer fnr);
+    AktørId aktorIdForFnr(Fødselsnummer fnr);
 
-    Fødselsnummer fnrForAktørId(AktorId fnr);
+    Fødselsnummer fnrForAktørId(AktørId fnr);
 
 }

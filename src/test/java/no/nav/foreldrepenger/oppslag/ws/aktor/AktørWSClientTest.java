@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClientWs;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
@@ -32,7 +32,7 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRespon
 
 public class AktørWSClientTest {
 
-    private static final AktorId AKTOR = new AktorId("222222222");
+    private static final AktørId AKTOR = new AktørId("222222222");
     private static final Fødselsnummer FNR = new Fødselsnummer("22222222222");
     @Mock
     private TokenUtil tokenHandler;

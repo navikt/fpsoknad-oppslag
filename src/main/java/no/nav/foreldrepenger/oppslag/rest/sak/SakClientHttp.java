@@ -30,7 +30,7 @@ import io.github.resilience4j.retry.Retry;
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 
 public class SakClientHttp implements SakClient {
 
@@ -58,7 +58,7 @@ public class SakClientHttp implements SakClient {
 
     @Override
     @Timed("lookup.sak")
-    public List<Sak> sakerFor(AktorId aktor, String tema) {
+    public List<Sak> sakerFor(AktørId aktor, String tema) {
         ResponseEntity<List<RemoteSak>> response = sakerFor(aktor.getAktør(), tema, request());
         return sisteSakFra(Optional.ofNullable(response.getBody()).orElse(emptyList()));
     }

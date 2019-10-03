@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
 import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
@@ -98,8 +98,8 @@ public class SerializationTest {
         return new Fødselsnummer("03016536325");
     }
 
-    private static AktorId aktoer() {
-        return new AktorId("11111111111111111");
+    private static AktørId aktoer() {
+        return new AktørId("11111111111111111");
     }
 
     private static Bankkonto bankkonto() {

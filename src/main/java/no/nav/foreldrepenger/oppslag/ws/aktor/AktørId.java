@@ -6,12 +6,12 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class AktorId {
+public class AktørId {
 
     private final String aktør;
 
     @NotNull
-    public AktorId(String aktør) {
+    public AktørId(String aktør) {
         this.aktør = Objects.requireNonNull(aktør);
     }
 
@@ -28,7 +28,7 @@ public class AktorId {
         if ((o == null) || (getClass() != o.getClass())) {
             return false;
         }
-        AktorId that = (AktorId) o;
+        AktørId that = (AktørId) o;
         return Objects.equals(aktør, that.aktør);
     }
 

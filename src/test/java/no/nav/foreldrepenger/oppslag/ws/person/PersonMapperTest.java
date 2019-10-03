@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
 import no.nav.foreldrepenger.oppslag.util.DateUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.oppslag.ws.person.ID;
@@ -19,7 +19,7 @@ public class PersonMapperTest {
 
     @Test
     public void basePerson() {
-        ID id = new ID(new AktorId("123445"), new Fødselsnummer("123456378910"));
+        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, createBasePerson(), emptyList());
         assertEquals("123456378910", mapped.getId().getFnr().getFnr());
         assertEquals("Diego", mapped.getNavn().getFornavn());
@@ -29,7 +29,7 @@ public class PersonMapperTest {
 
     @Test
     public void withMålform() {
-        ID id = new ID(new AktorId("123445"), new Fødselsnummer("123456378910"));
+        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
         Bruker tpsPerson = personWithMålform();
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
         assertEquals("Turkmenistansk", mapped.getMålform());
@@ -37,7 +37,7 @@ public class PersonMapperTest {
 
     @Test
     public void withNorskKonto() {
-        ID id = new ID(new AktorId("123445"), new Fødselsnummer("123456378910"));
+        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
         Bruker tpsPerson = personWithNorskKonto();
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
         Bankkonto expected = new Bankkonto("1234567890", "Ripoff inc.");
@@ -46,7 +46,7 @@ public class PersonMapperTest {
 
     @Test
     public void withUtenlandskKonto() {
-        ID id = new ID(new AktorId("123445"), new Fødselsnummer("123456378910"));
+        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
         Bruker tpsPerson = personWithUtenlandskKonto();
         Person mapped = person(id, tpsPerson, emptyList());
         Bankkonto expected = new Bankkonto("swiftster", "bankkode");

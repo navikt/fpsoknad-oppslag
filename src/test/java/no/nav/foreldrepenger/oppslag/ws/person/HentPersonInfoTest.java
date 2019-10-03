@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.person.Barnutvelger;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.oppslag.ws.person.ID;
@@ -111,7 +111,7 @@ public class HentPersonInfoTest {
     }
 
     private ID id() {
-        return new ID(new AktorId("aktør"), new Fødselsnummer("fnr"));
+        return new ID(new AktørId("aktør"), new Fødselsnummer("fnr"));
     }
 
     private HentPersonResponse response(Familierelasjon rel) {

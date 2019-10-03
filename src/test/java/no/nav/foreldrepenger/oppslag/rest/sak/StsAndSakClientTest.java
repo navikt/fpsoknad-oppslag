@@ -38,7 +38,7 @@ import no.nav.foreldrepenger.oppslag.rest.sak.SakClient;
 import no.nav.foreldrepenger.oppslag.rest.sak.SakClientHttp;
 import no.nav.foreldrepenger.oppslag.rest.sak.StsClient;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.security.token.support.test.JwtTokenGenerator;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +46,7 @@ import no.nav.security.token.support.test.JwtTokenGenerator;
 public class StsAndSakClientTest {
 
     private static final String ID = "222222222";
-    private static final AktorId AKTOR = new AktorId(ID);
+    private static final AktørId AKTOR = new AktørId(ID);
     private static final String SIGNED_JWT = JwtTokenGenerator.createSignedJWT("22222222222").serialize();
     private static final String MY_OIDC_TOKEN = "MY.OIDC.TOKEN";
     private static final String MYPW = "mypw";

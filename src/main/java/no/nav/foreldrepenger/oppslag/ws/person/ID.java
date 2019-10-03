@@ -5,20 +5,20 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 
 public class ID {
 
-    private final AktorId aktorId;
+    private final AktørId aktorId;
     private final Fødselsnummer fnr;
 
     @JsonCreator
-    public ID(@JsonProperty("aktorId") AktorId aktorId, @JsonProperty("fnr") Fødselsnummer fnr) {
+    public ID(@JsonProperty("aktorId") AktørId aktorId, @JsonProperty("fnr") Fødselsnummer fnr) {
         this.aktorId = aktorId;
         this.fnr = fnr;
     }
 
-    public AktorId getAktorId() {
+    public AktørId getAktorId() {
         return aktorId;
     }
 

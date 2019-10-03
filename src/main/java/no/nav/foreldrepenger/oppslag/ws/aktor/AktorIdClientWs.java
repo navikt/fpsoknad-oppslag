@@ -10,6 +10,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
@@ -44,13 +45,14 @@ public class AktorIdClientWs implements AktørTjeneste {
     }
 
     @Override
-    // @Cacheable(cacheNames = "aktoer")
-    public AktorId aktorIdForFnr(Fødselsnummer fnr) {
-        return new AktorId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
+    @Cacheable(cacheNames = "aktør")
+    public AktørId aktorIdForFnr(Fødselsnummer fnr) {
+        return new AktørId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
     }
 
     @Override
-    public Fødselsnummer fnrForAktørId(AktorId aktørId) {
+    @Cacheable(cacheNames = "aktør")
+    public Fødselsnummer fnrForAktørId(AktørId aktørId) {
         return new Fødselsnummer(decorateSupplier(retryConfig, () -> hentId(aktørId)).get());
     }
 
@@ -79,7 +81,7 @@ public class AktorIdClientWs implements AktørTjeneste {
         }
     }
 
-    private String hentId(AktorId aktørId) {
+    private String hentId(AktørId aktørId) {
         try {
             return aktoerV2.hentIdentForAktoerId(request(aktørId)).getIdent();
         } catch (HentIdentForAktoerIdPersonIkkeFunnet e) {
@@ -92,7 +94,7 @@ public class AktorIdClientWs implements AktørTjeneste {
         }
     }
 
-    private static HentIdentForAktoerIdRequest request(AktorId aktørId) {
+    private static HentIdentForAktoerIdRequest request(AktørId aktørId) {
         HentIdentForAktoerIdRequest req = new HentIdentForAktoerIdRequest();
         req.setAktoerId(aktørId.getAktør());
         return req;

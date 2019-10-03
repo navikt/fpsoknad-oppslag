@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.oppslag.stub;
 
 import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
@@ -14,8 +14,8 @@ public class AktorIdClientStub implements AktørTjeneste {
 
     @Override
     @Timed("lookup.aktor")
-    public AktorId aktorIdForFnr(Fødselsnummer fnr) {
-        return new AktorId("Michael learns to rock");
+    public AktørId aktorIdForFnr(Fødselsnummer fnr) {
+        return new AktørId("Michael learns to rock");
     }
 
     @Override
@@ -25,7 +25,7 @@ public class AktorIdClientStub implements AktørTjeneste {
 
     @Override
     @Timed("lookup.fnr")
-    public Fødselsnummer fnrForAktørId(AktorId fnr) {
+    public Fødselsnummer fnrForAktørId(AktørId fnr) {
         return new Fødselsnummer("01010100000");
     }
 

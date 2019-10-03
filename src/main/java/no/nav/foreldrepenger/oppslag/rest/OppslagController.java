@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import no.nav.foreldrepenger.oppslag.util.PingableRegisters;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.Søkerinfo;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorId;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
@@ -81,24 +81,24 @@ public class OppslagController {
     @GetMapping
     public Søkerinfo essensiellSøkerinfo() {
         Fødselsnummer fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
-        AktorId aktorId = aktør.aktorIdForFnr(fnr);
+        AktørId aktorId = aktør.aktorIdForFnr(fnr);
         Person p = person.hentPersonInfo(new ID(aktorId, fnr));
         List<Arbeidsforhold> arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr);
         return new Søkerinfo(p, arbeidsforhold);
     }
 
     @GetMapping("/aktor")
-    public AktorId getAktørId() {
+    public AktørId getAktørId() {
         return getAktørIdForFNR(new Fødselsnummer(tokenUtil.autentisertBruker()));
     }
 
     @GetMapping("/aktorfnr")
-    public AktorId getAktørIdForFNR(@RequestParam(name = "fnr") Fødselsnummer fnr) {
+    public AktørId getAktørIdForFNR(@RequestParam(name = "fnr") Fødselsnummer fnr) {
         return aktør.aktorIdForFnr(fnr);
     }
 
     @GetMapping("/fnr")
-    public Fødselsnummer getFNRforAktørIdR(@RequestParam(name = "aktorId") AktorId aktorId) {
+    public Fødselsnummer getFNRforAktørIdR(@RequestParam(name = "aktorId") AktørId aktorId) {
         return aktør.fnrForAktørId(aktorId);
     }
 
