@@ -38,12 +38,12 @@ public class AktorIdConfiguration extends WsClient<AktoerV2> {
     public AktørTjeneste aktorIdClientWs(@Qualifier(AKTOER_V2) AktoerV2 aktoerV2,
             @Qualifier(HEALTH_INDICATOR_AKTØR) AktoerV2 healthIndicator, TokenUtil tokenHandler,
             @Qualifier(AKTOER_V2RETRY) Retry retryConfig) {
-        return new AktorIdClientWs(aktoerV2, healthIndicator, tokenHandler, retryConfig);
+        return new AktørIdClientWs(aktoerV2, healthIndicator, tokenHandler, retryConfig);
     }
 
     @Bean
     @Qualifier(AKTOER_V2RETRY)
     public Retry aktørRetry(@Value("${retry.aktør.max:2}") int max) {
-        return RetryUtil.retry(max, "aktør/fnr", SOAPFaultException.class, getLogger(AktorIdClientWs.class));
+        return RetryUtil.retry(max, "aktør/fnr", SOAPFaultException.class, getLogger(AktørIdClientWs.class));
     }
 }

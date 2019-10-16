@@ -4,6 +4,7 @@ import static io.vavr.API.$;
 
 import org.slf4j.Logger;
 
+import io.github.resilience4j.retry.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -12,7 +13,7 @@ import io.vavr.Predicates;
 
 public final class RetryUtil {
 
-    public static final int DEFAULT_RETRIES = 2;
+    public static final int DEFAULT_RETRIES = 3;
 
     private RetryUtil() {
 
@@ -24,6 +25,7 @@ public final class RetryUtil {
                         API.Case($(Predicates.instanceOf(clazz)), true),
                         API.Case($(), false)))
                 .maxAttempts(max)
+                .intervalFunction(IntervalFunction.ofExponentialBackoff())
                 .build()).retry(name);
         retry.getEventPublisher()
                 .onRetry(event -> LOG.warn("Prøver {} igjen for {}. gang av {} grunnet {} ({})",

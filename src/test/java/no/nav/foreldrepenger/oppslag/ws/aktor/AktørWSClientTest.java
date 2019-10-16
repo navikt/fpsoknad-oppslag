@@ -20,7 +20,7 @@ import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktorIdClientWs;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørIdClientWs;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
@@ -44,7 +44,7 @@ public class AktørWSClientTest {
 
     @BeforeEach
     public void beforeEach() {
-        aktørClient = new AktorIdClientWs(aktoerV2, healthIndicator, tokenHandler);
+        aktørClient = new AktørIdClientWs(aktoerV2, healthIndicator, tokenHandler);
     }
 
     @Test

@@ -25,19 +25,19 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIk
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdRequest;
 
-public class AktorIdClientWs implements AktørTjeneste {
-    private static final Logger LOG = LoggerFactory.getLogger(AktorIdClientWs.class);
+public class AktørIdClientWs implements AktørTjeneste {
+    private static final Logger LOG = LoggerFactory.getLogger(AktørIdClientWs.class);
 
     private final AktoerV2 aktoerV2;
     private final AktoerV2 healthIndicator;
     private final TokenUtil tokenUtil;
     private final Retry retryConfig;
 
-    AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil) {
+    AktørIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil) {
         this(aktoerV2, healthIndicator, tokenUtil, defaultRetryConfig());
     }
 
-    public AktorIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil, Retry retryConfig) {
+    public AktørIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil, Retry retryConfig) {
         this.aktoerV2 = Objects.requireNonNull(aktoerV2);
         this.healthIndicator = Objects.requireNonNull(healthIndicator);
         this.tokenUtil = tokenUtil;
