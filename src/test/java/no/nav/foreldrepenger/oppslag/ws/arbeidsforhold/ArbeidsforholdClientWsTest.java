@@ -117,8 +117,8 @@ public class ArbeidsforholdClientWsTest {
         List<Arbeidsforhold> aktiveArbeidsforhold = client.aktiveArbeidsforhold(FNR);
         assertEquals(aktiveArbeidsforhold.size(), 1);
         assertEquals(aktiveArbeidsforhold.get(0).getArbeidsgiverNavn(), LURIUM_AS);
-        verify(arbeidsforhold, retriedOK()).finnArbeidsforholdPrArbeidstaker(any());
-        verify(organisasjonV5, retriedOK()).hentOrganisasjon(any());
+        verify(arbeidsforhold, retriedOK(2)).finnArbeidsforholdPrArbeidstaker(any());
+        verify(organisasjonV5, retriedOK(2)).hentOrganisasjon(any());
     }
 
     @Test

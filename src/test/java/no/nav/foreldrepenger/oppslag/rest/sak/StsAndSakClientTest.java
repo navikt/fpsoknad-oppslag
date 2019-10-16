@@ -33,10 +33,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.oppslag.config.Constants;
-import no.nav.foreldrepenger.oppslag.rest.sak.RemoteSak;
-import no.nav.foreldrepenger.oppslag.rest.sak.SakClient;
-import no.nav.foreldrepenger.oppslag.rest.sak.SakClientHttp;
-import no.nav.foreldrepenger.oppslag.rest.sak.StsClient;
+import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.security.token.support.test.JwtTokenGenerator;
@@ -84,7 +81,7 @@ public class StsAndSakClientTest {
         assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
         verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
-        verify(restOperations, retriedOK()).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+        verify(restOperations, retriedOK(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
     }
 
     @Test
@@ -110,7 +107,8 @@ public class StsAndSakClientTest {
                 any(ParameterizedTypeReference.class)))
                         .thenThrow(internalServerError());
         assertThrows(HttpServerErrorException.class, () -> sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER));
-        verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
+        verify(restOperations, times(RetryUtil.DEFAULT_RETRIES)).exchange(any(URI.class), eq(HttpMethod.GET),
+                any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
     }
 
@@ -130,7 +128,7 @@ public class StsAndSakClientTest {
                 .thenThrow(internalServerError())
                 .thenReturn(ENVELOPE);
         stsclient.oidcToSamlToken(MY_OIDC_TOKEN);
-        verify(restOperations, retriedOK()).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+        verify(restOperations, retriedOK(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
     }
 
     @Test

@@ -27,10 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
-import no.nav.foreldrepenger.oppslag.ws.person.Barnutvelger;
-import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.ID;
-import no.nav.foreldrepenger.oppslag.ws.person.PersonClientTpsWs;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.feil.PersonIkkeFunnet;
@@ -72,7 +68,7 @@ public class HentPersonInfoTest {
     public void testHentingAvPersonMedBarnSkalKallePåTpsToGanger() throws Exception {
         when(tps.hentPerson(any())).thenReturn(response(barn("11111898765", "FNR")));
         klient.hentPersonInfo(id());
-        verify(tps, retriedOK()).hentPerson(any());
+        verify(tps, retriedOK(2)).hentPerson(any());
     }
 
     @Test

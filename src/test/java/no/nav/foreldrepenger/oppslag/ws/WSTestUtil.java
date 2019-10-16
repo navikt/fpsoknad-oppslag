@@ -19,4 +19,8 @@ public class WSTestUtil {
     public static VerificationMode retriedOK() {
         return times(DEFAULT_RETRIES);
     }
+
+    public static VerificationMode retriedOK(int retries) {
+        return times(retries);
+    }
 }

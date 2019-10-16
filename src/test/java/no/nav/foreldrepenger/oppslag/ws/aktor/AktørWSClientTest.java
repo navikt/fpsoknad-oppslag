@@ -18,9 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørIdClientWs;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
@@ -54,7 +51,7 @@ public class AktørWSClientTest {
         assertThrows(SOAPFaultException.class, () -> {
             aktørClient.aktorIdForFnr(FNR);
         });
-        verify(aktoerV2, retriedOK()).hentAktoerIdForIdent(any());
+        verify(aktoerV2, retriedOK(2)).hentAktoerIdForIdent(any());
     }
 
     @Test
@@ -63,7 +60,7 @@ public class AktørWSClientTest {
                 .thenThrow(soapFault())
                 .thenReturn(aktørResponse());
         aktørClient.aktorIdForFnr(FNR);
-        verify(aktoerV2, retriedOK()).hentAktoerIdForIdent(any());
+        verify(aktoerV2, retriedOK(2)).hentAktoerIdForIdent(any());
     }
 
     @Test
@@ -90,7 +87,7 @@ public class AktørWSClientTest {
         assertThrows(SOAPFaultException.class, () -> {
             aktørClient.fnrForAktørId(AKTOR);
         });
-        verify(aktoerV2, retriedOK()).hentIdentForAktoerId(any());
+        verify(aktoerV2, retriedOK(2)).hentIdentForAktoerId(any());
     }
 
     @Test
@@ -99,7 +96,7 @@ public class AktørWSClientTest {
                 .thenThrow(soapFault())
                 .thenReturn(fnrResponse());
         aktørClient.fnrForAktørId(AKTOR);
-        verify(aktoerV2, retriedOK()).hentIdentForAktoerId(any());
+        verify(aktoerV2, retriedOK(2)).hentIdentForAktoerId(any());
     }
 
     @Test
