@@ -120,9 +120,13 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     }
 
     boolean siste3år(Arbeidsforhold arbeidsforhold) {
+        LOG.info("Sjekker om {} er aktivt siste 3 år", arbeidsforhold);
         if (arbeidsforhold.getTom().isPresent()) {
-            return arbeidsforhold.getTom().get().isAfter(LocalDate.now().minusYears(3));
+            boolean aktiv = arbeidsforhold.getTom().get().isAfter(LocalDate.now().minusYears(3));
+            LOG.info("Arbeidsforhold  {} er {} aktivt siste 3 år", arbeidsforhold, aktiv ? "" : "ikke");
+            return aktiv;
         }
+        LOG.info("Ingen sluttdato for {}, antar aktivt", arbeidsforhold);
         return true;
     }
 

@@ -79,7 +79,7 @@ public class StsAndSakClientTest {
                 .thenThrow(internalServerError())
                 .thenReturn(ENVELOPE);
         assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
-        verify(restOperations, times(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
+        verify(restOperations, retriedOK(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class));
         verify(restOperations, retriedOK(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
     }
