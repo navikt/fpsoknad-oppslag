@@ -59,8 +59,7 @@ public final class ArbeidsforholdMapper {
         LocalDate tom;
         if (avtale.getTomGyldighetsperiode() != null) {
             tom = DateUtil.toLocalDate(avtale.getTomGyldighetsperiode());
-        }
-        else {
+        } else {
             tom = now();
         }
 
