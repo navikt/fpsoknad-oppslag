@@ -43,7 +43,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(HttpStatusCodeException.class)
     public ResponseEntity<Object> handleHttpStatusCodeException(HttpStatusCodeException e, WebRequest request) {
         if (e.getStatusCode().equals(UNAUTHORIZED) || e.getStatusCode().equals(FORBIDDEN)) {
-            return logAndRespond(e.getStatusCode(), e, request, tokenUtil.getExpiryDate());
+            return logAndRespond(e.getStatusCode(), e, request);
         }
         return logAndRespond(e.getStatusCode(), e, request);
     }
@@ -107,7 +107,8 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
             List<Object> messages) {
 
         ApiError apiError = new ApiError(status, e, messages);
-        LOG.warn("({}) {} {} ({})", subject(), status, apiError.getMessages(), status.value(), e);
+        LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
+                tokenUtil.getExpiryDate(), e);
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
