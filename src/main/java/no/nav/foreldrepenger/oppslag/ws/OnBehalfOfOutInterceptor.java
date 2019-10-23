@@ -15,8 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
@@ -30,7 +28,6 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 @Scope(SCOPE_PROTOTYPE)
 public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> {
     private static final String OIDC_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:jwt";
-    private static final Logger LOG = LoggerFactory.getLogger(OnBehalfOfOutInterceptor.class);
     private final TokenUtil tokenUtil;
 
     public OnBehalfOfOutInterceptor(TokenUtil tokenUtil) {
@@ -41,7 +38,6 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     @Override
     public void handleMessage(Message message) throws Fault {
         if (tokenUtil.isExpired()) {
-            LOG.warn("Token gikk ut på tid in-flight ({}", tokenUtil.getExpiryDate());
             throw new TokenExpiredException(tokenUtil.getExpiryDate(), null);
         }
         message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(tokenUtil.getToken()));
