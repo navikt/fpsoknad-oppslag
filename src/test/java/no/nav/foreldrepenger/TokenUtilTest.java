@@ -53,7 +53,7 @@ public class TokenUtilTest {
     @Test
     public void testTokenExpiry() {
         when(claims.get(eq("exp")))
-                .thenReturn(toDate(LocalDateTime.now().plusHours(1)).toInstant().getEpochSecond());
+                .thenReturn(toDate(LocalDateTime.now().minusHours(1)).toInstant().getEpochSecond());
         assertNotNull(tokenHandler.getExpiryDate());
         assertTrue(tokenHandler.isExpired());
     }
