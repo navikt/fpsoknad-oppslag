@@ -29,7 +29,7 @@ public class TokenUtil {
 
     public boolean isExpired() {
         return Optional.ofNullable(getExpiryDate())
-                .filter(d -> d.after(Date.from(now())))
+                .filter(d -> d.before(Date.from(now())))
                 .isPresent();
     }
 
