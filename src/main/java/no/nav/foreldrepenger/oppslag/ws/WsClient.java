@@ -48,6 +48,7 @@ public class WsClient<T> implements EnvironmentAware {
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
         T port = (T) jaxWsProxyFactoryBean.create();
         Client client = ClientProxy.getClient(port);
+
         if (isDevOrLocal(env)) {
             client.getInFaultInterceptors().add(new LoggingInInterceptor());
             client.getOutFaultInterceptors().add(new LoggingOutInterceptor());
