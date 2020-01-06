@@ -4,9 +4,9 @@ metadata:
   name: {{application_name}}
   namespace: default
   labels:
-    team: {{team}}
+    team: teamforeldrepenger
 spec:
-  image: {{version}}
+  image: {{image}}
   port: 8080
   replicas:
       min: 2

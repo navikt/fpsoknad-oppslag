@@ -78,14 +78,14 @@ jobs:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: dev.json
+          template-vars: dev-fss.json
           environment: dev-fss
 
    prod-deploy:
      executor: go
      steps:
       - nais-deploy:
-          template-vars: prod.json
+          template-vars: prod-fss.json
           environment: prod-fss
 
 commands:
