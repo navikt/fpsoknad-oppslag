@@ -17,7 +17,7 @@ Få tak i en Java truststore med gyldige sertifikater for aktuelt miljø.
 
 `java -jar fpsoknad-oppslag-<version>.jar -Djavax.net.ssl.trustStore=/path/til/truststore -Djavax.net.ssl.trustStorePassword=........`
 
----
+---  
 
 # Henvendelser
 
