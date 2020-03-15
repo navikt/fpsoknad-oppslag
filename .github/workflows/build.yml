@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lukk deployment-issues
-        uses: actions/github-script@0.5.0
+        uses: actions/github-script@0.8.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -70,16 +70,11 @@ jobs:
           token: ${{ secrets.NOTIFICATION }}
           title: Bygg av ${{ env.TAG }}
           body: |
-            Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
-            <table>
-            <tr><th>Cluster</th></tr>
-            <tr><td>dev-fss</td></tr>
-            <tr><td>prod-fss</td></tr>
-            </table>
+            Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er <i>dev-fss</i> eller <i>prod-fss</i>
       
       - name: Trigg deploy til dev-fss
         if: success()
-        uses: actions/github-script@0.3.0
+        uses: actions/github-script@0.8.0
         with:
           github-token: ${{secrets.NOTIFICATION}}
           script: |
