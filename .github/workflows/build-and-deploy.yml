@@ -68,7 +68,7 @@ jobs:
         with:
           labels : 'bygg' 
           token: ${{ secrets.NOTIFICATION }}
-          title: Deploy av ${{ env.TAG }}
+          title: Bygg av ${{ env.TAG }}
           body: |
             Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
             <table>
