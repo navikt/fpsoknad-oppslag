@@ -11,6 +11,26 @@ jobs:
   kompiler:
     runs-on: ubuntu-latest
     steps:
+      - name: Lukk deployment-issues
+        uses: actions/github-script@0.5.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['bygg']
+            }).then(response => {
+              response.data.forEach(issue => {
+                github.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed'
+                });
+              });
+            });
     
       - name: Sjekk ut kode
         uses: actions/checkout@v1
@@ -46,11 +66,11 @@ jobs:
         uses: maxkomarychev/oction-create-issue@v0.7.1
         id: createdeployissue
         with:
+          labels : 'bygg' 
           token: ${{ secrets.NOTIFICATION }}
           title: Deploy av ${{ env.TAG }}
-          labels: deployment,${{env.CLUSTER}}
           body: |
-            Kommenter med <b>/promote ${{ env.TAG }} cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
+            Kommenter med <b>/promote cluster</b>, hvor <b>cluster</b> er et gyldig clusternavn
             <table>
             <tr><th>Cluster</th></tr>
             <tr><td>dev-fss</td></tr>
@@ -63,4 +83,4 @@ jobs:
         with:
           token: ${{ secrets.NOTIFICATION }}
           issue-number: ${{ steps.createdeployissue.outputs.number }}
-          body: /promote ${{ env.TAG }} ${{ env.CLUSTER }}
+          body: /promote  ${{ env.CLUSTER }}
