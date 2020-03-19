@@ -28,7 +28,6 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
@@ -80,7 +79,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     @Override
-    @Cacheable(cacheNames = "navn")
+    // @Cacheable(cacheNames = "navn")
     public Navn navn(Fødselsnummer fnr) {
         HentPersonRequest request = request(fnr);
         LOG.info("Slår opp navn");
