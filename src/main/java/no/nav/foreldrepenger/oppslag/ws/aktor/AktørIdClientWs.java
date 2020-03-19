@@ -45,7 +45,7 @@ public class AktørIdClientWs implements AktørTjeneste {
     }
 
     @Override
-    @Cacheable(cacheNames = "aktør")
+    @Cacheable(cacheNames = "fnr")
     public AktørId aktorIdForFnr(Fødselsnummer fnr) {
         return new AktørId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
     }

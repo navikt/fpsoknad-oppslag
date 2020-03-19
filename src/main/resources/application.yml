@@ -33,7 +33,7 @@ server:
     use-forward-headers: true
 spring:
     cache :
-      cache-names : aktør, organisasjon, navn
+      cache-names : aktør, fnr, organisasjon, navn
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
     application.name : fpsoknad-oppslag
     jackson:
