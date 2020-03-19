@@ -10,7 +10,6 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 
 import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
@@ -45,13 +44,13 @@ public class AktørIdClientWs implements AktørTjeneste {
     }
 
     @Override
-    @Cacheable(cacheNames = "fnr")
+    // @Cacheable(cacheNames = "fnr")
     public AktørId aktorIdForFnr(Fødselsnummer fnr) {
         return new AktørId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
     }
 
     @Override
-    @Cacheable(cacheNames = "aktør")
+    // @Cacheable(cacheNames = "aktør")
     public Fødselsnummer fnrForAktørId(AktørId aktørId) {
         return new Fødselsnummer(decorateSupplier(retryConfig, () -> hentId(aktørId)).get());
     }
