@@ -4,7 +4,7 @@
   "env": {
    "SAK_SAKER_URL": "https://sak-q1.nais.preprod.local/api/v1/saker",
    "VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL": "https://fpsak-q1.nais.preprod.local/fpsak/tjenester/sak/finnSak/v1",  
-   "INNSYNJOURNAL_V2_ENDPOINTURL": "https://wasapp-q1.adeo.no/joark/InnsynJournal/v2",
+   "INNSYNJOURNAL_V2_ENDPOINTURL": "https://dokarkiv-q1.nais.preprod.local/services/innsynjournal/v2",
    "AKTOER_V2_ENDPOINTURL": "https://app-q1.adeo.no/aktoerregister/ws/Aktoer/v2",
    "VIRKSOMHET_PERSON_V3_ENDPOINTURL": "https://wasapp-q1.adeo.no/tpsws/ws/Person/v3",  
    "SECURITYTOKENSERVICE_URL": "https://sts-q1.preprod.local/SecurityTokenServiceProvider/",
