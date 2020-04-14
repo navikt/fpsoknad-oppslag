@@ -68,9 +68,9 @@ public class Arbeidsforhold extends TidsAvgrensetBrukerInfo {
 
     @Override
     public String toString() {
-        return "Arbeidsforhold{" +
-                "arbeidsgiverId='" + arbeidsgiverId + '\'' +
-                ", arbeidsgiverIdType='" + arbeidsgiverIdType + '\'' +
-                '}';
+        return getClass().getSimpleName() + "[arbeidsgiverId=" + arbeidsgiverId + ", arbeidsgiverIdType="
+                + arbeidsgiverIdType + ", stillingsprosent=" + stillingsprosent + ", arbeidsgiverNavn="
+                + arbeidsgiverNavn + "]";
     }
+
 }

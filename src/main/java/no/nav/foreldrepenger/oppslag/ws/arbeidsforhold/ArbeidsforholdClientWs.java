@@ -68,6 +68,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             navn.ifPresent(forhold::setArbeidsgiverNavn);
         }
+        LOG.info("Fant {} aktive arbeidsforhold ({})", arbeidsforhold.size(), arbeidsforhold);
         return arbeidsforhold;
     }
 
