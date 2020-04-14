@@ -30,7 +30,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.jaxb-plugin.version>0.13.3</maven.jaxb-plugin.version>
-        <cxf.version>3.3.6</cxf.version>
+        <cxf.version>3.3.5</cxf.version>
         <springfox.swagger.version>2.9.2</springfox.swagger.version>
         <token-validation-version>1.0.1</token-validation-version>
     </properties>
