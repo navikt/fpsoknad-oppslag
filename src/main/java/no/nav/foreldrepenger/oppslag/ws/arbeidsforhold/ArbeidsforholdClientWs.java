@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.oppslag.util.RetryUtil.DEFAULT_RETRIES;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,11 +11,9 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.IncompleteRequestException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
@@ -34,20 +30,13 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     private final ArbeidsforholdV3 healthIndicator;
     private final OrganisasjonClient orgClient;
     private final TokenUtil tokenUtil;
-    private final Retry retryConfig;
-
-    ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenUtil tokenUtil) {
-        this(arbeidsforholdV3, healthIndicator, orgClient, tokenUtil, retryConfig());
-    }
 
     public ArbeidsforholdClientWs(ArbeidsforholdV3 arbeidsforholdV3, ArbeidsforholdV3 healthIndicator,
-            OrganisasjonClient orgClient, TokenUtil tokenUtil, Retry retry) {
+            OrganisasjonClient orgClient, TokenUtil tokenUtil) {
         this.arbeidsforholdV3 = arbeidsforholdV3;
         this.healthIndicator = healthIndicator;
         this.orgClient = orgClient;
         this.tokenUtil = tokenUtil;
-        this.retryConfig = retry;
     }
 
     @Override
@@ -62,8 +51,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
 
     @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
-        List<Arbeidsforhold> arbeidsforhold = decorateSupplier(retryConfig, () -> arbeidsforholdSiste3år(fnr.getFnr()))
-                .get();
+        List<Arbeidsforhold> arbeidsforhold = arbeidsforholdSiste3år(fnr.getFnr());
         for (Arbeidsforhold forhold : arbeidsforhold) {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             navn.ifPresent(forhold::setArbeidsgiverNavn);
@@ -116,10 +104,6 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
         return orgClient.nameFor(orgnr);
     }
 
-    private static Retry retryConfig() {
-        return RetryUtil.retry(DEFAULT_RETRIES, "arbeidforhold", SOAPFaultException.class, LOG);
-    }
-
     boolean siste3år(Arbeidsforhold arbeidsforhold) {
         LOG.info("Sjekker om {} er aktivt siste 3 år", arbeidsforhold);
         if (arbeidsforhold.getTom().isPresent()) {
@@ -136,8 +120,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [arbeidsforholdV3=" + arbeidsforholdV3 + ", healthIndicator="
-                + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + ", retryConfig="
-                + retryConfig + "]";
+                + healthIndicator + ", orgClient=" + orgClient + ", tokenUtil=" + tokenUtil + "]";
     }
 
     @Override

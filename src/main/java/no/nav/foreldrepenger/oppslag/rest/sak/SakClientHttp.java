@@ -1,12 +1,10 @@
 package no.nav.foreldrepenger.oppslag.rest.sak;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static java.time.LocalDate.now;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Comparator.comparing;
 import static no.nav.foreldrepenger.oppslag.config.Constants.INFOTRYGD;
-import static no.nav.foreldrepenger.oppslag.util.RetryUtil.DEFAULT_RETRIES;
 import static no.nav.foreldrepenger.oppslag.util.StringUtil.encode;
 import static no.nav.foreldrepenger.oppslag.util.URIUtil.uri;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -23,12 +21,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestOperations;
 
-import io.github.resilience4j.retry.Retry;
-import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 
@@ -40,25 +34,18 @@ public class SakClientHttp implements SakClient {
     private final URI sakBaseUrl;
     private final StsClient stsClient;
     private final TokenUtil tokenUtil;
-    private final Retry retryConfig;
-
-    SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
-            TokenUtil tokenUtil) {
-        this(sakBaseUrl, restOperations, stsClient, tokenUtil, defaultRetryConfig());
-    }
 
     public SakClientHttp(URI sakBaseUrl, RestOperations restOperations, StsClient stsClient,
-            TokenUtil tokenUtil, Retry retryConfig) {
+            TokenUtil tokenUtil) {
         this.restOperations = restOperations;
         this.sakBaseUrl = sakBaseUrl;
         this.stsClient = stsClient;
         this.tokenUtil = tokenUtil;
-        this.retryConfig = retryConfig;
     }
 
     @Override
-    @Timed("lookup.sak")
     public List<Sak> sakerFor(AktørId aktor, String tema) {
+        LOG.info("Henter saker for {}", aktor);
         ResponseEntity<List<RemoteSak>> response = sakerFor(aktor.getAktør(), tema, request());
         return sisteSakFra(Optional.ofNullable(response.getBody()).orElse(emptyList()));
     }
@@ -82,16 +69,13 @@ public class SakClientHttp implements SakClient {
     }
 
     private ResponseEntity<List<RemoteSak>> sakerFor(String aktor, String tema, HttpEntity<String> request) {
-        return decorateSupplier(retryConfig, () -> {
-            URI url = uri(sakBaseUrl, queryParams(aktor, tema));
-            LOG.info("Henter saker fra {}", url);
-            return restOperations.exchange(
-                    url,
-                    HttpMethod.GET,
-                    request,
-                    new ParameterizedTypeReference<List<RemoteSak>>() {
-                    });
-        }).get();
+        URI url = uri(sakBaseUrl, queryParams(aktor, tema));
+        return restOperations.exchange(
+                url,
+                HttpMethod.GET,
+                request,
+                new ParameterizedTypeReference<List<RemoteSak>>() {
+                });
     }
 
     private static HttpHeaders queryParams(String aktor, String tema) {
@@ -110,14 +94,10 @@ public class SakClientHttp implements SakClient {
         return headers;
     }
 
-    private static Retry defaultRetryConfig() {
-        return RetryUtil.retry(DEFAULT_RETRIES, "saker", HttpServerErrorException.class, LOG);
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [restOperations=" + restOperations + ", sakBaseUrl=" + sakBaseUrl
-                + ", stsClient=" + stsClient + ", tokenUtil=" + tokenUtil + ", retry=" + retryConfig + "]";
+                + ", stsClient=" + stsClient + ", tokenUtil=" + tokenUtil + "]";
     }
 
 }

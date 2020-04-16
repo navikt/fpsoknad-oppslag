@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.ws;
 
-import static no.nav.foreldrepenger.oppslag.util.RetryUtil.DEFAULT_RETRIES;
 import static org.mockito.Mockito.times;
 
 import javax.xml.namespace.QName;
@@ -17,7 +16,7 @@ public class WSTestUtil {
     }
 
     public static VerificationMode retriedOK() {
-        return times(DEFAULT_RETRIES);
+        return times(3);
     }
 
     public static VerificationMode retriedOK(int retries) {

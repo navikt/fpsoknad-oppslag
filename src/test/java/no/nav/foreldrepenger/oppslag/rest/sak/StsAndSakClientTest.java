@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.rest.sak;
 
-import static no.nav.foreldrepenger.oppslag.ws.WSTestUtil.retriedOK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.quality.Strictness.LENIENT;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -21,25 +21,33 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.stubbing.OngoingStubbing;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.oppslag.config.Constants;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.security.token.support.test.JwtTokenGenerator;
 
+@EnableRetry
+@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
+@ContextConfiguration(classes = { TokenUtil.class, SakConfiguration.class })
+@TestPropertySource(properties = { "SAK_SAKER_URL: http://sak",
+        "SECURITYTOKENSERVICE_URL=http://sts", "FPSELVBETJENING_PASSWORD=mypw", "FPSELVBETJENING_USERNAME=myuser" })
 public class StsAndSakClientTest {
 
     private static final String ID = "222222222";
@@ -51,91 +59,69 @@ public class StsAndSakClientTest {
     private static final String ASSERTION = "<saml2:Assertion .......... </saml2:Assertion>";
     private static final String ENVELOPE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<soapenv:Envelope  ..." + ASSERTION + "</wst:blabla</soapenv:Envelope>";
-    private static final URI SAKURL = URI.create("http://sak");
+    private static final URI SAKURL = URI.create("http://sak?aktoerId=" + ID + "&applikasjon=IT01&tema=FOR");
     private static final URI STSURL = URI.create("http://sts");
 
-    @Mock
+    @MockBean
     private RestOperations restOperations;
-    @Mock
+    @MockBean
     private TokenUtil tokenHandler;
-    private StsClient stsclient;
+    @Autowired
     private SakClient sakclient;
+    @Autowired
+    private StsClient stsclient;
 
     @BeforeEach
     public void beforeEach() {
-        stsclient = new StsClient(restOperations, STSURL, MYUSER, MYPW);
-        sakclient = new SakClientHttp(SAKURL, restOperations, stsclient, tokenHandler);
         when(tokenHandler.getToken()).thenReturn(SIGNED_JWT);
     }
 
     @SuppressWarnings("unchecked")
     @Test
     public void testSakAndSTSRetryRecovery() {
-        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)))
-                        .thenThrow(internalServerError())
-                        .thenReturn(remoteSaker());
-        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
+        whenSak()
                 .thenThrow(internalServerError())
+                .thenReturn(remoteSaker());
+        whenSTS().thenThrow(internalServerError())
                 .thenReturn(ENVELOPE);
         assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
-        verify(restOperations, retriedOK(2)).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
-                any(ParameterizedTypeReference.class));
-        verify(restOperations, retriedOK(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+        verifySak(2);
+        verifySTS(3);
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testVanilla() {
-        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)))
-                        .thenReturn(remoteSaker());
-        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
-                .thenReturn(ENVELOPE);
+    public void testSTSogSakOK() {
+        whenSak().thenReturn(remoteSaker());
+        whenSTS().thenReturn(ENVELOPE);
         assertEquals(sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER).size(), 1);
-        verify(restOperations).exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
-                any(ParameterizedTypeReference.class));
-        verify(restOperations).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+        verifySak(1);
+        verifySTS(1);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testSakSTSRetryUntilFail() {
-        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
-                .thenReturn(ENVELOPE);
-        when(restOperations.exchange(any(URI.class), eq(HttpMethod.GET), any(HttpEntity.class),
-                any(ParameterizedTypeReference.class)))
-                        .thenThrow(internalServerError());
+    public void testSakRetryUntilFail() {
+        whenSTS().thenReturn(ENVELOPE);
+        whenSak().thenThrow(internalServerError());
         assertThrows(HttpServerErrorException.class, () -> sakclient.sakerFor(AKTOR, Constants.FORELDREPENGER));
-        verify(restOperations, times(RetryUtil.DEFAULT_RETRIES)).exchange(any(URI.class), eq(HttpMethod.GET),
-                any(HttpEntity.class),
-                any(ParameterizedTypeReference.class));
+        verifySak(2);
+        verifySTS(2);
     }
 
     @Test
     public void testSTSRetryUntilFail() {
-        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
-                .thenThrow(internalServerError());
-        assertThrows(HttpStatusCodeException.class, () -> {
-            stsclient.oidcToSamlToken(MY_OIDC_TOKEN);
-        });
-        verify(restOperations, retriedOK()).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
-    }
-
-    @Test
-    public void testSTSRecovery() {
-        when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)))
-                .thenThrow(internalServerError())
-                .thenReturn(ENVELOPE);
-        stsclient.oidcToSamlToken(MY_OIDC_TOKEN);
-        verify(restOperations, retriedOK(2)).postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class));
+        whenSTS().thenThrow(internalServerError());
+        assertThrows(HttpServerErrorException.class, () -> stsclient.oidcToSamlToken("test"));
+        verifySTS(2);
     }
 
     @Test
     public void testInject() {
         String payload = stsclient.injectToken(MY_OIDC_TOKEN);
         assertTrue(payload.startsWith("<?xml"));
-        assertTrue(payload.contains("<wsse:Username>" + MYUSER + "</wsse:Username>"));
+        assertTrue(payload.contains("<wsse:Username>" + MYUSER +
+                "</wsse:Username>"));
         assertTrue(payload.contains(
                 "<wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">"
                         + MYPW + "</wsse:Password>"));
@@ -144,7 +130,19 @@ public class StsAndSakClientTest {
 
     @Test
     public void testExtraction() {
-        assertEquals(ASSERTION, StsClient.samlAssertionFra(ENVELOPE));
+        assertEquals(ASSERTION,
+                StsClientHttp.samlAssertionFra(ENVELOPE));
+    }
+
+    @SuppressWarnings("unchecked")
+    private OngoingStubbing whenSak() {
+        return when(restOperations.exchange(eq(SAKURL), eq(GET), any(HttpEntity.class),
+                any(ParameterizedTypeReference.class)));
+    }
+
+    @SuppressWarnings("unchecked")
+    private OngoingStubbing whenSTS() {
+        return when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)));
     }
 
     private static HttpServerErrorException internalServerError() {
@@ -154,5 +152,17 @@ public class StsAndSakClientTest {
     private static ResponseEntity<List<RemoteSak>> remoteSaker() {
         return new ResponseEntity<>(Collections.singletonList(
                 new RemoteSak(42L, "FOR", "IT01", "42", ID, "42", "Donald Duck", LocalDateTime.now().toString())), OK);
+    }
+
+    private String verifySTS(int n) {
+        return verify(restOperations, times(n)).postForObject(eq(STSURL),
+                any(HttpEntity.class), eq(String.class));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifySak(int n) {
+        verify(restOperations, times(n)).exchange(eq(SAKURL), eq(GET),
+                any(HttpEntity.class),
+                any(ParameterizedTypeReference.class));
     }
 }
