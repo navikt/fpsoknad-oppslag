@@ -9,40 +9,53 @@ import static org.mockito.Mockito.when;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
+import no.nav.foreldrepenger.oppslag.ws.EndpointSTSClientConfig;
+import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
+import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentAktoerIdForIdentPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.HentIdentForAktoerIdPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentAktoerIdForIdentResponse;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.HentIdentForAktoerIdResponse;
 
+@EnableRetry
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {
+        OnBehalfOfOutInterceptor.class,
+        AktorIdConfiguration.class,
+        EndpointSTSClientConfig.class })
 
 public class AktørWSClientTest {
 
     private static final AktørId AKTOR = new AktørId("222222222");
     private static final Fødselsnummer FNR = new Fødselsnummer("22222222222");
-    @Mock
+    @MockBean
     private TokenUtil tokenHandler;
-    @Mock
-    private AktoerV2 healthIndicator;
-    @Mock
+    @MockBean
+    TokenValidationContextHolder contextHolder;
+    @MockBean
+    @Qualifier(AktorIdConfiguration.AKTOER_V2)
     private AktoerV2 aktoerV2;
+    @MockBean
+    STSClient sts;
+    @Autowired
     private AktørTjeneste aktørClient;
-
-    @BeforeEach
-    public void beforeEach() {
-        aktørClient = new AktørIdClientWs(aktoerV2, healthIndicator, tokenHandler);
-    }
 
     @Test
     public void restRetryUntilFailAktør() throws Exception {

@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
 import static java.time.LocalDate.now;
-import static no.nav.foreldrepenger.oppslag.ws.WSTestUtil.retriedOK;
 import static no.nav.foreldrepenger.oppslag.ws.WSTestUtil.soapFault;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,14 +17,22 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.apache.cxf.ws.security.trust.STSClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
+import no.nav.foreldrepenger.oppslag.ws.EndpointSTSClientConfig;
+import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -42,33 +49,37 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personidenter;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
+@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
+@EnableRetry
+@ContextConfiguration(classes = {
+        OnBehalfOfOutInterceptor.class,
+        EndpointSTSClientConfig.class,
+        PersonConfiguration.class })
+
 public class HentPersonInfoTest {
 
-    private PersonClientTpsWs klient;
+    @Autowired
+    private PersonTjeneste klient;
 
     @Mock
     private Barnutvelger barnutvelger;
 
-    @Mock
+    @MockBean
+    @Qualifier(PersonConfiguration.PERSON_V3)
     private PersonV3 tps;
 
-    @Mock
-    private PersonV3 healthIndicator;
-
-    @Mock
+    @MockBean
     private TokenUtil tokenHandler;
 
-    @BeforeEach
-    public void setUp() {
-        klient = new PersonClientTpsWs(tps, healthIndicator, tokenHandler, barnutvelger);
-    }
+    @MockBean
+    STSClient sts;
 
     @Test
     public void testHentingAvPersonMedBarnSkalKallePåTpsToGanger() throws Exception {
         when(tps.hentPerson(any())).thenReturn(response(barn("11111898765", "FNR")));
         klient.hentPersonInfo(id());
-        verify(tps, retriedOK(2)).hentPerson(any());
+        verify(tps, times(2)).hentPerson(any());
     }
 
     @Test
@@ -86,7 +97,7 @@ public class HentPersonInfoTest {
         when(tps.hentPerson(any()))
                 .thenThrow(soapFault());
         assertThrows(SOAPFaultException.class, () -> klient.hentPersonInfo(id()));
-        verify(tps, retriedOK()).hentPerson(any());
+        verify(tps, times(3)).hentPerson(any());
     }
 
     @Test

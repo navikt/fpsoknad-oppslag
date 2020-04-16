@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static java.util.stream.Collectors.joining;
-import static no.nav.foreldrepenger.oppslag.util.RetryUtil.DEFAULT_RETRIES;
 
 import java.util.Optional;
 
@@ -12,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 
-import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonOrganisasjonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.organisasjon.v5.binding.HentOrganisasjonUgyldigInput;
@@ -31,19 +27,12 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
     private OrganisasjonV5 organisasjonV5;
     private OrganisasjonV5 healthIndicator;
     private final TokenUtil tokenHandler;
-    private final Retry retry;
-
-    OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
-            TokenUtil tokenHandler) {
-        this(organisasjonV5, healthIndicator, tokenHandler, retry());
-    }
 
     public OrganisasjonClientWs(OrganisasjonV5 organisasjonV5, OrganisasjonV5 healthIndicator,
-            TokenUtil tokenHandler, Retry retry) {
+            TokenUtil tokenHandler) {
         this.organisasjonV5 = organisasjonV5;
         this.healthIndicator = healthIndicator;
         this.tokenHandler = tokenHandler;
-        this.retry = retry;
     }
 
     @Override
@@ -59,7 +48,7 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
             LOG.warn("{} ser ikke ut som et organisasjonsnummer, slår ikke opp navn", orgnr);
             return Optional.empty();
         }
-        return decorateSupplier(retry, () -> doGetNameFor(orgnr)).get();
+        return doGetNameFor(orgnr);
     }
 
     private Optional<String> doGetNameFor(String orgnr) {
@@ -93,14 +82,10 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
         return str != null && !str.trim().isEmpty();
     }
 
-    private static Retry retry() {
-        return RetryUtil.retry(DEFAULT_RETRIES, "organisasjon", SOAPFaultException.class, LOG);
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [organisasjonV5=" + organisasjonV5 + ", healthIndicator="
-                + healthIndicator + ", tokenHandler=" + tokenHandler + ", retry=" + retry + "]";
+                + healthIndicator + ", tokenHandler=" + tokenHandler + "]";
     }
 
 }

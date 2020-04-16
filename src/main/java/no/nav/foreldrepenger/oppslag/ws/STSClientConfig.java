@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class STSClientConfig {
+public class STSClientConfig {
     private static final String POLICY_PATH = "classpath:policy/";
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = POLICY_PATH + "untPolicy.xml";
     @Value("${SECURITYTOKENSERVICE_URL}")

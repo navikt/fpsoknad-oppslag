@@ -1,10 +1,8 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.oppslag.util.EnvUtil.CONFIDENTIAL;
-import static no.nav.foreldrepenger.oppslag.util.RetryUtil.DEFAULT_RETRIES;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.barn;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.person;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonRequestUtil.BARN;
@@ -29,11 +27,9 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
@@ -56,20 +52,13 @@ public class PersonClientTpsWs implements PersonTjeneste {
     private final PersonV3 healthIndicator;
     private final Barnutvelger barnutvelger;
     private final TokenUtil tokenUtil;
-    private final Retry retryConfig;
-
-    PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenUtil,
-            Barnutvelger barnutvelger) {
-        this(person, healthIndicator, tokenUtil, barnutvelger, defaultRetryConfig());
-    }
 
     public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenUtil,
-            Barnutvelger barnutvelger, Retry retryConfig) {
+            Barnutvelger barnutvelger) {
         this.person = Objects.requireNonNull(person);
         this.healthIndicator = healthIndicator;
         this.tokenUtil = tokenUtil;
         this.barnutvelger = Objects.requireNonNull(barnutvelger);
-        this.retryConfig = retryConfig;
     }
 
     @Override
@@ -83,8 +72,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     public Navn navn(Fødselsnummer fnr) {
         HentPersonRequest request = request(fnr);
         LOG.info("Slår opp navn");
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person = tpsPersonWithRetry(request);
-        return navnFor(person);
+        return navnFor(hentPerson(request).getPerson());
     }
 
     private Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
@@ -98,15 +86,11 @@ public class PersonClientTpsWs implements PersonTjeneste {
         HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.info("Slår opp person");
         LOG.info(CONFIDENTIAL, "Fra ID {}", id);
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = tpsPersonWithRetry(request);
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
         Person p = person(id, tpsPerson, barnFor(tpsPerson));
         LOG.info("Slo opp person OK");
         LOG.info(CONFIDENTIAL, "Person er {}", p);
         return p;
-    }
-
-    private no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPersonWithRetry(HentPersonRequest request) {
-        return decorateSupplier(retryConfig, () -> hentPerson(request)).get().getPerson();
     }
 
     private List<Barn> barnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
@@ -142,8 +126,8 @@ public class PersonClientTpsWs implements PersonTjeneste {
             return null;
         }
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = tpsPersonWithRetry(
-                request(fnrBarn, FAMILIERELASJONER));
+        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = hentPerson(
+                request(fnrBarn, FAMILIERELASJONER)).getPerson();
         if (!skalKunneVises(tpsBarn) || harDøddForOverFireMånederSiden(tpsBarn)) {
             return null;
         }
@@ -153,7 +137,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
                 .map(this::toFødselsnummer)
                 .filter(Objects::nonNull)
                 .filter(fnr -> !fnr.equals(fnrSøker))
-                .map(fnr -> tpsPersonWithRetry(request(fnr)))
+                .map(fnr -> hentPerson(request(fnr)).getPerson())
                 .filter(this::skalKunneVises)
                 .filter(p -> !erDød(p))
                 .map(PersonMapper::annenForelder)
@@ -216,13 +200,9 @@ public class PersonClientTpsWs implements PersonTjeneste {
         }
     }
 
-    private static Retry defaultRetryConfig() {
-        return RetryUtil.retry(DEFAULT_RETRIES, "person", SOAPFaultException.class, LOG);
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [person=" + person + ", healthIndicator=" + healthIndicator
-                + ", barnutvelger=" + barnutvelger + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig + "]";
+                + ", barnutvelger=" + barnutvelger + ", tokenUtil=" + tokenUtil + "]";
     }
 }

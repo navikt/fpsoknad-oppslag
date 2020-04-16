@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.ws.aktor;
 
-import static io.github.resilience4j.retry.Retry.decorateSupplier;
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_AKTØR_ID;
 import static no.nav.foreldrepenger.oppslag.util.EnvUtil.CONFIDENTIAL;
 
@@ -11,11 +10,9 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.resilience4j.retry.Retry;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.MDCUtil;
-import no.nav.foreldrepenger.oppslag.util.RetryUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.aktoer.v2.binding.AktoerV2;
@@ -30,29 +27,23 @@ public class AktørIdClientWs implements AktørTjeneste {
     private final AktoerV2 aktoerV2;
     private final AktoerV2 healthIndicator;
     private final TokenUtil tokenUtil;
-    private final Retry retryConfig;
 
-    AktørIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil) {
-        this(aktoerV2, healthIndicator, tokenUtil, defaultRetryConfig());
-    }
-
-    public AktørIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil, Retry retryConfig) {
+    public AktørIdClientWs(AktoerV2 aktoerV2, AktoerV2 healthIndicator, TokenUtil tokenUtil) {
         this.aktoerV2 = Objects.requireNonNull(aktoerV2);
         this.healthIndicator = Objects.requireNonNull(healthIndicator);
         this.tokenUtil = tokenUtil;
-        this.retryConfig = retryConfig;
     }
 
     @Override
     // @Cacheable(cacheNames = "fnr")
     public AktørId aktorIdForFnr(Fødselsnummer fnr) {
-        return new AktørId(decorateSupplier(retryConfig, () -> hentAktør(fnr)).get());
+        return new AktørId(hentAktør(fnr));
     }
 
     @Override
     // @Cacheable(cacheNames = "aktør")
     public Fødselsnummer fnrForAktørId(AktørId aktørId) {
-        return new Fødselsnummer(decorateSupplier(retryConfig, () -> hentId(aktørId)).get());
+        return new Fødselsnummer(hentId(aktørId));
     }
 
     @Override
@@ -105,13 +96,9 @@ public class AktørIdClientWs implements AktørTjeneste {
         return req;
     }
 
-    private static Retry defaultRetryConfig() {
-        return RetryUtil.retry(2, "aktør/fnr", SOAPFaultException.class, LOG);
-    }
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [aktoerV2=" + aktoerV2 + ", healthIndicator=" + healthIndicator
-                + ", tokenUtil=" + tokenUtil + ", retryConfig=" + retryConfig + "]";
+                + ", tokenUtil=" + tokenUtil + "]";
     }
 }
