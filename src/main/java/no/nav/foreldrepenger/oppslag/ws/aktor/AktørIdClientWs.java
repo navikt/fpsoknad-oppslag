@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.aktor;
 
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_AKTØR_ID;
-import static no.nav.foreldrepenger.oppslag.util.EnvUtil.CONFIDENTIAL;
 
 import java.util.Objects;
 
@@ -53,11 +52,11 @@ public class AktørIdClientWs implements AktørTjeneste {
     }
 
     private String hentAktør(Fødselsnummer fnr) {
-        LOG.info(CONFIDENTIAL, "Henter aktør for fnr {}", fnr.getFnr());
+        LOG.info("Henter aktør for fnr {}", fnr);
         try {
             String aktørId = aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
             MDCUtil.toMDC(NAV_AKTØR_ID, aktørId);
-            LOG.info(CONFIDENTIAL, "Aktørid for {} er {}", fnr.getFnr(), aktørId);
+            LOG.info("Aktørid for {} er {}", fnr, aktørId);
             return aktørId;
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);

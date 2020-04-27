@@ -8,6 +8,8 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import no.nav.foreldrepenger.oppslag.util.StringUtil;
+
 @Validated
 public class Fødselsnummer {
 
@@ -42,7 +44,7 @@ public class Fødselsnummer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [fnr=" + fnr + "]";
+        return getClass().getSimpleName() + " [fnr=" + StringUtil.mask(fnr) + "]";
     }
 
 }

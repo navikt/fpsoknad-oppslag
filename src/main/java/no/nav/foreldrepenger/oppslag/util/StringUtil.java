@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.util.CollectionUtils;
 
+import com.google.common.base.Strings;
+
 public final class StringUtil {
 
     private StringUtil() {
@@ -25,6 +27,10 @@ public final class StringUtil {
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public static String mask(String value) {
+        return (value != null) && (value.length() == 11) ? Strings.padEnd(value.substring(0, 6), 11, '*') : value;
     }
 
 }
