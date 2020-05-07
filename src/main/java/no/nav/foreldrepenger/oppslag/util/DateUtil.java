@@ -18,7 +18,7 @@ public final class DateUtil {
 
     public static XMLGregorianCalendar toXMLGregorianCalendar(LocalDate date) {
         try {
-            XMLGregorianCalendar xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            var xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar();
             xgc.setYear(date.getYear());
             xgc.setMonth(date.getMonthValue());
             xgc.setDay(date.getDayOfMonth());

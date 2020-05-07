@@ -89,15 +89,9 @@ public class RemoteSak {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "id=" + id +
-                ", tema='" + tema + '\'' +
-                ", applikasjon='" + applikasjon + '\'' +
-                ", aktoerId='" + aktoerId + '\'' +
-                ", orgnr='" + orgnr + '\'' +
-                ", fagsakNr='" + fagsakNr + '\'' +
-                ", opprettetAv='" + opprettetAv + '\'' +
-                ", opprettetTidspunkt='" + opprettetTidspunkt + '\'' +
-                '}';
+        return getClass().getSimpleName() + "[id=" + id + ", tema=" + tema + ", applikasjon=" + applikasjon
+                + ", aktoerId=" + aktoerId + ", orgnr=" + orgnr + ", fagsakNr=" + fagsakNr + ", opprettetAv="
+                + opprettetAv + ", opprettetTidspunkt=" + opprettetTidspunkt + "]";
     }
+
 }

@@ -33,15 +33,14 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
             throws IOException {
 
         LOG.info("{} - {}", request.getMethodValue(), request.getURI());
-        StopWatch timer = new StopWatch();
+        var timer = new StopWatch();
         timer.start();
         ClientHttpResponse respons = execution.execute(request, body);
         timer.stop();
         if (hasError(respons.getStatusCode())) {
             LOG.warn("{} - {} - ({}). Dette tok {}ms. ({})", request.getMethodValue(), request.getURI(),
                     respons.getRawStatusCode(), timer.getTime(MILLISECONDS), tokenUtil.getExpiryDate());
-        }
-        else {
+        } else {
             LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
                     respons.getRawStatusCode(), timer.getTime(MILLISECONDS));
         }

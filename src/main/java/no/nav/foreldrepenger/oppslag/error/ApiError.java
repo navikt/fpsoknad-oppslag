@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableList.Builder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class ApiError {
@@ -59,7 +58,7 @@ class ApiError {
     }
 
     private static ImmutableList<String> messages(Throwable t, List<Object> objects) {
-        Builder<String> builder = new ImmutableList.Builder<>();
+        var builder = new ImmutableList.Builder<String>();
         String msg = getRootCauseMessage(t);
         if (msg != null) {
             builder.add(msg);

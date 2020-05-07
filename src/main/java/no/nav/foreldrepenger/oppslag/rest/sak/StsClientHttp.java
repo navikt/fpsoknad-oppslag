@@ -5,7 +5,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.TEXT_XML_VALUE;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Base64;
@@ -66,7 +65,7 @@ public class StsClientHttp implements StsClient {
     }
 
     private static String readTemplate(String serviceUser, String servicePwd) {
-        try (InputStream stream = StsClientHttp.class.getResourceAsStream(TEMPLATE_STSENVELOPE_TXT);
+        try (var stream = StsClientHttp.class.getResourceAsStream(TEMPLATE_STSENVELOPE_TXT);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
             return reader.lines()
                     .collect(joining("\n"))
@@ -83,7 +82,8 @@ public class StsClientHttp implements StsClient {
 
     @Override
     public String toString() {
-        return "StsClient [restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", template=" + template
-                + "]";
+        return getClass().getSimpleName() + "[restOperations=" + restOperations + ", stsUrl=" + stsUrl + ", template="
+                + template + "]";
     }
+
 }

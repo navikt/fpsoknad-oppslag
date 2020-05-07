@@ -13,7 +13,8 @@ public class Sak {
     private LocalDate opprettet;
     private String opprettetAv;
 
-    public Sak(String saksnummer, String sakstype, String fagsystem, String fagsakId, String status, LocalDate opprettet, String opprettetAv) {
+    public Sak(String saksnummer, String sakstype, String fagsystem, String fagsakId, String status,
+            LocalDate opprettet, String opprettetAv) {
         this.saksnummer = saksnummer;
         this.sakstype = sakstype;
         this.fagsystem = fagsystem;
@@ -47,18 +48,22 @@ public class Sak {
         return status;
     }
 
-    public String getOpprettetAv() { return opprettetAv; }
+    public String getOpprettetAv() {
+        return opprettetAv;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Sak sak = (Sak) o;
         return Objects.equals(fagsakId, sak.fagsakId) &&
-            Objects.equals(sakstype, sak.sakstype) &&
-            Objects.equals(fagsystem, sak.fagsystem) &&
-            Objects.equals(saksnummer, sak.saksnummer) &&
-            Objects.equals(opprettet, sak.opprettet);
+                Objects.equals(sakstype, sak.sakstype) &&
+                Objects.equals(fagsystem, sak.fagsystem) &&
+                Objects.equals(saksnummer, sak.saksnummer) &&
+                Objects.equals(opprettet, sak.opprettet);
     }
 
     @Override
@@ -68,13 +73,9 @@ public class Sak {
 
     @Override
     public String toString() {
-        return "Sak{" +
-            "fagsakId='" + fagsakId + '\'' +
-            ", sakstype='" + sakstype + '\'' +
-            ", fagsystem='" + fagsystem + '\'' +
-            ", saksnummer='" + saksnummer + '\'' +
-            ", opprettet=" + opprettet +
-            ", opprettetAv=" + opprettetAv +
-            '}';
+        return getClass().getSimpleName() + "[saksnummer=" + saksnummer + ", sakstype=" + sakstype + ", fagsystem="
+                + fagsystem + ", fagsakId=" + fagsakId + ", status=" + status + ", opprettet=" + opprettet
+                + ", opprettetAv=" + opprettetAv + "]";
     }
+
 }

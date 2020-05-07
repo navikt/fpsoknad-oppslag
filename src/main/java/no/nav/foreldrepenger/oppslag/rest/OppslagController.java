@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.oppslag.rest;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -19,11 +18,9 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.Søkerinfo;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.oppslag.ws.person.ID;
-import no.nav.foreldrepenger.oppslag.ws.person.Person;
 import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
@@ -80,10 +77,10 @@ public class OppslagController {
 
     @GetMapping
     public Søkerinfo essensiellSøkerinfo() {
-        Fødselsnummer fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
-        AktørId aktorId = aktør.aktorIdForFnr(fnr);
-        Person p = person.hentPersonInfo(new ID(aktorId, fnr));
-        List<Arbeidsforhold> arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr);
+        var fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
+        var aktorId = aktør.aktorIdForFnr(fnr);
+        var p = person.hentPersonInfo(new ID(aktorId, fnr));
+        var arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr);
         return new Søkerinfo(p, arbeidsforhold);
     }
 
