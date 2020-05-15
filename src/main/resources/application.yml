@@ -13,11 +13,13 @@ http:
 management:
     endpoint:
       health:    
-         show-details : never
+       show-details : never
     metrics:
       web:
         server:
-          auto-time-requests : true
+          request:
+            autotime:
+              enabled: true
     endpoints:
       web:
         exposure:
