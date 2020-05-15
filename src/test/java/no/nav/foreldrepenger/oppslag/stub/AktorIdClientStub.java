@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.oppslag.stub;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.micrometer.core.annotation.Timed;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class AktorIdClientStub implements AktørTjeneste {
 

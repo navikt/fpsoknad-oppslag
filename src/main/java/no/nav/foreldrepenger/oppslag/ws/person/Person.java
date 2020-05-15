@@ -1,14 +1,14 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.neovisionaries.i18n.CountryCode;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "fødselsdato", "navn", "kjønn", "målform"})
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.neovisionaries.i18n.CountryCode;
+
+@JsonPropertyOrder({ "id", "fødselsdato", "navn", "kjønn", "målform" })
 public class Person {
 
     @JsonUnwrapped
@@ -23,7 +23,7 @@ public class Person {
     private final List<Barn> barn;
 
     public Person(ID id, CountryCode landKode, Kjønn kjønn, Navn navn, String målform,
-                  Bankkonto bankkonto, LocalDate fødselsdato, List<Barn> barn) {
+            Bankkonto bankkonto, LocalDate fødselsdato, List<Barn> barn) {
         this.id = id;
         this.landKode = landKode;
         this.kjønn = kjønn;
@@ -68,19 +68,21 @@ public class Person {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
+        }
         Person person = (Person) o;
         return Objects.equals(id, person.id) &&
-            landKode == person.landKode &&
-            kjønn == person.kjønn &&
-            Objects.equals(fødselsdato, person.fødselsdato) &&
-            Objects.equals(målform, person.målform) &&
-            Objects.equals(bankkonto, person.bankkonto) &&
-            Objects.equals(navn, person.navn) &&
-            Objects.equals(landKode, person.landKode);
+                (landKode == person.landKode) &&
+                (kjønn == person.kjønn) &&
+                Objects.equals(fødselsdato, person.fødselsdato) &&
+                Objects.equals(målform, person.målform) &&
+                Objects.equals(bankkonto, person.bankkonto) &&
+                Objects.equals(navn, person.navn) &&
+                Objects.equals(landKode, person.landKode);
     }
 
     @Override
@@ -91,8 +93,8 @@ public class Person {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [id=" + id + ", landKode=" + landKode + ", kjønn=" + kjønn
-            + ", fødselsdato=" + fødselsdato
-            + ", målform=" + målform + ", bankkonto=" + bankkonto
-            + ", navn=" + navn + "]";
+                + ", fødselsdato=" + fødselsdato
+                + ", målform=" + målform + ", bankkonto=" + bankkonto
+                + ", navn=" + navn + "]";
     }
 }

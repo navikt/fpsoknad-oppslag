@@ -17,7 +17,7 @@ public final class EnvUtil {
     }
 
     public static boolean isDevOrLocal(Environment env) {
-        return env == null || isDev(env) || isLocal(env);
+        return (env == null) || isDev(env) || isLocal(env);
     }
 
     public static boolean isDev(Environment env) {

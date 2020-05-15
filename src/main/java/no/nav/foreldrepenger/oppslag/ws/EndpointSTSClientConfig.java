@@ -18,7 +18,7 @@ import org.apache.neethi.Policy;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EndpointSTSClientConfig  {
+public class EndpointSTSClientConfig {
 
     private static final String POLICY_PATH = "classpath:policy/";
     private static final String STS_REQUEST_SAML_POLICY = POLICY_PATH + "requestSamlPolicy.xml";

@@ -1,19 +1,29 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import no.nav.foreldrepenger.oppslag.util.DateUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
-import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
-import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.ID;
-import no.nav.foreldrepenger.oppslag.ws.person.Person;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.*;
-import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-
 import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.Test;
+
+import no.nav.foreldrepenger.oppslag.util.DateUtil;
+import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoUtland;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontonummerUtland;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bostedsadresse;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Foedselsdato;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Gateadresse;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Kjoenn;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Kjoennstyper;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Landkoder;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Postnummer;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.Spraak;
 
 public class PersonMapperTest {
 

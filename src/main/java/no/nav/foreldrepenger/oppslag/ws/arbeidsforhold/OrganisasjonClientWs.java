@@ -79,7 +79,7 @@ public class OrganisasjonClientWs implements OrganisasjonClient {
     }
 
     private static boolean isNotEmpty(String str) {
-        return str != null && !str.trim().isEmpty();
+        return (str != null) && !str.trim().isEmpty();
     }
 
     @Override

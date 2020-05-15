@@ -57,20 +57,20 @@ public class OppslagController {
             @RequestParam(name = "register", defaultValue = "all", required = false) PingableRegisters register) {
         LOG.info("Vil pinge register {}", register);
         switch (register) {
-        case aareg:
-            arbeid.ping();
-            break;
-        case aktør:
-            aktør.ping();
-            break;
-        case tps:
-            person.ping();
-            break;
-        case all:
-            aktør.ping();
-            person.ping();
-            arbeid.ping();
-            break;
+            case aareg:
+                arbeid.ping();
+                break;
+            case aktør:
+                aktør.ping();
+                break;
+            case tps:
+                person.ping();
+                break;
+            case all:
+                aktør.ping();
+                person.ping();
+                arbeid.ping();
+                break;
         }
         return registerNavn(register) + " er i toppform";
     }

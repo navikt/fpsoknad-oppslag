@@ -1,12 +1,12 @@
 package no.nav.foreldrepenger.oppslag.stub;
 
-import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
+import io.micrometer.core.annotation.Timed;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
 
 public class OrganisasjonClientStub implements OrganisasjonClient {
 

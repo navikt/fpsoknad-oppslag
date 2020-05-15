@@ -28,10 +28,12 @@ public class ID {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if ((o == null) || (getClass() != o.getClass())) {
             return false;
+        }
         ID id = (ID) o;
         return Objects.equals(aktorId, id.aktorId) &&
                 Objects.equals(fnr, id.fnr);

@@ -65,8 +65,6 @@ public class ArbeidsforholdClientWsTest {
     private static final String SIGNED_JWT = JwtTokenGenerator.createSignedJWT("22222222222").serialize();
     private static final String LURIUM_AS = "Lurium AS";
     private static final String ORGNR = "999999999";
-    private static final String YRKE = "snekker";
-    private static final String NAVN = "S. Vindel & sønn";
     private static final LocalDate FOURYEARSAGO = LocalDate.now().minusYears(4);
     private static final LocalDate TWOYEARSAGO = LocalDate.now().minusYears(2);
 
@@ -187,15 +185,15 @@ public class ArbeidsforholdClientWsTest {
     /*
      * @Test public void noEndDateSet() { assertTrue(client.siste3år(new
      * Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.empty()))); }
-     * 
+     *
      * @Test public void endDate4årSiden() { assertFalse( client.siste3år(new
      * Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK,
      * Optional.ofNullable(FOURYEARSAGO)))); }
-     * 
+     *
      * @Test public void endDate2årSiden() { assertTrue( client.siste3år(new
      * Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK,
      * Optional.ofNullable(TWOYEARSAGO)))); }
-     * 
+     *
      * @Test public void endDateInTheFuture() { assertTrue(client.siste3år(new
      * Arbeidsforhold(NAVN, YRKE, 100.0, LASTWEEK, Optional.ofNullable(TOMORROW))));
      * }

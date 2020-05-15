@@ -68,7 +68,7 @@ final class PersonMapper {
     }
 
     private static LocalDate birthDate(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if (person.getFoedselsdato() != null && person.getFoedselsdato().getFoedselsdato() != null) {
+        if ((person.getFoedselsdato() != null) && (person.getFoedselsdato().getFoedselsdato() != null)) {
             return DateUtil.toLocalDate(person.getFoedselsdato().getFoedselsdato());
         }
         return null;

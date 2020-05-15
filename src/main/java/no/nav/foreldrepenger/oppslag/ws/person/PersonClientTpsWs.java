@@ -97,17 +97,17 @@ public class PersonClientTpsWs implements PersonTjeneste {
         PersonIdent id = (PersonIdent) person.getAktoer();
         String idType = id.getIdent().getType().getValue();
         switch (idType) {
-        case FNR:
-        case DNR:
-            Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
-            return person.getHarFraRolleI().stream()
-                    .filter(this::isBarn)
-                    .map(s -> hentBarn(s, fnrSøker))
-                    .filter(Objects::nonNull)
-                    .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
-                    .collect(toList());
-        default:
-            throw new IllegalStateException("ID type " + idType + " ikke støttet");
+            case FNR:
+            case DNR:
+                Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
+                return person.getHarFraRolleI().stream()
+                        .filter(this::isBarn)
+                        .map(s -> hentBarn(s, fnrSøker))
+                        .filter(Objects::nonNull)
+                        .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
+                        .collect(toList());
+            default:
+                throw new IllegalStateException("ID type " + idType + " ikke støttet");
         }
     }
 
@@ -152,7 +152,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
             return false;
         }
         XMLGregorianCalendar dato = dødsdato.getDoedsdato();
-        return dato != null
+        return (dato != null)
                 && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
     }
 
@@ -170,7 +170,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
         Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
             String verdi = diskresjonskode.getValue();
-            return verdi != null && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);
+            return (verdi != null) && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);
         }
         return true;
     }
