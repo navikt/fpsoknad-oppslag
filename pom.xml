@@ -29,7 +29,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cxf.version>3.3.6</cxf.version>
         <springfox.swagger.version>2.9.2</springfox.swagger.version>
-        <token-validation-version>1.1.5</token-validation-version>
+        <token-validation-version>1.1.4</token-validation-version>
     </properties>
 
     <scm>
