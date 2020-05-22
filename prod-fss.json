@@ -1,5 +1,6 @@
 {
-  "ingress" : "https://fpsoknad-oppslag.nais.adeo.no",
+  "ingresses":  ["https://fpsoknad-oppslag.nais.adeo.no", 
+                 "https://fpsoknad-oppslag.prod-fss.nais.io"],
   "application_name": "fpsoknad-oppslag",
   "env": {
    "SAK_SAKER_URL": "https://sak.nais.adeo.no/api/v1/saker",
