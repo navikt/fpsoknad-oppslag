@@ -71,7 +71,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     // @Cacheable(cacheNames = "navn")
     public Navn navn(Fødselsnummer fnr) {
         HentPersonRequest request = request(fnr);
-        LOG.info("Slår opp navn");
+        LOG.trace("Slår opp navn");
         return navnFor(hentPerson(request).getPerson());
     }
 
