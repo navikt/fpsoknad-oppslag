@@ -52,11 +52,11 @@ public class AktørIdClientWs implements AktørTjeneste {
     }
 
     private String hentAktør(Fødselsnummer fnr) {
-        LOG.info("Henter aktør for fnr {}", fnr);
+        LOG.trace("Henter aktør for fnr {}", fnr);
         try {
             String aktørId = aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
             MDCUtil.toMDC(NAV_AKTØR_ID, aktørId);
-            LOG.info("Aktørid for {} er {}", fnr, aktørId);
+            LOG.trace("Aktørid for {} er {}", fnr, aktørId);
             return aktørId;
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);
