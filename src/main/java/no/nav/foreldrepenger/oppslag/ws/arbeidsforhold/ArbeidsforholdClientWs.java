@@ -56,7 +56,7 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
             Optional<String> navn = navnFor(forhold.getArbeidsgiverId());
             navn.ifPresent(forhold::setArbeidsgiverNavn);
         }
-        LOG.info("Fant {} aktive arbeidsforhold ({})", arbeidsforhold.size(), arbeidsforhold);
+        LOG.trace("Fant {} aktive arbeidsforhold ({})", arbeidsforhold.size(), arbeidsforhold);
         return arbeidsforhold;
     }
 
@@ -105,15 +105,15 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     }
 
     boolean siste3år(Arbeidsforhold arbeidsforhold) {
-        LOG.info("Sjekker om {} er aktivt siste 3 år", arbeidsforhold);
+        LOG.trace("Sjekker om {} er aktivt siste 3 år", arbeidsforhold);
         if (arbeidsforhold.getTom().isPresent()) {
             LocalDate tom = arbeidsforhold.getTom().get();
             boolean aktiv = tom.isAfter(LocalDate.now().minusYears(3));
-            LOG.info("Arbeidsforhold  {} er {} aktivt siste 3 år{}", arbeidsforhold, aktiv ? "" : "ikke",
+            LOG.trace("Arbeidsforhold  {} er {} aktivt siste 3 år{}", arbeidsforhold, aktiv ? "" : "ikke",
                     !aktiv ? ", ble avsluttet " + tom : "");
             return aktiv;
         }
-        LOG.info("Ingen sluttdato for {}, antar aktivt", arbeidsforhold);
+        LOG.trace("Ingen sluttdato for {}, antar aktivt", arbeidsforhold);
         return true;
     }
 
