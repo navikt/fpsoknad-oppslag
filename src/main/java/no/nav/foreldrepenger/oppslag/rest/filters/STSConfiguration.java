@@ -19,7 +19,7 @@ public class STSConfiguration {
 
     @Bean
     @Qualifier("STS")
-    public RestOperations restOperationsSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restOperations(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
         return new RestTemplateBuilder()
                 .interceptors(Arrays.stream(interceptors)
                         .collect(toCollection(ArrayList::new)))
