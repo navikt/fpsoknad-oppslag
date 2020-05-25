@@ -2,6 +2,7 @@ package no.nav.foreldrepenger.oppslag.rest.filters;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 class UserToken {
@@ -14,6 +15,7 @@ class UserToken {
 
     private final LocalDateTime issuedTime = LocalDateTime.now();
 
+    @JsonCreator
     public UserToken(@JsonProperty("access_token") String accessToken, @JsonProperty("expires_in") Long expiresIn,
             @JsonProperty("token_type") String tokenType) {
         this.accessToken = accessToken;
