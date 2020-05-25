@@ -9,7 +9,7 @@ import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.Pingable;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
-@Retryable(maxAttempts = 3, include = WebServiceException.class, exclude = { TokenExpiredException.class,
+@Retryable(maxAttempts = 2, include = WebServiceException.class, exclude = { TokenExpiredException.class,
         NotFoundException.class })
 public interface AktørTjeneste extends Pingable {
     AktørId aktorIdForFnr(Fødselsnummer fnr);
