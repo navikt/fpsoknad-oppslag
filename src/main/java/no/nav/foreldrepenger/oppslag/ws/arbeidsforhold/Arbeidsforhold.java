@@ -7,6 +7,8 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws.TidsAvgrensetBrukerInfo;
+
 public class Arbeidsforhold extends TidsAvgrensetBrukerInfo {
 
     private final String arbeidsgiverId;

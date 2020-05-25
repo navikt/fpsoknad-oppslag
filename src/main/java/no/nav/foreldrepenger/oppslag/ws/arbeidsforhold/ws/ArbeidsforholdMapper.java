@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
+package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws;
 
 import static java.time.LocalDate.now;
 
@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import no.nav.foreldrepenger.oppslag.util.DateUtil;
 import no.nav.foreldrepenger.oppslag.util.Pair;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Aktoer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsavtale;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.HistoriskArbeidsgiverMedArbeidsgivernummer;

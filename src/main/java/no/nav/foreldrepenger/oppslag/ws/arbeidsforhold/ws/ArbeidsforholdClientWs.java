@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
+package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,6 +15,8 @@ import no.nav.foreldrepenger.oppslag.error.IncompleteRequestException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;

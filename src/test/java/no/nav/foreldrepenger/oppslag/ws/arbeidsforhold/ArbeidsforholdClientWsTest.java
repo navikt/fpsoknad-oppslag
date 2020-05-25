@@ -35,6 +35,8 @@ import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.EndpointSTSClientConfig;
 import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws.ArbeidsforholdConfiguration;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws.OrganisasjonConfiguration;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.security.token.support.test.JwtTokenGenerator;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;

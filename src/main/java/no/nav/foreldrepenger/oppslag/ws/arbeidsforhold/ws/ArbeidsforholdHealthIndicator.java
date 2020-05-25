@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
+package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws;
 
 import java.net.URI;
 
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import no.nav.foreldrepenger.oppslag.rest.PingableHealthIndicator;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 
 @Component
 public class ArbeidsforholdHealthIndicator extends PingableHealthIndicator {

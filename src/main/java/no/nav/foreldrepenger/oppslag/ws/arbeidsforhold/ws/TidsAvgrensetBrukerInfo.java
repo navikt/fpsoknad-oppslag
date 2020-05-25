@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
+package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws;
 
 import java.time.LocalDate;
 import java.util.Objects;

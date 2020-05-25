@@ -9,7 +9,7 @@ import no.nav.foreldrepenger.oppslag.rest.sak.SakClient;
 import no.nav.foreldrepenger.oppslag.util.EnvUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws.OrganisasjonClient;
 import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 
 @Configuration

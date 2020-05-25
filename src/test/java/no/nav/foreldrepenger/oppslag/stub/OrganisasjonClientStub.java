@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.micrometer.core.annotation.Timed;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.OrganisasjonClient;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws.OrganisasjonClient;
 
 public class OrganisasjonClientStub implements OrganisasjonClient {
 

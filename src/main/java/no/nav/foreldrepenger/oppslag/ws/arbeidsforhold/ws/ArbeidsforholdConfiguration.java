@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold;
+package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ws;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.WsClient;
+import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
 
 @Configuration
