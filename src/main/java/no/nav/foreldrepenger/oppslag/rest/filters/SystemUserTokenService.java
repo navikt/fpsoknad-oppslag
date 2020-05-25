@@ -19,8 +19,8 @@ public class SystemUserTokenService {
 
     private final String password;
 
-    public SystemUserTokenService(RestTemplate restTemplate, @Value("FPSELVBETJENING_USERNAME") String username,
-            @Value("FPSELVBETJENING_PASSWORD") String password) {
+    public SystemUserTokenService(RestTemplate restTemplate, @Value("${FPSELVBETJENING_USERNAME}") String username,
+            @Value("${FPSELVBETJENING_PASSWORD}") String password) {
         this.restTemplate = restTemplate;
         this.username = username;
         this.password = password;
