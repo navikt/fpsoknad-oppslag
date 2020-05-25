@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,7 @@ public class SakConfiguration {
     private String servicePwd;
 
     @Bean
+    @Qualifier("SAK")
     public RestOperations restOperationsSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
         List<ClientHttpRequestInterceptor> interceptorListWithoutAuth = Arrays.stream(interceptors)
                 // We'll add our own auth header with SAML elsewhere

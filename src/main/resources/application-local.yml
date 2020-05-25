@@ -11,7 +11,6 @@ no.nav.security.jwt:
     selvbetjening.cookie_name: localhost-idtoken
 
 securitytokenservice.uri:  http://localhost
-http.proxy:
 
 AKTOER_V2_ENDPOINTURL: http://localhost
 JOURNAL_V2_ENDPOINTURL: http://localhost
@@ -32,7 +31,7 @@ FPSELVBETJENING_PASSWORD: bogus
 server.port: 9000
 
 spring :
-    http.log-request-details : true   
+    mvc.log-request-details : true   
     jackson :
       default-property-inclusion :  non-absent
       mapper :
