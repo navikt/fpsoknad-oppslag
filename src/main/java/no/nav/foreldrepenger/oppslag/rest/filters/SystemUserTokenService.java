@@ -5,6 +5,7 @@ import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,14 +27,14 @@ public class SystemUserTokenService {
 
     private final URI uri;
 
-    public SystemUserTokenService(RestTemplate restTemplate, @Value("${FPSELVBETJENING_USERNAME}") String username,
+    public SystemUserTokenService(@Qualifier("STS") RestTemplate restTemplate,
+            @Value("${FPSELVBETJENING_USERNAME}") String username,
             @Value("${FPSELVBETJENING_PASSWORD}") String password,
             @Value("${sts.uri}") URI uri) {
         this.restTemplate = restTemplate;
         this.username = username;
         this.password = password;
         this.uri = uri;
-        LOG.info("Token er {}", fetch());
     }
 
     public UserToken fetch() {

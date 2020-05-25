@@ -8,8 +8,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class ConsumerTokenInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerTokenInterceptor.class);
 
@@ -23,8 +24,8 @@ public class ConsumerTokenInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         LOG.debug("Adding \'Nav-Consumer-Token\' header to {} {}", request.getMethod(), request.getURI());
-        // request.getHeaders().add("Nav-Consumer-Token",
-        // "Bearer " + userTokenService.fetch().getAccessToken());
+        request.getHeaders().add("Nav-Consumer-Token",
+                "Bearer " + userTokenService.fetch().getAccessToken());
         return execution.execute(request, body);
     }
 
