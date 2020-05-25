@@ -23,8 +23,8 @@ public class ConsumerTokenInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         LOG.debug("Adding \'Nav-Consumer-Token\' header to {} {}", request.getMethod(), request.getURI());
-        request.getHeaders().add("Nav-Consumer-Token",
-                "Bearer " + userTokenService.fetch().getAccessToken());
+        // request.getHeaders().add("Nav-Consumer-Token",
+        // "Bearer " + userTokenService.fetch().getAccessToken());
         return execution.execute(request, body);
     }
 
