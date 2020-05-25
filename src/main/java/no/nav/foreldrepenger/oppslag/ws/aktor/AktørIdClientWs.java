@@ -4,6 +4,7 @@ import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_AKTØR_ID;
 
 import java.util.Objects;
 
+import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
@@ -60,7 +61,10 @@ public class AktørIdClientWs implements AktørTjeneste {
             return aktørId;
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);
-        } catch (SOAPFaultException e) {
+        } catch (WebServiceException e) {
+            if (e.getMessage() != null && e.getMessage().contains("404")) {
+                throw new NotFoundException(e);
+            }
             LOG.trace("Feil ved henting av aktør", e);
             if (tokenUtil.isExpired()) {
                 LOG.trace("Token expired: {}", tokenUtil.getExpiryDate());
