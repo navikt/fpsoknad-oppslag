@@ -5,18 +5,17 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 class UserToken {
-    @JsonProperty("access_token")
-    private String accessToken;
 
-    @JsonProperty("expires_in")
-    private Long expiresIn;
+    private final String accessToken;
 
-    @JsonProperty("token_type")
-    private String tokenType;
+    private final Long expiresIn;
+
+    private final String tokenType;
 
     private final LocalDateTime issuedTime = LocalDateTime.now();
 
-    public UserToken(String accessToken, Long expiresIn, String tokenType) {
+    public UserToken(@JsonProperty("access_token") String accessToken, @JsonProperty("expires_in") Long expiresIn,
+            @JsonProperty("token_type") String tokenType) {
         this.accessToken = accessToken;
         this.expiresIn = expiresIn;
         this.tokenType = tokenType;
