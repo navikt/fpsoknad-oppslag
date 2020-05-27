@@ -22,6 +22,7 @@ public class SystemUserTokenService {
                 .baseUrl(url)
                 .defaultHeaders(header -> header.setBasicAuth(username, password))
                 .build();
+        fetch();
     }
 
     public UserToken fetch() {
