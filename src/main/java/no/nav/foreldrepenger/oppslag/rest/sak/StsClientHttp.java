@@ -11,7 +11,6 @@ import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestOperations;
@@ -30,7 +29,7 @@ public class StsClientHttp implements StsClient {
     private final URI stsUrl;
     private final String template;
 
-    public StsClientHttp(@Qualifier("SAK") RestOperations restOperations, URI stsUrl, String serviceUser,
+    public StsClientHttp(RestOperations restOperations, URI stsUrl, String serviceUser,
             String servicePwd) {
         this.restOperations = restOperations;
         this.stsUrl = stsUrl;

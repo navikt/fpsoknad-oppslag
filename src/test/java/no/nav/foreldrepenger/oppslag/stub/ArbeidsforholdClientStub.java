@@ -37,4 +37,9 @@ public class ArbeidsforholdClientStub implements ArbeidsforholdTjeneste {
     public String arbeidsgiverNavn(String orgnr) {
         return "Spiders from Mars";
     }
+
+    @Override
+    public List<Arbeidsforhold> aktiveArbeidsforhold() {
+        return aktiveArbeidsforhold(new Fødselsnummer("11111111111"));
+    }
 }

@@ -14,5 +14,7 @@ import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 public interface ArbeidsforholdTjeneste extends Pingable {
     List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr);
 
+    List<Arbeidsforhold> aktiveArbeidsforhold();
+
     String arbeidsgiverNavn(String orgnr);
 }

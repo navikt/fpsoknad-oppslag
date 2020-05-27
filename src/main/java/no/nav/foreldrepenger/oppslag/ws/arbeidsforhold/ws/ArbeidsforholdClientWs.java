@@ -52,6 +52,11 @@ public class ArbeidsforholdClientWs implements ArbeidsforholdTjeneste {
     }
 
     @Override
+    public List<Arbeidsforhold> aktiveArbeidsforhold() {
+        return aktiveArbeidsforhold(new Fødselsnummer(tokenUtil.autentisertBruker()));
+    }
+
+    @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
         List<Arbeidsforhold> arbeidsforhold = arbeidsforholdSiste3år(fnr.getFnr());
         for (Arbeidsforhold forhold : arbeidsforhold) {
