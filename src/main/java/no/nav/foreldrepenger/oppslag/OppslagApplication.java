@@ -9,9 +9,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
@@ -28,7 +26,6 @@ import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.oppslag")
 @EnableCaching
 @EnableRetry
-@EnableAutoConfiguration(exclude = WebFluxAutoConfiguration.class)
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class OppslagApplication {
 
