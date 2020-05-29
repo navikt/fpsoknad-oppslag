@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,14 +13,8 @@ public class SystemUserTokenService {
 
     private final WebClient webClient;
 
-    public SystemUserTokenService(WebClient.Builder webClientBuilder,
-            @Value("${FPSELVBETJENING_USERNAME}") String username,
-            @Value("${FPSELVBETJENING_PASSWORD}") String password,
-            @Value("${sts.uri}") String url) {
-        this.webClient = webClientBuilder
-                .baseUrl(url)
-                .defaultHeaders(header -> header.setBasicAuth(username, password))
-                .build();
+    public SystemUserTokenService(WebClient webClient) {
+        this.webClient = webClient;
         // fetch();
     }
 
