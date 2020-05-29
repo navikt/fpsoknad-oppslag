@@ -3,10 +3,9 @@ package no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Service
+//@Service
 public class SystemUserTokenService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemUserTokenService.class);

@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestOperations;
 
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
@@ -23,14 +22,12 @@ import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 public class ArbeidsforholdClientRest implements ArbeidsforholdTjeneste {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArbeidsforholdClientRest.class);
-    private final RestOperations restOperations;
     private final URI baseUri;
     private final SystemUserTokenService tokenService;
     private final TokenUtil tokenUtil;
 
-    public ArbeidsforholdClientRest(URI baseUri, RestOperations restOperations, SystemUserTokenService tokenService,
+    public ArbeidsforholdClientRest(URI baseUri, SystemUserTokenService tokenService,
             TokenUtil tokenUtil) {
-        this.restOperations = restOperations;
         this.baseUri = baseUri;
         this.tokenService = tokenService;
         this.tokenUtil = tokenUtil;

@@ -4,6 +4,7 @@ management :
      health.show-details : always
      security.enabled : false
 
+sts.uri: http://www.vg.no
 no.nav.security.jwt:
   issuer:
     selvbetjening.discoveryurl: http://metadata
