@@ -19,6 +19,7 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 
@@ -26,6 +27,7 @@ import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.oppslag")
 @EnableCaching
 @EnableRetry
+@EnableWebFlux
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class OppslagApplication {
 
