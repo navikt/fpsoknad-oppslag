@@ -42,7 +42,7 @@ public class ArbeidsforholdClientRest implements ArbeidsforholdTjeneste {
     @Override
     public List<Arbeidsforhold> aktiveArbeidsforhold(Fødselsnummer fnr) {
         LOG.info("Henter arbeidsforhold for {}", fnr);
-        var response = arbeidsforholdFor(request());
+        // var response = arbeidsforholdFor(request());
         return Collections.emptyList();
 
     }
@@ -56,9 +56,10 @@ public class ArbeidsforholdClientRest implements ArbeidsforholdTjeneste {
         return "TODO";
     }
 
-    private HttpEntity<String> request() {
-        return new HttpEntity<>(headers(tokenService.fetch().getAccessToken()));
-    }
+    /*
+     * private HttpEntity<String> request() { return new
+     * HttpEntity<>(headers(tokenService.fetch().getAccessToken())); }
+     */
 
     private HttpHeaders headers(String jwtToken) {
         HttpHeaders headers = new HttpHeaders();
