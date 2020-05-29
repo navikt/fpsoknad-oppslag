@@ -30,5 +30,6 @@
     <springProfile name="dev,local">
         <logger name="no.nav.foreldrepenger" level="trace" />
         <logger name="org.springframework.web.reactive" level="trace" />
+        <logger name="org.springframework.vault" level="trace" />     
     </springProfile>
 </configuration>
