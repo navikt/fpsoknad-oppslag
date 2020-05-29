@@ -1,4 +1,5 @@
 no.nav.security.jwt.issuer.selvbetjening.discoveryurl: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
+sts.uri: https://security-token-service.nais.preprod.local/rest/v1/sts/token?grant_type=client_credentials&scope=openid
 management :
    endpoints:
      web:
@@ -11,7 +12,7 @@ management :
        enabled : false
 
 spring:
-  http:
+  mvc:
     log-request-details : true
 org:
   apache:
