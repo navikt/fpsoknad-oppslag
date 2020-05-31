@@ -26,7 +26,7 @@ public class SakConfiguration {
     @Value("${SECURITYTOKENSERVICE_URL}")
     private URI stsUrl;
 
-    @Value("${FPSELVBETJENING_USERNAME}")
+    @Value("${FPSELVBETJENING_USERNAME:srvfpsoknad-oppslag}")
     private String serviceUser;
 
     @Value("${FPSELVBETJENING_PASSWORD}")
