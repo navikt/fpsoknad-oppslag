@@ -2,6 +2,7 @@ spring:
    cloud:
       vault:
          enabled: true
+         reactive.enabled: false
          uri: https://vault.adeo.no
          authentication: KUBERNETES
          kubernetes:
