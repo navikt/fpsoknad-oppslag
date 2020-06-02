@@ -2,14 +2,14 @@ spring:
    cloud:
       vault:
          reactive:
-           enabled: false
+           enabled: true
          enabled: true
          uri: http://127.0.0.1:8200
          authentication: TOKEN
-         token: s.VtBT8D8QVrFHdPtNNH0UTah1
+         token: s.D49M05VaOXS3fDHtQwquhJMp
          kv:
             enabled: true
-            backend: secret/local
+            backend: secret/kv/local
             application-name: fpsoknad-oppslag
             default-context: fpsoknad-oppslag
          
