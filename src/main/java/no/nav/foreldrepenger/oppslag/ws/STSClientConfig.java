@@ -12,6 +12,7 @@ import org.apache.cxf.ws.security.trust.STSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 @Configuration
 public class STSClientConfig {
@@ -25,6 +26,7 @@ public class STSClientConfig {
     private String servicePwd;
 
     @Bean
+    @Lazy
     public STSClient configureSTSClient(Bus bus) {
         STSClient stsClient = new STSClient(bus);
         stsClient.setEnableAppliesTo(false);
