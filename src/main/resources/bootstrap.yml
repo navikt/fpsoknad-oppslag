@@ -10,7 +10,7 @@ spring:
             role: fpsoknad-oppslag
             kubernetes-path: kubernetes/prod/fss
             service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
-         generic:
+         kv:
             enabled: true
             backend: kv/prod/fss
             application-name: fpsoknad-oppslag/default

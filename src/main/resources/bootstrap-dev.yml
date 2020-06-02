@@ -2,14 +2,15 @@ spring:
    cloud:
       vault:
          enabled: true
-         reactive.enabled: false
+         reactive:
+           enabled: false
          uri: https://vault.adeo.no
          authentication: KUBERNETES
          kubernetes:
             role: fpsoknad-oppslag
             kubernetes-path: kubernetes/preprod/fss
             service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
-         generic:
+         kv:
             enabled: true
             backend: kv/preprod/fss
             application-name: fpsoknad-oppslag/default
