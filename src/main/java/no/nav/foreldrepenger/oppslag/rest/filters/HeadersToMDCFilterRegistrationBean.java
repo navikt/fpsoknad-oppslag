@@ -3,7 +3,6 @@ package no.nav.foreldrepenger.oppslag.rest.filters;
 import static no.nav.foreldrepenger.oppslag.rest.OppslagController.OPPSLAG;
 import static no.nav.foreldrepenger.oppslag.rest.filters.FilterRegistrationUtil.urlPatternsFor;
 import static no.nav.foreldrepenger.oppslag.rest.sak.SakController.SAK;
-import static no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdController.ARBEIDSFORHOLD;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonController.PERSON;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
@@ -20,7 +19,7 @@ public class HeadersToMDCFilterRegistrationBean extends FilterRegistrationBean<H
 
     public HeadersToMDCFilterRegistrationBean(HeadersToMDCFilterBean headersFilter) {
         setFilter(headersFilter);
-        setUrlPatterns(urlPatternsFor(OPPSLAG, ARBEIDSFORHOLD, PERSON, SAK));
+        setUrlPatterns(urlPatternsFor(OPPSLAG, PERSON, SAK));
         LOG.info("Registrert filter {}", this);
     }
 }

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.Arbeidsforhold;
 import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 import no.nav.foreldrepenger.oppslag.ws.person.ID;
@@ -30,11 +28,6 @@ import no.nav.foreldrepenger.oppslag.ws.person.Person;
 public class SerializationTest {
     @Autowired
     private ObjectMapper mapper;
-
-    @Test
-    public void testArbeidsforholdSerialization() throws IOException {
-        test(arbeidsforhold());
-    }
 
     @Test
     public void testBankkontoSerialization() throws IOException {
@@ -104,12 +97,6 @@ public class SerializationTest {
 
     private static Bankkonto bankkonto() {
         return new Bankkonto("1234567890", "Pæng r'us");
-    }
-
-    private static Arbeidsforhold arbeidsforhold() {
-        LocalDate now = LocalDate.now();
-        return new Arbeidsforhold("arbgiver", "typen", 100d,
-                now.minusMonths(2), Optional.of(now));
     }
 
     private String write(Object obj) throws JsonProcessingException {
