@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.oppslag.util;
 
 public enum PingableRegisters {
-    aareg,
+    // aareg,
     aktør,
     tps,
     all

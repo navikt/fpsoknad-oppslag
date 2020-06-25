@@ -15,12 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import no.nav.foreldrepenger.oppslag.util.PingableRegisters;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.Søkerinfo;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
-import no.nav.foreldrepenger.oppslag.ws.arbeidsforhold.ArbeidsforholdTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.ID;
 import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.api.Unprotected;
@@ -38,16 +35,16 @@ public class OppslagController {
 
     private final PersonTjeneste person;
 
-    private final ArbeidsforholdTjeneste arbeid;
+    // private final ArbeidsforholdTjeneste arbeid;
 
     private final TokenUtil tokenUtil;
 
     @Inject
-    public OppslagController(AktørTjeneste aktør, PersonTjeneste person, ArbeidsforholdTjeneste arbeid,
+    public OppslagController(AktørTjeneste aktør, PersonTjeneste person, /* ArbeidsforholdTjeneste arbeid, */
             TokenUtil tokenHandler) {
         this.aktør = aktør;
         this.person = person;
-        this.arbeid = arbeid;
+        // this.arbeid = arbeid;
         this.tokenUtil = tokenHandler;
     }
 
@@ -57,9 +54,9 @@ public class OppslagController {
             @RequestParam(name = "register", defaultValue = "all", required = false) PingableRegisters register) {
         LOG.info("Vil pinge register {}", register);
         switch (register) {
-            case aareg:
-                arbeid.ping();
-                break;
+            /*
+             * case aareg: arbeid.ping(); break;
+             */
             case aktør:
                 aktør.ping();
                 break;
@@ -69,21 +66,19 @@ public class OppslagController {
             case all:
                 aktør.ping();
                 person.ping();
-                arbeid.ping();
+                // arbeid.ping();
                 break;
         }
         return registerNavn(register) + " er i toppform";
     }
 
-    @GetMapping
-    public Søkerinfo essensiellSøkerinfo() {
-        var fnr = new Fødselsnummer(tokenUtil.autentisertBruker());
-        var aktorId = aktør.aktorIdForFnr(fnr);
-        var p = person.hentPersonInfo(new ID(aktorId, fnr));
-        var arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr);
-        return new Søkerinfo(p, arbeidsforhold);
-    }
-
+    /*
+     * @GetMapping public Søkerinfo essensiellSøkerinfo() { var fnr = new
+     * Fødselsnummer(tokenUtil.autentisertBruker()); var aktorId =
+     * aktør.aktorIdForFnr(fnr); var p = person.hentPersonInfo(new ID(aktorId,
+     * fnr)); var arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr); return new
+     * Søkerinfo(p, arbeidsforhold); }
+     */
     @GetMapping("/aktor")
     public AktørId getAktørId() {
         return getAktørIdForFNR(new Fødselsnummer(tokenUtil.autentisertBruker()));
@@ -110,7 +105,8 @@ public class OppslagController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [aktør=" + aktør + ", person=" + person + ", arbeid=" + arbeid + "]";
+        return getClass().getSimpleName() + " [aktør=" + aktør + ", person=" + person /* + ", arbeid=" + arbeid */
+                + "]";
     }
 
 }
