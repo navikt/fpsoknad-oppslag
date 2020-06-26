@@ -104,6 +104,7 @@
                             <sourceDestDir>target/generated-sources</sourceDestDir>
                         </configuration>
                     </execution>
+                    <!--  
                     <execution>
                         <id>WsdlAareg</id>
                         <goals>
@@ -130,6 +131,7 @@
                             <sourceDestDir>target/generated-sources</sourceDestDir>
                         </configuration>
                     </execution>
+                    -->
                 </executions>
             </plugin>
             <plugin>
