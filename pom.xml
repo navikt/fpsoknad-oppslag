@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cxf.version>3.3.6</cxf.version>
-        <springfox.swagger.version>2.9.2</springfox.swagger.version>
+        <springfox.swagger.version>2.10.5</springfox.swagger.version>
         <token-validation-version>1.1.6</token-validation-version>
     </properties>
 
@@ -104,34 +104,6 @@
                             <sourceDestDir>target/generated-sources</sourceDestDir>
                         </configuration>
                     </execution>
-                    <!--  
-                    <execution>
-                        <id>WsdlAareg</id>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>Binding.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <wsdlDirectory>src/main/resources/wsdl/aareg/</wsdlDirectory>
-                            <sourceDestDir>target/generated-sources</sourceDestDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>WsdlOrganisasjon</id>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>Binding.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <wsdlDirectory>src/main/resources/wsdl/organisasjon</wsdlDirectory>
-                            <sourceDestDir>target/generated-sources</sourceDestDir>
-                        </configuration>
-                    </execution>
-                    -->
                 </executions>
             </plugin>
             <plugin>
