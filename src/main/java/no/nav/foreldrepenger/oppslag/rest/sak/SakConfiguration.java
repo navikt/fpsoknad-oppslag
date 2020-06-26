@@ -35,7 +35,7 @@ public class SakConfiguration {
 
     @Bean
     @Lazy
-    public RestOperations restOperationsSak(TokenUtil tokenHandler, ClientHttpRequestInterceptor... interceptors) {
+    public RestOperations restOperationsSak(ClientHttpRequestInterceptor... interceptors) {
         List<ClientHttpRequestInterceptor> interceptorListWithoutAuth = Arrays.stream(interceptors)
                 // We'll add our own auth header with SAML elsewhere
                 .filter(i -> !(i instanceof BearerTokenClientHttpRequestInterceptor))

@@ -33,7 +33,7 @@ public class MDCValuesPropagatingClientRequestInterceptor implements ClientHttpR
         return execution.execute(req, body);
     }
 
-    private void propagateIfSet(HttpRequest request, String... keys) {
+    private static void propagateIfSet(HttpRequest request, String... keys) {
         for (String key : keys) {
             String value = MDC.get(key);
             if (value != null) {

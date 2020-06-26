@@ -117,11 +117,11 @@ public class HentPersonInfoTest {
         verify(tps).hentPerson(any());
     }
 
-    private ID id() {
+    private static ID id() {
         return new ID(new AktørId("aktør"), new Fødselsnummer("fnr"));
     }
 
-    private HentPersonResponse response(Familierelasjon rel) {
+    private static HentPersonResponse response(Familierelasjon rel) {
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person = new no.nav.tjeneste.virksomhet.person.v3.informasjon.Person();
         person.setAktoer(aktoer("01018812345", "FNR"));
         person.setKjoenn(kjoenn());
@@ -138,7 +138,7 @@ public class HentPersonInfoTest {
         return response;
     }
 
-    private Familierelasjon barn(String fnr, String fnrType) {
+    private static Familierelasjon barn(String fnr, String fnrType) {
         Familierelasjon rel = new Familierelasjon();
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person barn = new no.nav.tjeneste.virksomhet.person.v3.informasjon.Person();
         barn.setAktoer(aktoer(fnr, fnrType));
@@ -149,7 +149,7 @@ public class HentPersonInfoTest {
         return rel;
     }
 
-    private Foedselsdato foedselsdato() {
+    private static Foedselsdato foedselsdato() {
         Foedselsdato foedselsdato = new Foedselsdato();
         LocalDate twenty = now().minusYears(20);
         GregorianCalendar gcal = GregorianCalendar.from(twenty.atStartOfDay(ZoneId.systemDefault()));
@@ -162,14 +162,14 @@ public class HentPersonInfoTest {
         return foedselsdato;
     }
 
-    private Personnavn navn() {
+    private static Personnavn navn() {
         Personnavn navn = new Personnavn();
         navn.setFornavn("Test");
         navn.setEtternavn("Testesen");
         return navn;
     }
 
-    private Kjoenn kjoenn() {
+    private static Kjoenn kjoenn() {
         Kjoenn kjoenn = new Kjoenn();
         Kjoennstyper type = new Kjoennstyper();
         type.setValue("K");
@@ -177,7 +177,7 @@ public class HentPersonInfoTest {
         return kjoenn;
     }
 
-    private Aktoer aktoer(String fnr, String fnrType) {
+    private static Aktoer aktoer(String fnr, String fnrType) {
         PersonIdent aktoer = new PersonIdent();
         NorskIdent norskIdent = new NorskIdent();
         norskIdent.setIdent(fnr);

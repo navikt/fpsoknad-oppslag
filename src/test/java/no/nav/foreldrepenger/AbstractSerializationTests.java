@@ -32,7 +32,7 @@ public abstract class AbstractSerializationTests {
         return mapper;
     }
 
-    private void test(Object object, boolean print) {
+    private static void test(Object object, boolean print) {
         test(object, print, mapper);
     }
 

@@ -44,24 +44,24 @@ public class EndpointSTSClientConfig {
         return port;
     }
 
-    private void configureEndpointWithPolicyForSTS(STSClient stsClient, Client client, String policyReference,
+    private static void configureEndpointWithPolicyForSTS(STSClient stsClient, Client client, String policyReference,
             boolean cacheTokenInEndpoint) {
         client.getRequestContext().put(STS_CLIENT, stsClient);
         client.getRequestContext().put(CACHE_ISSUED_TOKEN_IN_ENDPOINT, cacheTokenInEndpoint);
         setEndpointPolicyReference(client, policyReference);
     }
 
-    private void setEndpointPolicyReference(Client client, String uri) {
+    private static void setEndpointPolicyReference(Client client, String uri) {
         Policy policy = resolvePolicyReference(client, uri);
         setClientEndpointPolicy(client, policy);
     }
 
-    private Policy resolvePolicyReference(Client client, String uri) {
+    private static Policy resolvePolicyReference(Client client, String uri) {
         PolicyBuilder policyBuilder = client.getBus().getExtension(PolicyBuilder.class);
         return new RemoteReferenceResolver("", policyBuilder).resolveReference(uri);
     }
 
-    private void setClientEndpointPolicy(Client client, Policy policy) {
+    private static void setClientEndpointPolicy(Client client, Policy policy) {
         Endpoint endpoint = client.getEndpoint();
         EndpointInfo endpointInfo = endpoint.getEndpointInfo();
 

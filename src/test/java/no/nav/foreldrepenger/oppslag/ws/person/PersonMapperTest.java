@@ -63,7 +63,7 @@ public class PersonMapperTest {
         assertEquals(expected, mapped.getBankkonto());
     }
 
-    private Bruker createBasePerson() {
+    private static Bruker createBasePerson() {
         Bruker person = new Bruker();
 
         Kjoenn kjoenn = new Kjoenn();
@@ -99,7 +99,7 @@ public class PersonMapperTest {
         return person;
     }
 
-    private Bruker personWithMålform() {
+    private static Bruker personWithMålform() {
         Bruker basePerson = createBasePerson();
         Spraak spraak = new Spraak();
         spraak.setValue("Turkmenistansk");
@@ -107,19 +107,19 @@ public class PersonMapperTest {
         return basePerson;
     }
 
-    private Bruker personWithNorskKonto() {
+    private static Bruker personWithNorskKonto() {
         Bruker basePerson = createBasePerson();
         basePerson.setBankkonto(norskKonto());
         return basePerson;
     }
 
-    private Bruker personWithUtenlandskKonto() {
+    private static Bruker personWithUtenlandskKonto() {
         Bruker basePerson = createBasePerson();
         basePerson.setBankkonto(utenlandskKonto());
         return basePerson;
     }
 
-    private no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto norskKonto() {
+    private static no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto norskKonto() {
         BankkontoNorge bankkonto = new BankkontoNorge();
         Bankkontonummer kontonr = new Bankkontonummer();
         kontonr.setBankkontonummer("1234567890");
@@ -128,7 +128,7 @@ public class PersonMapperTest {
         return bankkonto;
     }
 
-    private no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto utenlandskKonto() {
+    private static no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto utenlandskKonto() {
         BankkontoUtland bankkonto = new BankkontoUtland();
         BankkontonummerUtland kontonr = new BankkontonummerUtland();
         kontonr.setSwift("swiftster");

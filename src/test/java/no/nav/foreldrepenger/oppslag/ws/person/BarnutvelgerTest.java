@@ -20,7 +20,7 @@ public class BarnutvelgerTest {
         assertThat(new BarnMorRelasjonSjekkendeBarnutvelger(months).erStonadsberettigetBarn(MOR, barn)).isFalse();
     }
 
-    private Navn navn() {
+    private static Navn navn() {
         return new Navn("Test", "T", "Testesen", Kjønn.M);
     }
 }

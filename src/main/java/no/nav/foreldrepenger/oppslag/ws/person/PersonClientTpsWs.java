@@ -68,14 +68,13 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     @Override
-    // @Cacheable(cacheNames = "navn")
     public Navn navn(Fødselsnummer fnr) {
         HentPersonRequest request = request(fnr);
         LOG.trace("Slår opp navn");
         return navnFor(hentPerson(request).getPerson());
     }
 
-    private Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private static Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         return Optional.ofNullable(person)
                 .map(p -> PersonMapper.name(p.getPersonnavn(), Kjønn.valueOf(p.getKjoenn().getKjoenn().getValue())))
                 .orElse(null);
@@ -146,7 +145,8 @@ public class PersonClientTpsWs implements PersonTjeneste {
         return barn(id, fnrSøker, tpsBarn, annenForelder);
     }
 
-    private boolean harDøddForOverFireMånederSiden(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private static boolean harDøddForOverFireMånederSiden(
+            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Doedsdato dødsdato = person.getDoedsdato();
         if (dødsdato == null) {
             return false;
@@ -156,7 +156,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
                 && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
     }
 
-    private boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private static boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         try {
             String status = person.getPersonstatus().getPersonstatus().getValue();
             return DØD.equals(status) || DØDD.equals(status);

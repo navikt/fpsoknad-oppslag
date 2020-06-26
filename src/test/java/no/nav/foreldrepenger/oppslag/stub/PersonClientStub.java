@@ -38,7 +38,7 @@ public class PersonClientStub implements PersonTjeneste {
         LOG.info("PONG");
     }
 
-    private List<Barn> barn(Fødselsnummer fnrMor) {
+    private static List<Barn> barn(Fødselsnummer fnrMor) {
         Barn barn = new Barn(fnrMor,
                 new Fødselsnummer("01011812345"),
                 now().minusYears(1),

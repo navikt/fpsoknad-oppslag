@@ -60,7 +60,7 @@ public class StsClientHttp implements StsClient {
         return headers;
     }
 
-    private String encode(String oidcToken) {
+    private static String encode(String oidcToken) {
         return Base64.getEncoder().encodeToString(oidcToken.getBytes());
     }
 

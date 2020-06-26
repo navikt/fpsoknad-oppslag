@@ -129,7 +129,7 @@ public class AktørWSClientTest {
         verify(aktoerV2).hentIdentForAktoerId(any());
     }
 
-    private HentAktoerIdForIdentResponse aktørResponse() {
+    private static HentAktoerIdForIdentResponse aktørResponse() {
         HentAktoerIdForIdentResponse respons = new HentAktoerIdForIdentResponse();
         respons.setAktoerId(AKTOR.getAktør());
         return respons;
