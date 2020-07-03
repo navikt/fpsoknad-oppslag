@@ -17,6 +17,7 @@ jobs:
            echo "::set-env name=TAG::$(echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}' | awk -F- '{print $NF}')"
            echo "::set-env name=IMAGE::$IMAGE_BASE:$(echo ${{ github.event.client_payload.github.payload.issue.title }} | awk '{print $NF}')"
            echo "::set-env name=CLUSTER::${{ github.event.client_payload.slash_command.arg1 }}"      
+           echo "::set-env name=NAMESPACE::${{ github.event.client_payload.slash_command.arg2 }}"      
             
        
       - name: Sjekk ut kode
@@ -31,7 +32,7 @@ jobs:
           CLUSTER: ${{ env.CLUSTER }}
           RESOURCE: naiserator.yaml
           PRINT_PAYLOAD: true
-          VARS: ${{ env.CLUSTER }}.json 
+          VARS: ${{ env.CLUSTER }}-${{ env.NAMESPACE }}.json 
           
       - name: Oppdater kommentar med deployment status ved feil
         if: failure()
@@ -45,7 +46,7 @@ jobs:
             github.issues.createComment({...issue,
                                     title: 'Deploy av ${{ env.TAG }}',
                                     body: '>promote ${{ github.event.client_payload.slash_command.args }} feilet'})
-            github.issues.addLabels({...issue, labels: ['deployment-failed','${{ env.CLUSTER }}'])            
+            github.issues.addLabels({...issue, labels: ['deployment-failed','${{ env.CLUSTER }}-${{ env.NAMESPAE }}']) 
    
       - name: Oppdater kommentar med deployment status
         if: success()
@@ -58,5 +59,5 @@ jobs:
                             issue_number: ${{ github.event.client_payload.github.payload.issue.number }} }
             const new_comment  = github.issues.createComment({...issue,
                                     body: '>promote ${{ github.event.client_payload.slash_command.args }} var OK'})
-            github.issues.addLabels({...issue, labels: ['${{ env.CLUSTER }}']})
+            github.issues.addLabels({...issue, labels: ['${{ env.CLUSTER }}-${{ env.NAMESPACE }}']})
                   
