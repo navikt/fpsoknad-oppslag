@@ -134,11 +134,13 @@ public class StsAndSakClientTest {
                 StsClientHttp.samlAssertionFra(ENVELOPE));
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private OngoingStubbing whenSak() {
         return when(restOperations.exchange(eq(SAKURL), eq(GET), any(HttpEntity.class),
                 any(ParameterizedTypeReference.class)));
     }
 
+    @SuppressWarnings("rawtypes")
     private OngoingStubbing whenSTS() {
         return when(restOperations.postForObject(eq(STSURL), any(HttpEntity.class), eq(String.class)));
     }

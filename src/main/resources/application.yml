@@ -37,7 +37,8 @@ spring:
     cache :
       cache-names : aktør, fnr, organisasjon, navn
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
-    application.name : fpsoknad-oppslag
+    application:
+      name : fpsoknad-oppslag
     jackson:
       default-property-inclusion: non-null
       deserialization:
