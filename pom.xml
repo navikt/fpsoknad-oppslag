@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cxf.version>3.3.7</cxf.version>
-        <springfox.swagger.version>2.10.5</springfox.swagger.version>
+        <springfox.swagger.version>3.0.0</springfox.swagger.version>
         <token-validation-version>1.3.0</token-validation-version>
     </properties>
 
