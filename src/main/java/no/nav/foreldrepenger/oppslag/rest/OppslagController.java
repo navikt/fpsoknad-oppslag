@@ -35,8 +35,6 @@ public class OppslagController {
 
     private final PersonTjeneste person;
 
-    // private final ArbeidsforholdTjeneste arbeid;
-
     private final TokenUtil tokenUtil;
 
     @Inject
@@ -44,7 +42,6 @@ public class OppslagController {
             TokenUtil tokenHandler) {
         this.aktør = aktør;
         this.person = person;
-        // this.arbeid = arbeid;
         this.tokenUtil = tokenHandler;
     }
 
@@ -54,9 +51,6 @@ public class OppslagController {
             @RequestParam(name = "register", defaultValue = "all", required = false) PingableRegisters register) {
         LOG.info("Vil pinge register {}", register);
         switch (register) {
-            /*
-             * case aareg: arbeid.ping(); break;
-             */
             case aktør:
                 aktør.ping();
                 break;
@@ -66,19 +60,11 @@ public class OppslagController {
             case all:
                 aktør.ping();
                 person.ping();
-                // arbeid.ping();
                 break;
         }
         return registerNavn(register) + " er i toppform";
     }
 
-    /*
-     * @GetMapping public Søkerinfo essensiellSøkerinfo() { var fnr = new
-     * Fødselsnummer(tokenUtil.autentisertBruker()); var aktorId =
-     * aktør.aktorIdForFnr(fnr); var p = person.hentPersonInfo(new ID(aktorId,
-     * fnr)); var arbeidsforhold = arbeid.aktiveArbeidsforhold(fnr); return new
-     * Søkerinfo(p, arbeidsforhold); }
-     */
     @GetMapping("/aktor")
     public AktørId getAktørId() {
         return getAktørIdForFNR(new Fødselsnummer(tokenUtil.autentisertBruker()));
