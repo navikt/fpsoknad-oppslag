@@ -14,13 +14,14 @@ import org.springframework.retry.annotation.EnableRetry;
 import no.nav.foreldrepenger.oppslag.OppslagApplication;
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
 @EnableRetry
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.oppslag")
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 @ComponentScan(excludeFilters = { @Filter(type = ASSIGNABLE_TYPE, value = OppslagApplication.class) })
-
+@EnableOpenApi
 @Import(value = TokenGeneratorConfiguration.class)
 public class OppslagApplicationLocal {
 
