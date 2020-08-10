@@ -1,0 +1,14 @@
+{
+  "namespace" : "default",
+  "ingresses":  ["https://fpsoknad-oppslag.nais.adeo.no", 
+                 "https://fpsoknad-oppslag.prod-fss.nais.io"],
+  "env": {
+   "SAK_SAKER_URL": "https://sak.nais.adeo.no/api/v1/saker",
+   "VIRKSOMHET_FORELDREPENGESAK_V1_ENDPOINTURL": "https://fpsak.nais.adeo.no/fpsak/tjenester/sak/finnSak/v1",  
+   "AKTOER_V2_ENDPOINTURL": "https://app.adeo.no/aktoerregister/ws/Aktoer/v2",
+   "VIRKSOMHET_PERSON_V3_ENDPOINTURL": "https://wasapp.adeo.no/tpsws/ws/Person/v3",  
+   "SECURITYTOKENSERVICE_URL": "https://sts.adeo.no/SecurityTokenServiceProvider/",
+   "VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL": "https://modapp.adeo.no/ereg/ws/OrganisasjonService/v5", 
+   "VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL": "https://modapp.adeo.no/aareg-services/ArbeidsforholdService/v3"   
+  }
+}

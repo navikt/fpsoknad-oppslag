@@ -1,9 +1,13 @@
 no.nav:
-     security.jwt.issuer.selvbetjening:
-        discoveryurl: https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
-        cookie_name: selvbetjening-idtoken
+     security:
+       jwt:
+         issuer:
+           selvbetjening:
+             discoveryurl: https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
+             cookie_name: selvbetjening-idtoken
 
-info.app:
+info:
+  app:
     version: '@project.version@'
     build.time:  '@timestamp@'
 
@@ -38,7 +42,11 @@ server:
       context-path: /api
     forward-headers-strategy: framework
 spring:
-    cloud.discovery.client.health-indicator.enabled: false
+    cloud:
+      discovery:
+        client:
+          health-indicator:
+            enabled: false
     cache :
       cache-names : aktør, fnr, organisasjon, navn
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
