@@ -1,5 +1,5 @@
 {
-  "namespace" : "default",
+  "namespace" : "teamforeldrepenger",
   "ingresses":  ["https://fpsoknad-oppslag.nais.adeo.no", 
                  "https://fpsoknad-oppslag.prod-fss.nais.io"],
   "env": {
