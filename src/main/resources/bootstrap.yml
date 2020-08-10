@@ -13,5 +13,5 @@ spring:
          kv:
             enabled: true
             backend: kv/prod/fss
-            application-name: fpsoknad-oppslag/default
-            default-context: fpsoknad-oppslag/default 
+            application-name: fpsoknad-oppslag/teamforeldrepenger
+            default-context: fpsoknad-oppslag/teamforeldrepenger
