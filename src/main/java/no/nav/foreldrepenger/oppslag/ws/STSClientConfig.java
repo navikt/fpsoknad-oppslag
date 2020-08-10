@@ -4,7 +4,6 @@ import static org.apache.cxf.rt.security.SecurityConstants.PASSWORD;
 import static org.apache.cxf.rt.security.SecurityConstants.USERNAME;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.cxf.Bus;
@@ -28,16 +27,13 @@ public class STSClientConfig {
     @Bean
     @Lazy
     public STSClient configureSTSClient(Bus bus) {
-        STSClient stsClient = new STSClient(bus);
-        stsClient.setEnableAppliesTo(false);
-        stsClient.setAllowRenewing(false);
-        stsClient.setLocation(stsUrl.toString());
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(USERNAME, serviceUser);
-        properties.put(PASSWORD, servicePwd);
-        stsClient.setProperties(properties);
+        STSClient sts = new STSClient(bus);
+        sts.setEnableAppliesTo(false);
+        sts.setAllowRenewing(false);
+        sts.setLocation(stsUrl.toString());
+        sts.setProperties(Map.of(USERNAME, serviceUser, PASSWORD, servicePwd));
         // used for the STS client to authenticate itself to the STS provider.
-        stsClient.setPolicy(STS_CLIENT_AUTHENTICATION_POLICY);
-        return stsClient;
+        sts.setPolicy(STS_CLIENT_AUTHENTICATION_POLICY);
+        return sts;
     }
 }

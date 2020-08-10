@@ -12,7 +12,7 @@ public class TPSHealthIndicator extends PingableHealthIndicator {
 
     private final PersonTjeneste client;
 
-    public TPSHealthIndicator(PersonTjeneste client, @Value("${VIRKSOMHET_PERSON_V3_ENDPOINTURL}") URI serviceUrl) {
+    public TPSHealthIndicator(PersonTjeneste client, @Value("${virksomhet.person.v3.endpointurl}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
     }
