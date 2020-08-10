@@ -38,8 +38,3 @@ spec:
         memory: 1536Mi 
   vault:
       enabled: true      
-  env: 
-  {{#each env}}
-   - name: {{@key}}
-     value: "{{this}}"
-  {{/each}}

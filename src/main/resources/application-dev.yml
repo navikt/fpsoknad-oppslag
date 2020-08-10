@@ -19,3 +19,26 @@ org:
     cxf:
       logging:
         enable : true
+        
+sak:
+  saker:
+     url: https://sak-q1.nais.preprod.local/api/v1/saker
+virksomhet:
+  arbeidsforhold:
+    v3:
+      endpointurl: https://modapp-q1.adeo.no/aareg-services/ArbeidsforholdService/v3
+  organisasjon:
+    v5: 
+      endpointurl: https://modapp-q1.adeo.no/ereg/ws/OrganisasjonService/v5
+  person:
+    v3:
+      endpointurl: https://wasapp-q1.adeo.no/tpsws/ws/Person/v3
+  foreldrepengesak:
+    v1:
+      endpointurl: https://fpsak-q1.nais.preprod.local/fpsak/tjenester/sak/finnSak/v1
+aktoer:
+  v2:
+    endpointurl: https://app-q1.adeo.no/aktoerregister/ws/Aktoer/v2
+securitytokenservice:
+  url:
+     https://sts-q1.preprod.local/SecurityTokenServiceProvider/         

@@ -116,5 +116,45 @@
     "name": "no.nav.security.jwt.issuer.selvbetjening.discoveryurl",
     "type": "java.lang.String",
     "description": "A description for 'no.nav.security.jwt.issuer.selvbetjening.discoveryurl'"
+  },
+  {
+    "name": "aktoer.v2.endpointurl",
+    "type": "java.lang.String",
+    "description": "A description for 'aktoer.v2.endpointurl'"
+  },
+  {
+    "name": "sak.saker.url",
+    "type": "java.lang.String",
+    "description": "A description for 'sak.saker.url'"
+  },
+  {
+    "name": "securitytokenservice.url",
+    "type": "java.lang.String",
+    "description": "A description for 'securitytokenservice.url'"
+  },
+  {
+    "name": "sts.uri",
+    "type": "java.lang.String",
+    "description": "A description for 'sts.uri'"
+  },
+  {
+    "name": "virksomhet.arbeidsforhold.v3.endpointurl",
+    "type": "java.lang.String",
+    "description": "A description for 'virksomhet.arbeidsforhold.v3.endpointurl'"
+  },
+  {
+    "name": "virksomhet.person.v3.endpointurl",
+    "type": "java.lang.String",
+    "description": "A description for 'virksomhet.person.v3.endpointurl'"
+  },
+  {
+    "name": "virksomhet.organisasjon.v5.endpointurl",
+    "type": "java.lang.String",
+    "description": "A description for 'virksomhet.organisasjon.v5.endpointurl'"
+  },
+  {
+    "name": "virksomhet.foreldrepengesak.v1.endpointurl",
+    "type": "java.lang.String",
+    "description": "A description for 'virksomhet.foreldrepengesak.v1.endpointurl'"
   }
 ]}
