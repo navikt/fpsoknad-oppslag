@@ -4,7 +4,7 @@ metadata:
   name: fpsoknad-oppslag
   namespace: teamforeldrepenger
   labels:
-    team: default
+    team: teamforeldrepenger
 spec:
   image: {{image}}
   port: 8080
