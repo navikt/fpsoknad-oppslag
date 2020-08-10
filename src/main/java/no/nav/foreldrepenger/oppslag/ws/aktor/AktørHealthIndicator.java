@@ -12,7 +12,7 @@ public class AktørHealthIndicator extends PingableHealthIndicator {
 
     private final AktørTjeneste client;
 
-    public AktørHealthIndicator(AktørTjeneste client, @Value("${AKTOER_V2_ENDPOINTURL}") URI serviceUrl) {
+    public AktørHealthIndicator(AktørTjeneste client, @Value("${aktoer.v2.endpointurl}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
     }
