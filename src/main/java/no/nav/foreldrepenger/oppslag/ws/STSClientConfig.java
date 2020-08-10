@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Lazy;
 public class STSClientConfig {
     private static final String POLICY_PATH = "classpath:policy/";
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = POLICY_PATH + "untPolicy.xml";
-    @Value("${SECURITYTOKENSERVICE_URL}")
+    @Value("${securitytokenservice.url}")
     private URI stsUrl;
     @Value("${FPSELVBETJENING_USERNAME:srvfpsoknad-oppslag}")
     private String serviceUser;

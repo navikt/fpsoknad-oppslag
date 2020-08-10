@@ -21,10 +21,10 @@ import no.nav.security.token.support.spring.validation.interceptor.BearerTokenCl
 @Configuration
 public class SakConfiguration {
 
-    @Value("${SAK_SAKER_URL}")
+    @Value("${sak.saker.url}")
     private URI sakBaseUrl;
 
-    @Value("${SECURITYTOKENSERVICE_URL}")
+    @Value("${securitytokenservice.url}")
     private URI stsUrl;
 
     @Value("${FPSELVBETJENING_USERNAME:srvfpsoknad-oppslag}")
