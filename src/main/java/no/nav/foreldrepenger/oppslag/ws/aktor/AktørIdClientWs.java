@@ -62,7 +62,7 @@ public class AktørIdClientWs implements AktørTjeneste {
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {
             throw new NotFoundException(fnr.getFnr(), e);
         } catch (WebServiceException e) {
-            if (e.getMessage() != null && e.getMessage().contains("404")) {
+            if ((e.getMessage() != null) && e.getMessage().contains("404")) {
                 throw new NotFoundException(e);
             }
             LOG.trace("Feil ved henting av aktør", e);
