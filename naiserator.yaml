@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: fpsoknad-oppslag
-  namespace: teamforeldrepenger
+  namespace: default
   labels:
-    team: default
+    team: teamforeldrepenger
 spec:
   image: {{image}}
   port: 8080
