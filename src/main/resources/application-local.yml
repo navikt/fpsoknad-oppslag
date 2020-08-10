@@ -14,8 +14,9 @@ no.nav.security.jwt:
 securitytokenservice.uri:  http://localhost
 http.proxy:
 
-AKTOER_V2_ENDPOINTURL: http://localhost
-JOURNAL_V2_ENDPOINTURL: http://localhost
+aktoer:
+  v2:
+    endpointurl: http://localhost
 VIRKSOMHET_ARBEIDSFORHOLD_V3_ENDPOINTURL: http://localhost
 VIRKSOMHET_INNTEKT_V3_ENDPOINTURL:  http://localhost
 VIRKSOMHET_PERSON_V3_ENDPOINTURL:  http://localhost
@@ -25,8 +26,8 @@ VIRKSOMHET_SAK_V2_ENDPOINTURL: http://localhost
 VIRKSOMHET_INFOTRYGDSAK_V1_ENDPOINTURL: http://localhost
 VIRKSOMHET_MEDLEMSKAP_V2_ENDPOINTURL: http://localhost
 VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL: http://localhost
-SAK_SAKER_URL: http://localhost
-SECURITYTOKENSERVICE_URL: http://localhost
+sak.saker.url: http://localhost
+securitytokenservice.url: http://localhost
 
 server.port: 9000
 
