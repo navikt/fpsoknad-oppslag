@@ -3,7 +3,7 @@ on:
   repository_dispatch:
     types: [promote-command]
 env:
-  NAMESPACE: default
+  NAMESPACE: teamforeldrepenger
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   IMAGE_BASE: docker.pkg.github.com/${{ github.repository }}/fpsoknad-oppslag
       
