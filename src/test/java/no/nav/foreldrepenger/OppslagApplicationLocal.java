@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger;
 
-import static no.nav.foreldrepenger.oppslag.config.ClusterAwareSpringProfileResolver.profiles;
+import static no.nav.foreldrepenger.boot.conditionals.Cluster.profiler;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,7 +27,7 @@ public class OppslagApplicationLocal {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(OppslagApplicationLocal.class)
-                .profiles(profiles())
+                .profiles(profiler())
                 .run(args);
     }
 }
