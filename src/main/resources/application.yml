@@ -29,10 +29,6 @@ management:
         exposure:
           include:  info, health, metrics, prometheus
     health :
-      livenessstate:
-        enabled: true
-      readinessstate:
-        enabled: true
       diskspace:
         enabled: false
       jms:
