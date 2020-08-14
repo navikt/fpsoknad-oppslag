@@ -27,10 +27,10 @@ public class SakConfiguration {
     @Value("${sak.securitytokenservice.url}")
     private URI stsUrl;
 
-    @Value("${fpselvbetjening.username:srvfpsoknad-oppslag}")
+    @Value("${sak.securitytokenservice.username}")
     private String serviceUser;
 
-    @Value("${fpselvbetjening.password}")
+    @Value("${sak.securitytokenservice.password}")
     private String servicePwd;
 
     @Bean

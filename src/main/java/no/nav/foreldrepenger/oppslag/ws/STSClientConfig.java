@@ -19,9 +19,9 @@ public class STSClientConfig {
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = POLICY_PATH + "untPolicy.xml";
     @Value("${securitytokenservice.url}")
     private URI stsUrl;
-    @Value("${fpselvbetjening.username:srvfpsoknad-oppslag}")
+    @Value("${securitytokenservice.username}")
     private String serviceUser;
-    @Value("${fpselvbetjening.password}")
+    @Value("${securitytokenservice.password}")
     private String servicePwd;
 
     @Bean
