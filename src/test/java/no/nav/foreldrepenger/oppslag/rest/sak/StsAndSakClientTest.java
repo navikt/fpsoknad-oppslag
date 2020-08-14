@@ -47,7 +47,7 @@ import no.nav.security.token.support.test.JwtTokenGenerator;
 @MockitoSettings(strictness = LENIENT)
 @ContextConfiguration(classes = { TokenUtil.class, SakConfiguration.class })
 @TestPropertySource(properties = {
-        "securitytokenservice.url=http://sts", "sak.saker.url=http://sak", "fpselvbetjening.password=mypw", "fpselvbetjening.username=myuser" })
+        "sak.securitytokenservice.url=http://sts", "sak.saker.url=http://sak", "fpselvbetjening.password=mypw", "fpselvbetjening.username=myuser" })
 public class StsAndSakClientTest {
 
     private static final String ID = "222222222";

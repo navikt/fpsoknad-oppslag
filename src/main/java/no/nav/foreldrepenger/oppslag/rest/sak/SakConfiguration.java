@@ -24,7 +24,7 @@ public class SakConfiguration {
     @Value("${sak.saker.url}")
     private URI sakBaseUrl;
 
-    @Value("${securitytokenservice.url}")
+    @Value("${sak.securitytokenservice.url}")
     private URI stsUrl;
 
     @Value("${fpselvbetjening.username:srvfpsoknad-oppslag}")

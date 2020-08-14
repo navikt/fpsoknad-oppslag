@@ -11,7 +11,7 @@ no.nav.security.jwt:
     selvbetjening.accepted_audience: aud-localhost
     selvbetjening.cookie_name: localhost-idtoken
 
-securitytokenservice.uri:  http://localhost
+sak.securitytokenservice.uri:  http://localhost
 http.proxy:
 
 aktoer:

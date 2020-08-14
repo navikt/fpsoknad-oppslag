@@ -59,6 +59,8 @@ spring:
     
 
 sak:
+  securitytokenservice:
+    url: https://sts.adeo.no/SecurityTokenServiceProvider/ 
   saker:
      url: https://sak.nais.adeo.no/api/v1/saker
 virksomhet:
@@ -73,6 +75,4 @@ virksomhet:
       endpointurl: https://wasapp.adeo.no/tpsws/ws/Person/v3
 aktoer:
   v2:
-    endpointurl: https://app.adeo.no/aktoerregister/ws/Aktoer/v2
-securitytokenservice:
-  url: https://sts.adeo.no/SecurityTokenServiceProvider/       
+    endpointurl: https://app.adeo.no/aktoerregister/ws/Aktoer/v2      

@@ -21,8 +21,11 @@ org:
         enable : true
         
 sak:
+  securitytokenservice:
+    url: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
   saker:
      url: https://sak-q1.nais.preprod.local/api/v1/saker
+     
 virksomhet:
   arbeidsforhold:
     v3:
@@ -36,5 +39,3 @@ virksomhet:
 aktoer:
   v2:
     endpointurl: https://app-q1.adeo.no/aktoerregister/ws/Aktoer/v2
-securitytokenservice:
-  url: https://sts-q1.preprod.local/SecurityTokenServiceProvider/         
