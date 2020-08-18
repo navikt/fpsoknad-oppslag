@@ -156,5 +156,40 @@
     "name": "virksomhet.foreldrepengesak.v1.endpointurl",
     "type": "java.lang.String",
     "description": "A description for 'virksomhet.foreldrepengesak.v1.endpointurl'"
+  },
+  {
+    "name": "sak.securitytokenservice.uri",
+    "type": "java.lang.String",
+    "description": "A description for 'sak.securitytokenservice.uri'"
+  },
+  {
+    "name": "sak.securitytokenservice.password",
+    "type": "java.lang.String",
+    "description": "A description for 'sak.securitytokenservice.password'"
+  },
+  {
+    "name": "sak.securitytokenservice.url",
+    "type": "java.lang.String",
+    "description": "A description for 'sak.securitytokenservice.url'"
+  },
+  {
+    "name": "sak.securitytokenservice.username",
+    "type": "java.lang.String",
+    "description": "A description for 'sak.securitytokenservice.username'"
+  },
+  {
+    "name": "securitytokenservice.password",
+    "type": "java.lang.String",
+    "description": "A description for 'securitytokenservice.password'"
+  },
+  {
+    "name": "securitytokenservice.username",
+    "type": "java.lang.String",
+    "description": "A description for 'securitytokenservice.username'"
+  },
+  {
+    "name": "spring.cloud.vault.reactive.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.cloud.vault.reactive.enabled'"
   }
 ]}

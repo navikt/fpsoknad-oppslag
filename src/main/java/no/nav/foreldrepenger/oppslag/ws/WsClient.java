@@ -16,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import no.nav.cxf.metrics.MetricFeature;
+import no.nav.foreldrepenger.oppslag.config.EndpointSTSClientConfig;
 
 @Component
 public class WsClient<T> implements EnvironmentAware {

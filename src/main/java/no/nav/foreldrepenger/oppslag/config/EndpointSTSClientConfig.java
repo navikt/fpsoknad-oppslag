@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws;
+package no.nav.foreldrepenger.oppslag.config;
 
 import static org.apache.cxf.rt.security.SecurityConstants.CACHE_ISSUED_TOKEN_IN_ENDPOINT;
 import static org.apache.cxf.rt.security.SecurityConstants.STS_CLIENT;
@@ -16,6 +16,8 @@ import org.apache.cxf.ws.policy.attachment.reference.RemoteReferenceResolver;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.apache.neethi.Policy;
 import org.springframework.stereotype.Component;
+
+import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
 
 @Component
 public class EndpointSTSClientConfig {

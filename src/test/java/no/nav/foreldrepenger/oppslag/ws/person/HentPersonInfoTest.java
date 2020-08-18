@@ -29,9 +29,9 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import no.nav.foreldrepenger.oppslag.config.EndpointSTSClientConfig;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-import no.nav.foreldrepenger.oppslag.ws.EndpointSTSClientConfig;
 import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
