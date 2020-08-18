@@ -106,7 +106,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndRespond(HttpStatus status, Exception e, WebRequest req,
             List<Object> messages) {
 
-        ApiError apiError = new ApiError(status, e, messages);
+        var apiError = new ApiError(status, e, messages);
         LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
                 tokenUtil.getExpiryDate(), e);
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);

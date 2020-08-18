@@ -17,9 +17,8 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket productApi() {
-        String[] schemes = { "http", "https" };
         return new Docket(DocumentationType.SWAGGER_2)
-                .protocols(Set.of(schemes))
+                .protocols(Set.of("http", "https"))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())

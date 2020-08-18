@@ -75,29 +75,26 @@ final class PersonMapper {
     }
 
     private static String målform(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if (person instanceof Bruker) {
-            Bruker bruker = (Bruker) person;
+        if (person instanceof Bruker bruker) {
             return bruker.getMaalform() != null ? bruker.getMaalform().getValue() : null;
         }
         return null;
     }
 
     private static Bankkonto bankkonto(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if (person instanceof Bruker) {
-            Bruker bruker = (Bruker) person;
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto bankkonto = bruker.getBankkonto();
+        if (person instanceof Bruker bruker) {
+            var bankkonto = bruker.getBankkonto();
             if (bankkonto == null) {
                 return null;
             }
-            Pair<String, String> kontoinfo = kontoinfo(bankkonto);
+            var kontoinfo = kontoinfo(bankkonto);
             return new Bankkonto(kontoinfo.getFirst(), kontoinfo.getSecond());
         }
         return null;
     }
 
     private static Pair<String, String> kontoinfo(no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto konto) {
-        if (konto instanceof BankkontoNorge) {
-            BankkontoNorge norskKonto = (BankkontoNorge) konto;
+        if (konto instanceof BankkontoNorge norskKonto) {
             return Pair.of(norskKonto.getBankkonto().getBankkontonummer(), norskKonto.getBankkonto().getBanknavn());
         } else {
             BankkontoUtland utenlandskKonto = (BankkontoUtland) konto;

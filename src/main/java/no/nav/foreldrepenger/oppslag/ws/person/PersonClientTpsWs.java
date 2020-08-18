@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.soap.SOAPFaultException;
 
 import org.slf4j.Logger;
@@ -34,8 +33,6 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Diskresjonskoder;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.Doedsdato;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Familierelasjon;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
@@ -69,12 +66,10 @@ public class PersonClientTpsWs implements PersonTjeneste {
 
     @Override
     public Navn navn(Fødselsnummer fnr) {
-        HentPersonRequest request = request(fnr);
-        LOG.trace("Slår opp navn");
-        return navnFor(hentPerson(request).getPerson());
+        return navn(hentPerson(request(fnr)).getPerson());
     }
 
-    private static Navn navnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
+    private static Navn navn(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         return Optional.ofNullable(person)
                 .map(p -> PersonMapper.name(p.getPersonnavn(), Kjønn.valueOf(p.getKjoenn().getKjoenn().getValue())))
                 .orElse(null);
@@ -82,32 +77,31 @@ public class PersonClientTpsWs implements PersonTjeneste {
 
     @Override
     public Person hentPersonInfo(ID id) {
-        HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
+        var request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.trace("Slår opp person");
         LOG.info(CONFIDENTIAL, "Fra ID {}", id);
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
-        Person p = person(id, tpsPerson, barnFor(tpsPerson));
+        var tpsPerson = hentPerson(request).getPerson();
+        var p = person(id, tpsPerson, barnFor(tpsPerson));
         LOG.trace("Slo opp person OK");
         LOG.info(CONFIDENTIAL, "Person er {}", p);
         return p;
     }
 
     private List<Barn> barnFor(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        PersonIdent id = (PersonIdent) person.getAktoer();
+        PersonIdent id = PersonIdent.class.cast(person.getAktoer());
         String idType = id.getIdent().getType().getValue();
-        switch (idType) {
-            case FNR:
-            case DNR:
+        return switch (idType) {
+            case FNR, DNR -> {
                 Fødselsnummer fnrSøker = new Fødselsnummer(id.getIdent().getIdent());
-                return person.getHarFraRolleI().stream()
+                yield person.getHarFraRolleI().stream()
                         .filter(this::isBarn)
                         .map(s -> hentBarn(s, fnrSøker))
                         .filter(Objects::nonNull)
                         .filter(barn -> barnutvelger.erStonadsberettigetBarn(fnrSøker, barn))
                         .collect(toList());
-            default:
-                throw new IllegalStateException("ID type " + idType + " ikke støttet");
-        }
+            }
+            default -> throw new IllegalStateException("ID type " + idType + " ikke støttet");
+        };
     }
 
     private boolean isBarn(Familierelasjon rel) {
@@ -125,13 +119,12 @@ public class PersonClientTpsWs implements PersonTjeneste {
             return null;
         }
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = hentPerson(
-                request(fnrBarn, FAMILIERELASJONER)).getPerson();
+        var tpsBarn = hentPerson(request(fnrBarn, FAMILIERELASJONER)).getPerson();
         if (!skalKunneVises(tpsBarn) || harDøddForOverFireMånederSiden(tpsBarn)) {
             return null;
         }
 
-        AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
+        var annenForelder = tpsBarn.getHarFraRolleI().stream()
                 .filter(this::isForelder)
                 .map(this::toFødselsnummer)
                 .filter(Objects::nonNull)
@@ -147,11 +140,11 @@ public class PersonClientTpsWs implements PersonTjeneste {
 
     private static boolean harDøddForOverFireMånederSiden(
             no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        Doedsdato dødsdato = person.getDoedsdato();
+        var dødsdato = person.getDoedsdato();
         if (dødsdato == null) {
             return false;
         }
-        XMLGregorianCalendar dato = dødsdato.getDoedsdato();
+        var dato = dødsdato.getDoedsdato();
         return (dato != null)
                 && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
     }
@@ -167,7 +160,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     private boolean skalKunneVises(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
+        var diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
             String verdi = diskresjonskode.getValue();
             return (verdi != null) && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);

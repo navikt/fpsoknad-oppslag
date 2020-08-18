@@ -16,7 +16,7 @@ public class PersonRequestUtil {
     static final String BARN = "BARN";
 
     static HentPersonRequest request(String fnr, Informasjonsbehov... behov) {
-        HentPersonRequest req = new HentPersonRequest();
+        var req = new HentPersonRequest();
         infoBehov(req, behov);
         req.setAktoer(aktor(fnr));
         return req;
@@ -34,13 +34,13 @@ public class PersonRequestUtil {
     }
 
     private static Aktoer aktor(String fnr) {
-        PersonIdent aktor = new PersonIdent();
+        var aktor = new PersonIdent();
         aktor.setIdent(norskIdent(fnr));
         return aktor;
     }
 
     private static NorskIdent norskIdent(String fnr) {
-        NorskIdent id = new NorskIdent();
+        var id = new NorskIdent();
         id.setIdent(fnr);
         return id;
     }
