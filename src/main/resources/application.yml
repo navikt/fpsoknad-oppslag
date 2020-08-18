@@ -63,8 +63,7 @@ sak:
     username: ${securitytokenservice.username}
     password : ${securitytokenservice.password}
     url: ${securitytokenservice.url} 
-  saker:
-     
+  saker:  
      url: https://sak.nais.adeo.no/api/v1/saker
 virksomhet:
   arbeidsforhold:
@@ -79,6 +78,7 @@ virksomhet:
 aktoer:
   v2:
     endpointurl: https://app.adeo.no/aktoerregister/ws/Aktoer/v2 
+
     
 securitytokenservice:
     username: ${fpselvbetjening.username}

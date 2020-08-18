@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws;
+package no.nav.foreldrepenger.oppslag.config;
 
 import static org.apache.cxf.rt.security.SecurityConstants.PASSWORD;
 import static org.apache.cxf.rt.security.SecurityConstants.USERNAME;
