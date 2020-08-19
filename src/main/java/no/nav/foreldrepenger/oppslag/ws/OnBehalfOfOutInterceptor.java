@@ -41,6 +41,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     public void handleMessage(Message message) throws Fault {
         if (tokenUtil.isExpired()) {
             LOG.warn("Token looks expired {}, should probably throw", tokenUtil.getExpiryDate());
+            // throw new TokenExpiredException(tokenUtil.getExpiryDate(), null);
         }
         message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(tokenUtil.getToken()));
     }
@@ -48,7 +49,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     private static Element createOnBehalfOfElement(String token) {
         try {
             String content = wrapWithBinarySecurityToken(token.getBytes());
-            var factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setFeature(FEATURE_SECURE_PROCESSING, true);
             return factory.newDocumentBuilder().parse(new InputSource(new StringReader(content))).getDocumentElement();

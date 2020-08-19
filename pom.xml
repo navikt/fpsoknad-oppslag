@@ -139,7 +139,7 @@
         <dependency>
             <groupId>no.nav.foreldrepenger</groupId>
             <artifactId>boot-conditionals</artifactId>
-            <version>1.0.20200812131740-8ef0a05</version> 
+            <version>1.0.20200812131740-8ef0a05</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

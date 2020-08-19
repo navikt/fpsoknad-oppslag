@@ -20,6 +20,10 @@ org:
       logging:
         enable : true
         
+sak:
+  saker:
+     url: https://sak-q1.nais.preprod.local/api/v1/saker
+     
 virksomhet:
   arbeidsforhold:
     v3:

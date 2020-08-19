@@ -26,7 +26,6 @@ public final class MDCUtil {
     }
 
     public static void toMDC(String key, String value, String defaultValue) {
-        MDC.put(key, Optional.ofNullable(value)
-                .orElse(defaultValue));
+        MDC.put(key, Optional.ofNullable(value).orElse(defaultValue));
     }
 }
