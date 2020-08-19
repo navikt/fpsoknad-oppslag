@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag;
+package no.nav.foreldrepenger.oppslag.health;
 
 import java.net.URI;
 

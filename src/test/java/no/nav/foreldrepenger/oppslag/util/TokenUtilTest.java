@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger;
+package no.nav.foreldrepenger.oppslag.util;
 
 import static no.nav.foreldrepenger.oppslag.config.Constants.ISSUER;
 import static org.junit.Assert.assertNotNull;
