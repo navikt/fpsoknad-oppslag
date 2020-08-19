@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.rest;
+package no.nav.foreldrepenger.oppslag;
 
 import static org.slf4j.LoggerFactory.getLogger;
 

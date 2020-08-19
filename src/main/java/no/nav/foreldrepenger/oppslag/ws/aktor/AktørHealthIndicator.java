@@ -5,7 +5,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.oppslag.rest.PingableHealthIndicator;
+import no.nav.foreldrepenger.oppslag.health.PingableHealthIndicator;
 
 @Component
 public class AktørHealthIndicator extends PingableHealthIndicator {
