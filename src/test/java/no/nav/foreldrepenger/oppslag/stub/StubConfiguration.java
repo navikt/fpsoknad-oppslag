@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
+import no.nav.foreldrepenger.oppslag.rest.sak.SakClient;
 import no.nav.foreldrepenger.oppslag.util.EnvUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
@@ -25,4 +26,9 @@ public class StubConfiguration {
         return new PersonClientStub();
     }
 
+    @Bean
+    @Primary
+    public SakClient sakClientStub() {
+        return new SakClientStub();
+    }
 }
