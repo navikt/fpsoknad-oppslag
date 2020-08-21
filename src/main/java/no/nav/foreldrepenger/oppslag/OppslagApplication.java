@@ -58,8 +58,6 @@ public class OppslagApplication {
                     if (ctx.getRetryCount() > 0) {
                         log.info("Metode {} avslutter vellykket retry etter {}. forsøk",
                                 ctx.getAttribute(NAME), ctx.getRetryCount());
-                    } else {
-                        log.trace("Metode {} avslutter vellykket uten retry", ctx.getAttribute(NAME));
                     }
                 }
             }
@@ -71,8 +69,6 @@ public class OppslagApplication {
                 String metode = (String) ReflectionUtils.getField(labelField, callback);
                 if (context.getRetryCount() > 0) {
                     log.info("Metode {} gjør retry for {}. gang", metode, context.getRetryCount());
-                } else {
-                    log.trace("Metode {} initierer retry", metode);
                 }
                 return true;
             }
