@@ -28,6 +28,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import no.nav.foreldrepenger.oppslag.util.StringUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
@@ -114,6 +115,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String subject() {
         return Optional.ofNullable(tokenUtil.getSubject())
+                .map(s -> StringUtil.mask(s))
                 .orElse("Uautentisert");
     }
 
