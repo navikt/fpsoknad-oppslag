@@ -115,7 +115,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String subject() {
         return Optional.ofNullable(tokenUtil.getSubject())
-                .map(s -> StringUtil.mask(s))
+                .map(StringUtil::mask)
                 .orElse("Uautentisert");
     }
 
