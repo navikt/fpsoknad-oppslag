@@ -4,14 +4,12 @@ management :
      health.show-details : always
      security.enabled : false
 
-sts.uri: http://www.vg.no
 no.nav.security.jwt:
   issuer:
     selvbetjening.discoveryurl: http://metadata
     selvbetjening.accepted_audience: aud-localhost
     selvbetjening.cookie_name: localhost-idtoken
 
-sak.securitytokenservice.uri:  http://localhost
 http.proxy:
 
 aktoer:
@@ -26,7 +24,6 @@ VIRKSOMHET_SAK_V2_ENDPOINTURL: http://localhost
 VIRKSOMHET_INFOTRYGDSAK_V1_ENDPOINTURL: http://localhost
 VIRKSOMHET_MEDLEMSKAP_V2_ENDPOINTURL: http://localhost
 VIRKSOMHET_ORGANISASJON_V5_ENDPOINTURL: http://localhost
-sak.saker.url: http://localhost
 securitytokenservice.url: http://localhost
 
 server.port: 9000

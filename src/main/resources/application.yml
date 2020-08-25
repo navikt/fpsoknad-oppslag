@@ -57,15 +57,6 @@ spring:
          fail-on-empty-beans: false
     main.banner-mode: 'off'
     
-
-sak:
-  securitytokenservice:
-    username: ${securitytokenservice.username}
-    password : ${securitytokenservice.password}
-    url: ${securitytokenservice.url} 
-  saker:
-     
-     url: https://sak.nais.adeo.no/api/v1/saker
 virksomhet:
   arbeidsforhold:
     v3:
