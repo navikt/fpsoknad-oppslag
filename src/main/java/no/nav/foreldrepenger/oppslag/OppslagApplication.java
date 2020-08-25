@@ -21,11 +21,13 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.util.ReflectionUtils;
 
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan("no.nav.foreldrepenger.oppslag")
 @EnableCaching
 @EnableRetry
+@EnableOpenApi
 @EnableJwtTokenValidation(ignore = { "org.springframework", "springfox.documentation" })
 public class OppslagApplication {
 
