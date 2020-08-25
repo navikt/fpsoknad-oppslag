@@ -30,7 +30,7 @@ public class PersonController {
 
     @GetMapping
     public Person person() {
-        Fødselsnummer fnr = new Fødselsnummer(tokenHandler.autentisertBruker());
+        var fnr = new Fødselsnummer(tokenHandler.autentisertBruker());
         return personClient.hentPersonInfo(new ID(aktorClient.aktorIdForFnr(fnr), fnr));
     }
 
