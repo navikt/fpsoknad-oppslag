@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws;
 
-import static no.nav.foreldrepenger.oppslag.util.EnvUtil.isDevOrLocal;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.isDevOrLocal;
 
 import java.util.Objects;
 

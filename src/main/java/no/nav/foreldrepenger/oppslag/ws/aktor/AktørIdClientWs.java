@@ -56,7 +56,7 @@ public class AktørIdClientWs implements AktørTjeneste {
         LOG.trace("Henter aktør for fnr {}", fnr);
         try {
             String aktørId = aktoerV2.hentAktoerIdForIdent(request(fnr)).getAktoerId();
-            MDCUtil.toMDC(NAV_AKTØR_ID, aktørId);
+            MDCUtil.tilMDC(NAV_AKTØR_ID, aktørId);
             LOG.trace("Aktørid for {} er {}", fnr, aktørId);
             return aktørId;
         } catch (HentAktoerIdForIdentPersonIkkeFunnet e) {

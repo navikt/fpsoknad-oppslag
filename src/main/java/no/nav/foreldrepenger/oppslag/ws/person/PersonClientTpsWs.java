@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.oppslag.ws.person;
 
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
-import static no.nav.foreldrepenger.oppslag.util.EnvUtil.CONFIDENTIAL;
+import static no.nav.foreldrepenger.boot.conditionals.EnvUtil.CONFIDENTIAL;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.barn;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.person;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonRequestUtil.BARN;

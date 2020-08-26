@@ -2,8 +2,7 @@ package no.nav.foreldrepenger.oppslag.rest.filters;
 
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_USER_ID;
-import static no.nav.foreldrepenger.oppslag.util.EnvUtil.isDevOrLocal;
-import static no.nav.foreldrepenger.oppslag.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.oppslag.util.MDCUtil.tilMDC;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -20,6 +19,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 
@@ -41,19 +41,19 @@ public class IDToMDCFilterBean extends GenericFilterBean {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         if (tokenUtil.erAutentisert()) {
-            copyHeadersToMDC(HttpServletRequest.class.cast(req));
+            headersTilMDC(HttpServletRequest.class.cast(req));
         }
         chain.doFilter(req, res);
     }
 
-    private void copyHeadersToMDC(HttpServletRequest req) {
+    private void headersTilMDC(HttpServletRequest req) {
         try {
             String fnr = tokenUtil.getSubject();
-            if (isDevOrLocal(getEnvironment())) {
-                toMDC(NAV_USER_ID, fnr);
+            if (EnvUtil.isDevOrLocal(getEnvironment())) {
+                tilMDC(NAV_USER_ID, fnr);
             }
             if (tokenUtil.getExpiryDate() != null) {
-                toMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
+                tilMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
             }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",

@@ -2,7 +2,7 @@ package no.nav.foreldrepenger.oppslag.rest.filters;
 
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_CALL_ID;
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.oppslag.util.MDCUtil.toMDC;
+import static no.nav.foreldrepenger.oppslag.util.MDCUtil.tilMDC;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -48,8 +48,8 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private void putValues(HttpServletRequest request) {
         try {
-            toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+            tilMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
+            tilMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {
             LOG.warn("Noe gikk feil ved propagering av header-verdier for request {}, MDC-verdier er inkomplette",
                     request.getRequestURL(), e);

@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.oppslag.ws.person;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import com.neovisionaries.i18n.CountryCode;
 
@@ -60,49 +62,46 @@ final class PersonMapper {
     }
 
     private static CountryCode countryCode(String land) {
-        if (land != null) {
-            CountryCode cc = CountryCode.getByCode(land);
-            return cc != null ? cc : CountryCode.NO;
-        }
-        return CountryCode.NO;
+        return Optional.ofNullable(land)
+                .map(CountryCode::getByCode)
+                .filter(Objects::nonNull)
+                .orElse(CountryCode.NO);
     }
 
     private static LocalDate birthDate(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if ((person.getFoedselsdato() != null) && (person.getFoedselsdato().getFoedselsdato() != null)) {
-            return DateUtil.toLocalDate(person.getFoedselsdato().getFoedselsdato());
-        }
-        return null;
+        return Optional.ofNullable(person)
+                .map(p -> p.getFoedselsdato())
+                .map(d -> d.getFoedselsdato())
+                .map(DateUtil::toLocalDate)
+                .orElse(null);
     }
 
     private static String målform(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if (person instanceof Bruker) {
-            Bruker bruker = (Bruker) person;
-            return bruker.getMaalform() != null ? bruker.getMaalform().getValue() : null;
+        if (person instanceof Bruker bruker) {
+            return Optional.ofNullable(bruker.getMaalform())
+                    .map(m -> m.getValue())
+                    .orElse(null);
         }
         return null;
     }
 
     private static Bankkonto bankkonto(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
-        if (person instanceof Bruker) {
-            Bruker bruker = (Bruker) person;
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto bankkonto = bruker.getBankkonto();
-            if (bankkonto == null) {
-                return null;
-            }
-            Pair<String, String> kontoinfo = kontoinfo(bankkonto);
-            return new Bankkonto(kontoinfo.getFirst(), kontoinfo.getSecond());
+        if (person instanceof Bruker bruker) {
+            var bankkonto = bruker.getBankkonto();
+            return Optional.ofNullable(bankkonto)
+                    .map(PersonMapper::kontoinfo)
+                    .map(i -> new Bankkonto(i.getFirst(), i.getSecond()))
+                    .orElse(null);
         }
         return null;
     }
 
     private static Pair<String, String> kontoinfo(no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkonto konto) {
-        if (konto instanceof BankkontoNorge) {
-            BankkontoNorge norskKonto = (BankkontoNorge) konto;
+        if (konto instanceof BankkontoNorge norskKonto) {
             return Pair.of(norskKonto.getBankkonto().getBankkontonummer(), norskKonto.getBankkonto().getBanknavn());
-        } else {
-            BankkontoUtland utenlandskKonto = (BankkontoUtland) konto;
-            return Pair.of(utenlandskKonto.getBankkontoUtland().getSwift(),
-                    utenlandskKonto.getBankkontoUtland().getBankkode());
         }
+        BankkontoUtland utenlandskKonto = (BankkontoUtland) konto;
+        return Pair.of(utenlandskKonto.getBankkontoUtland().getSwift(),
+                utenlandskKonto.getBankkontoUtland().getBankkode());
     }
 }
