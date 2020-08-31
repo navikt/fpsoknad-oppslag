@@ -19,6 +19,7 @@ org:
     cxf:
       logging:
         enable : true
+        
              
 virksomhet:
   arbeidsforhold:
