@@ -54,6 +54,7 @@ jobs:
     
       - name: Kompiler
         run: | 
+          mvn versions:set -DnewVersion=${TAG}
           echo "::set-env name=IMAGE::$IMAGE_BASE:$TAG" 
           mvn clean install --batch-mode --quiet --settings .github/workflows/.m2/settings.xml
                    
