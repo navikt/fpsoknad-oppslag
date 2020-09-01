@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.oppslag.config;
 
-import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
+import static springfox.documentation.spi.DocumentationType.OAS_30;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket productApi() {
-        return new Docket(SWAGGER_2)
+        return new Docket(OAS_30)
                 .protocols(Set.of("http", "https"))
                 .select()
                 .apis(RequestHandlerSelectors.any())
