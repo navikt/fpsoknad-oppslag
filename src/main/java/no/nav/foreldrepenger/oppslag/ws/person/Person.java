@@ -95,6 +95,6 @@ public class Person {
         return getClass().getSimpleName() + " [id=" + id + ", landKode=" + landKode + ", kjønn=" + kjønn
                 + ", fødselsdato=" + fødselsdato
                 + ", målform=" + målform + ", bankkonto=" + bankkonto
-                + ", navn=" + navn + "]";
+                + ", navn=" + navn.getFornavn() + "]";
     }
 }
