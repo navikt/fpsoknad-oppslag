@@ -39,6 +39,11 @@ public class PersonController {
         return personClient.navn(fnr);
     }
 
+    @GetMapping("/kontonr")
+    public String kontonr() {
+        return person().getBankkonto().getKontonummer();
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [aktorClient=" + aktorClient + ", personClient=" + personClient + "]";

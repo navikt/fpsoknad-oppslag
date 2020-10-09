@@ -10,7 +10,6 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørTjeneste;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.PersonTjeneste;
 
 @ProtectedRestController(OppslagController.OPPSLAG)
 public class OppslagController {
@@ -19,15 +18,11 @@ public class OppslagController {
 
     private final AktørTjeneste aktør;
 
-    private final PersonTjeneste person;
-
     private final TokenUtil tokenUtil;
 
     @Inject
-    public OppslagController(AktørTjeneste aktør, PersonTjeneste person, /* ArbeidsforholdTjeneste arbeid, */
-            TokenUtil tokenHandler) {
+    public OppslagController(AktørTjeneste aktør, TokenUtil tokenHandler) {
         this.aktør = aktør;
-        this.person = person;
         this.tokenUtil = tokenHandler;
     }
 
@@ -48,8 +43,7 @@ public class OppslagController {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [aktør=" + aktør + ", person=" + person /* + ", arbeid=" + arbeid */
-                + "]";
+        return getClass().getSimpleName() + " [aktør=" + aktør + "]";
     }
 
 }

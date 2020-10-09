@@ -50,6 +50,6 @@ public class AnnenForelder {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [navn=" + navn + ", fnr=" + fnr + ", fødselsdato=" + fødselsdato + "]";
+        return getClass().getSimpleName() + " [navn=" + navn.getFornavn() + ", fnr=" + fnr + ", fødselsdato=" + fødselsdato + "]";
     }
 }
