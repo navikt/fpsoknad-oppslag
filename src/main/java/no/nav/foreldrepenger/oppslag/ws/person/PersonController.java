@@ -1,5 +1,7 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +43,7 @@ public class PersonController {
 
     @GetMapping("/kontonr")
     public String kontonr() {
-        return person().getBankkonto().getKontonummer();
+        return Optional.ofNullable(person().getBankkonto()).map(Bankkonto::getKontonummer).orElse(null);
     }
 
     @Override
