@@ -48,6 +48,13 @@ public class PersonController {
                 .orElse(null);
     }
 
+    @GetMapping("/maalform")
+    public String målform() {
+        return Optional.ofNullable(person())
+                .map(Person::getMålform)
+                .orElse(null);
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + " [aktorClient=" + aktorClient + ", personClient=" + personClient + "]";
