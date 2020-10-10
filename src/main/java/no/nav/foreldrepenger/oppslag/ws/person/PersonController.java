@@ -42,8 +42,10 @@ public class PersonController {
     }
 
     @GetMapping("/kontonr")
-    public String kontonr() {
-        return Optional.ofNullable(person().getBankkonto()).map(Bankkonto::getKontonummer).orElse(null);
+    public Bankkonto kontonr() {
+        return Optional.ofNullable(person())
+                .map(Person::getBankkonto)
+                .orElse(null);
     }
 
     @Override
