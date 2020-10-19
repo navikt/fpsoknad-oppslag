@@ -165,9 +165,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
     private static boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         try {
             String status = person.getPersonstatus().getPersonstatus().getValue();
-            var død = DØD.equals(status) || DØDD.equals(status);
-            LOG.info("DØD " + død);
-            return død;
+            return DØD.equals(status) || DØDD.equals(status);
         } catch (Exception e) {
             LOG.warn("Feil ved sjekking av personstatus", e);
             return false;

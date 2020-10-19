@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.neovisionaries.i18n.CountryCode;
 
 import no.nav.foreldrepenger.oppslag.util.DateUtil;
@@ -17,6 +20,8 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 
 final class PersonMapper {
+    private static final Logger LOG = LoggerFactory.getLogger(PersonMapper.class);
+
     private PersonMapper() {
     }
 
@@ -35,12 +40,14 @@ final class PersonMapper {
 
     public static Barn barn(NorskIdent id, Fødselsnummer fnrMor,
             no.nav.tjeneste.virksomhet.person.v3.informasjon.Person barn, AnnenForelder annenForelder) {
-        return new Barn(
+        var b = new Barn(
                 fnrMor,
                 new Fødselsnummer(id.getIdent()),
                 birthDate(barn),
                 name(barn.getPersonnavn(), Kjønn.valueOf(barn.getKjoenn().getKjoenn().getValue())),
                 annenForelder);
+        LOG.info("MAPPED BARN " + b);
+        return b;
     }
 
     public static AnnenForelder annenForelder(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person annenForelder) {
