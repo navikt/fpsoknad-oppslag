@@ -125,9 +125,12 @@ public class PersonClientTpsWs implements PersonTjeneste {
             return null;
         }
         Fødselsnummer fnrBarn = new Fødselsnummer(id.getIdent());
+        LOG.info("HENTE BARN");
+
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsBarn = hentPerson(
                 request(fnrBarn, FAMILIERELASJONER)).getPerson();
         if (!skalKunneVises(tpsBarn) || harDøddForOverFireMånederSiden(tpsBarn)) {
+            LOG.info("IKKE RETURNERE BARN");
             return null;
         }
 
