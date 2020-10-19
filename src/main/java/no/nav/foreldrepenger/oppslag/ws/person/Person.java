@@ -91,9 +91,9 @@ public class Person {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [id=" + id + ", landKode=" + landKode + ", kjønn=" + kjønn
-                + ", fødselsdato=" + fødselsdato
-                + ", målform=" + målform + ", bankkonto=" + bankkonto
-                + ", navn=" + navn.getFornavn() + "]";
+        return getClass().getSimpleName() + " [id=" + id + ", landKode=" + landKode + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato
+                + ", målform=" + målform
+                + ", bankkonto=" + bankkonto + ", navn=" + navn + ", barn=" + barn + "]";
     }
+
 }
