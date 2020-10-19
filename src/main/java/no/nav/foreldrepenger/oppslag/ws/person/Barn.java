@@ -33,7 +33,6 @@ public class Barn {
         return fnrSøker;
     }
 
-    @JsonUnwrapped
     public Navn getNavn() {
         return navn;
     }

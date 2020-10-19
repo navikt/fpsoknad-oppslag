@@ -18,7 +18,6 @@ public class Person {
     private final LocalDate fødselsdato;
     private final String målform;
     private final Bankkonto bankkonto;
-    @JsonUnwrapped
     private final Navn navn;
     private final List<Barn> barn;
 
