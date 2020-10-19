@@ -152,14 +152,18 @@ public class PersonClientTpsWs implements PersonTjeneste {
             return false;
         }
         XMLGregorianCalendar dato = dødsdato.getDoedsdato();
-        return (dato != null)
+        var s = (dato != null)
                 && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
+        LOG.info("4 MND " + s);
+        return s;
     }
 
     private static boolean erDød(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         try {
             String status = person.getPersonstatus().getPersonstatus().getValue();
-            return DØD.equals(status) || DØDD.equals(status);
+            var død = DØD.equals(status) || DØDD.equals(status);
+            LOG.info("DØD " + død);
+            return død;
         } catch (Exception e) {
             LOG.warn("Feil ved sjekking av personstatus", e);
             return false;
@@ -169,9 +173,11 @@ public class PersonClientTpsWs implements PersonTjeneste {
     private boolean skalKunneVises(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
+            LOG.info("VISES IKKE");
             String verdi = diskresjonskode.getValue();
             return (verdi != null) && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);
         }
+        LOG.info("VISES");
         return true;
     }
 
