@@ -86,7 +86,9 @@ public class PersonClientTpsWs implements PersonTjeneste {
         LOG.trace("Slår opp person");
         LOG.info(CONFIDENTIAL, "Fra ID {}", id);
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
-        Person p = person(id, tpsPerson, barnFor(tpsPerson));
+        List<Barn> barnFor = barnFor(tpsPerson);
+        LOG.trace("Slo opp barn " + barnFor);
+        Person p = person(id, tpsPerson, barnFor);
         LOG.trace("Slo opp person OK");
         LOG.info(CONFIDENTIAL, "Person er {}", p);
         return p;
