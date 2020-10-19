@@ -133,6 +133,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
             LOG.info("IKKE RETURNERE BARN");
             return null;
         }
+        LOG.info("BARN " + tpsBarn);
 
         AnnenForelder annenForelder = tpsBarn.getHarFraRolleI().stream()
                 .filter(this::isForelder)
