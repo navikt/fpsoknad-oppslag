@@ -6,6 +6,8 @@ metadata:
   labels:
     team: teamforeldrepenger
 spec:
+  envFrom:
+    - configmap: loginservice-idporten
   image: {{image}}
   port: 8080
   replicas:
