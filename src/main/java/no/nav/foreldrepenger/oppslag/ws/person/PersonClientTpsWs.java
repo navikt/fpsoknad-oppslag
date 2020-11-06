@@ -157,7 +157,6 @@ public class PersonClientTpsWs implements PersonTjeneste {
         XMLGregorianCalendar dato = dødsdato.getDoedsdato();
         var s = (dato != null)
                 && LocalDate.of(dato.getYear(), dato.getMonth(), dato.getDay()).isBefore(now().minusMonths(4));
-        LOG.info("4 MND " + s);
         return s;
     }
 
@@ -174,11 +173,9 @@ public class PersonClientTpsWs implements PersonTjeneste {
     private boolean skalKunneVises(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         Diskresjonskoder diskresjonskode = person.getDiskresjonskode();
         if (diskresjonskode != null) {
-            LOG.info("VISES IKKE");
             String verdi = diskresjonskode.getValue();
             return (verdi != null) && !verdi.equals(STRENGT_FORTROLIG_ADRESSE) && !verdi.equals(FORTROLIG_ADRESSE);
         }
-        LOG.info("VISES");
         return true;
     }
 
