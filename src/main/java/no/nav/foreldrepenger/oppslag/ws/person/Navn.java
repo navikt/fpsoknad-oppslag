@@ -59,7 +59,6 @@ public class Navn {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[fornavn=" + fornavn + ", mellomnavn=" + mellomnavn + ", etternavn="
-                + etternavn + ", kjønn=" + kjønn + "]";
+        return getClass().getSimpleName() + "[fornavn=" + fornavn + ", mellomnavn=xxx" + ", etternavn=xxx" + ", kjønn=" + kjønn + "]";
     }
 }
