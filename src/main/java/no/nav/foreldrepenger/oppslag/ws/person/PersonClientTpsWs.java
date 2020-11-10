@@ -89,8 +89,8 @@ public class PersonClientTpsWs implements PersonTjeneste {
         List<Barn> barnFor = barnFor(tpsPerson);
         LOG.trace("Slo opp barn " + barnFor);
         Person p = person(id, tpsPerson, barnFor);
-        LOG.trace("Slo opp person OK");
-        LOG.info(CONFIDENTIAL, "Person er {}", p);
+        LOG.info("Slo opp person OK");
+        LOG.trace(CONFIDENTIAL, "Person er {}", p);
         return p;
     }
 
