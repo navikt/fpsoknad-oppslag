@@ -36,12 +36,14 @@ public class PersonController {
 
     @GetMapping
     public Person person() {
+        LOG.info("Slår opp person");
         var fnr = new Fødselsnummer(tokenHandler.autentisertBruker());
         return personClient.hentPersonInfo(new ID(aktorClient.aktorIdForFnr(fnr), fnr));
     }
 
     @GetMapping("/navn")
     public Navn person(Fødselsnummer fnr) {
+        LOG.info("Slår opp navn");
         return personClient.navn(fnr);
     }
 
@@ -55,6 +57,7 @@ public class PersonController {
 
     @GetMapping("/maalform")
     public String målform() {
+        LOG.info("Slår opp målform");
         return Optional.ofNullable(person())
                 .map(Person::getMålform)
                 .orElse(null);

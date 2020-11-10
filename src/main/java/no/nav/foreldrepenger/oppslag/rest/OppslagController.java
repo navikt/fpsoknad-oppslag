@@ -2,6 +2,8 @@ package no.nav.foreldrepenger.oppslag.rest;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,6 +15,8 @@ import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
 
 @ProtectedRestController(OppslagController.OPPSLAG)
 public class OppslagController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OppslagController.class);
 
     public static final String OPPSLAG = "/oppslag";
 
@@ -33,11 +37,13 @@ public class OppslagController {
 
     @GetMapping("/aktorfnr")
     public AktørId getAktørIdForFNR(@RequestParam(name = "fnr") Fødselsnummer fnr) {
+        LOG.info("Slår opp aktør");
         return aktør.aktorIdForFnr(fnr);
     }
 
     @GetMapping("/fnr")
     public Fødselsnummer getFNRforAktørIdR(@RequestParam(name = "aktorId") AktørId aktorId) {
+        LOG.info("Slår opp fnr");
         return aktør.fnrForAktørId(aktorId);
     }
 
