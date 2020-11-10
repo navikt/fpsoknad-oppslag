@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,8 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
 @RequestMapping(PersonController.PERSON)
 public class PersonController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersonController.class);
 
     public static final String PERSON = "/person";
     private final AktørTjeneste aktorClient;
@@ -43,6 +47,7 @@ public class PersonController {
 
     @GetMapping("/kontonr")
     public Bankkonto kontonr() {
+        LOG.info("Slår opp kontonummer");
         return Optional.ofNullable(person())
                 .map(Person::getBankkonto)
                 .orElse(null);
