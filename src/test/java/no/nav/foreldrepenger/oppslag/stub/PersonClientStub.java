@@ -15,7 +15,6 @@ import no.nav.foreldrepenger.oppslag.ws.person.AnnenForelder;
 import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
 import no.nav.foreldrepenger.oppslag.ws.person.Barn;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.ID;
 import no.nav.foreldrepenger.oppslag.ws.person.Kjønn;
 import no.nav.foreldrepenger.oppslag.ws.person.Navn;
 import no.nav.foreldrepenger.oppslag.ws.person.Person;
@@ -26,11 +25,11 @@ public class PersonClientStub implements PersonTjeneste {
 
     @Timed("lookup.person")
     @Override
-    public Person hentPersonInfo(ID id) {
+    public Person hentPersonInfo(Fødselsnummer id) {
         Navn navn = new Navn("Anne", "Lene", "Sveen", Kjønn.K);
         return new Person(id, CountryCode.NO, Kjønn.valueOf("M"), navn,
                 "NN", new Bankkonto("1234567890", "Stub NOR"),
-                now().minusYears(20), barn(id.getFnr()));
+                now().minusYears(20), barn(id));
     }
 
     @Override
