@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import javax.inject.Inject;
 
@@ -13,17 +13,17 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 
 @RestController
 @ProtectedWithClaims(issuer = "selvbetjening", claimMap = { "acr=Level4" })
-@RequestMapping(PersonController.PERSON)
-public class PersonController {
+@RequestMapping(BankkontoController.PERSON)
+public class BankkontoController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersonController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BankkontoController.class);
 
     public static final String PERSON = "/person";
-    private final PersonTjeneste personClient;
+    private final BankkontoTjeneste personClient;
     private final TokenUtil tokenHandler;
 
     @Inject
-    public PersonController(PersonTjeneste personClient,
+    public BankkontoController(BankkontoTjeneste personClient,
             TokenUtil tokenHandler) {
         this.personClient = personClient;
         this.tokenHandler = tokenHandler;

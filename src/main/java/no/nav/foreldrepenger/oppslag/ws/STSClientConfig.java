@@ -27,7 +27,7 @@ public class STSClientConfig {
     @Bean
     @Lazy
     public STSClient configureSTSClient(Bus bus) {
-        STSClient sts = new STSClient(bus);
+        var sts = new STSClient(bus);
         sts.setEnableAppliesTo(false);
         sts.setAllowRenewing(false);
         sts.setLocation(stsUrl.toString());

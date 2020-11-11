@@ -42,7 +42,7 @@ public class WsClient<T> implements EnvironmentAware {
 
     @SuppressWarnings("unchecked")
     private T createAndConfigurePort(String serviceUrl, Class<?> portType) {
-        JaxWsProxyFactoryBean jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
+        var jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
         jaxWsProxyFactoryBean.getFeatures().add(new MetricFeature());
         jaxWsProxyFactoryBean.setServiceClass(portType);
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));

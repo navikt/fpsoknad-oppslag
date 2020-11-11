@@ -1,6 +1,6 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
-import static no.nav.foreldrepenger.oppslag.ws.person.PersonRequestUtil.request;
+import static no.nav.foreldrepenger.oppslag.ws.bankkonto.RequestUtil.request;
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.BANKKONTO;
 
 import java.util.Objects;
@@ -19,13 +19,13 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensn
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
-public class PersonClientTpsWs implements PersonTjeneste {
-    private static final Logger LOG = LoggerFactory.getLogger(PersonClientTpsWs.class);
+public class BankkontoClientWs implements BankkontoTjeneste {
+    private static final Logger LOG = LoggerFactory.getLogger(BankkontoClientWs.class);
     private final PersonV3 person;
     private final PersonV3 healthIndicator;
     private final TokenUtil tokenUtil;
 
-    public PersonClientTpsWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenUtil) {
+    public BankkontoClientWs(PersonV3 person, PersonV3 healthIndicator, TokenUtil tokenUtil) {
         this.person = Objects.requireNonNull(person);
         this.healthIndicator = healthIndicator;
         this.tokenUtil = tokenUtil;
@@ -39,7 +39,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
 
     @Override
     public Bankkonto bankkonto(Fødselsnummer fnr) {
-        return PersonMapper.kontonr(hentPerson(fnr).getPerson());
+        return BankkontoMapper.kontonr(hentPerson(fnr).getPerson());
     }
 
     private HentPersonResponse hentPerson(Fødselsnummer fnr) {

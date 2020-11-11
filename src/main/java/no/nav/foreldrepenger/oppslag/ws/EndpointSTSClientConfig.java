@@ -30,14 +30,14 @@ public class EndpointSTSClientConfig {
     }
 
     public <T> T configureRequestSamlToken(T port) {
-        Client client = ClientProxy.getClient(port);
+        var client = ClientProxy.getClient(port);
         // do not have onbehalfof token so cache token in endpoint
         configureEndpointWithPolicyForSTS(stsClient, client, STS_REQUEST_SAML_POLICY, true);
         return port;
     }
 
     public <T> T configureRequestSamlTokenOnBehalfOfOidc(T port, OnBehalfOfOutInterceptor onBehalfOfOutInterceptor) {
-        Client client = ClientProxy.getClient(port);
+        var client = ClientProxy.getClient(port);
         client.getOutInterceptors().add(onBehalfOfOutInterceptor);
         // want to cache the token with the OnBehalfOfToken, not per proxy
         configureEndpointWithPolicyForSTS(stsClient, client, STS_REQUEST_SAML_POLICY, false);
@@ -52,7 +52,7 @@ public class EndpointSTSClientConfig {
     }
 
     private static void setEndpointPolicyReference(Client client, String uri) {
-        Policy policy = resolvePolicyReference(client, uri);
+        var policy = resolvePolicyReference(client, uri);
         setClientEndpointPolicy(client, policy);
     }
 

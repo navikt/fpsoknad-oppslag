@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import java.util.Objects;
 

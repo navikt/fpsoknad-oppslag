@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Aktoer;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov;
@@ -6,7 +6,7 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 
-public class PersonRequestUtil {
+public class RequestUtil {
 
     private static final String FNR = "FNR";
 

@@ -35,7 +35,7 @@ public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpR
         LOG.info("{} - {}", request.getMethodValue(), request.getURI());
         var timer = new StopWatch();
         timer.start();
-        ClientHttpResponse respons = execution.execute(request, body);
+        var respons = execution.execute(request, body);
         timer.stop();
         if (hasError(respons.getStatusCode())) {
             LOG.warn("{} - {} - ({}). Dette tok {}ms. ({})", request.getMethodValue(), request.getURI(),

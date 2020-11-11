@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
+import no.nav.foreldrepenger.oppslag.ws.bankkonto.Bankkonto;
 
 @SpringJUnitConfig
 @AutoConfigureJsonTesters

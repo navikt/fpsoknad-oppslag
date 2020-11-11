@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import java.util.Optional;
 
@@ -8,9 +8,9 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoUtland;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Person;
 
-final class PersonMapper {
+final class BankkontoMapper {
 
-    private PersonMapper() {
+    private BankkontoMapper() {
     }
 
     public static Bankkonto kontonr(Person person) {
@@ -21,7 +21,7 @@ final class PersonMapper {
         if (person instanceof Bruker bruker) {
             var bankkonto = bruker.getBankkonto();
             return Optional.ofNullable(bankkonto)
-                    .map(PersonMapper::kontoinfo)
+                    .map(BankkontoMapper::kontoinfo)
                     .map(i -> new Bankkonto(i.getFirst(), i.getSecond()))
                     .orElse(null);
         }

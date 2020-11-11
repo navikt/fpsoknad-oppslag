@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import java.net.URI;
 
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import no.nav.foreldrepenger.oppslag.rest.PingableHealthIndicator;
 
 @Component
-public class TPSHealthIndicator extends PingableHealthIndicator {
+public class BankkontoHealthIndicator extends PingableHealthIndicator {
 
-    private final PersonTjeneste client;
+    private final BankkontoTjeneste client;
 
-    public TPSHealthIndicator(PersonTjeneste client, @Value("${virksomhet.person.v3.endpointurl}") URI serviceUrl) {
+    public BankkontoHealthIndicator(BankkontoTjeneste client, @Value("${virksomhet.person.v3.endpointurl}") URI serviceUrl) {
         super(serviceUrl);
         this.client = client;
     }

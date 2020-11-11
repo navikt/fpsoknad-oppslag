@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,19 +17,19 @@ public class PersonConfiguration extends WsClient<PersonV3> {
 
     @Bean
     @Qualifier(PERSON_V3)
-    public PersonV3 personV3(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
+    public PersonV3 client(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
         return createPortForExternalUser(serviceUrl, PersonV3.class);
     }
 
     @Bean
     @Qualifier(HEALTH_INDICATOR_PERSON)
-    public PersonV3 healthIndicatorPerson(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
+    public PersonV3 healthIndicator(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
         return createPortForSystemUser(serviceUrl, PersonV3.class);
     }
 
     @Bean
-    public PersonTjeneste personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
+    public BankkontoTjeneste bankkontoKlient(@Qualifier(PERSON_V3) PersonV3 client,
             @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler) {
-        return new PersonClientTpsWs(personV3, healthIndicator, handler);
+        return new BankkontoClientWs(client, healthIndicator, handler);
     }
 }

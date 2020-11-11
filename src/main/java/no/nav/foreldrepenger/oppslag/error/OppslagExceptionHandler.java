@@ -2,7 +2,6 @@ package no.nav.foreldrepenger.oppslag.error;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -58,11 +57,6 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleValidationException(ConstraintViolationException e, WebRequest req) {
         return logAndRespond(UNPROCESSABLE_ENTITY, e, req);
-    }
-
-    @ExceptionHandler(IncompleteRequestException.class)
-    public ResponseEntity<Object> handleIncompleteRequestException(IncompleteRequestException e, WebRequest req) {
-        return logAndRespond(BAD_REQUEST, e, req);
     }
 
     @ExceptionHandler(NotFoundException.class)

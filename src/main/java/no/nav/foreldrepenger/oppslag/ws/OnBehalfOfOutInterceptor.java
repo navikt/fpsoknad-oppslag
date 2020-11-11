@@ -49,7 +49,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     private static Element createOnBehalfOfElement(String token) {
         try {
             String content = wrapWithBinarySecurityToken(token.getBytes());
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            var factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setFeature(FEATURE_SECURE_PROCESSING, true);
             return factory.newDocumentBuilder().parse(new InputSource(new StringReader(content))).getDocumentElement();

@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.ws.person;
+package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import javax.xml.ws.WebServiceException;
 
@@ -11,7 +11,7 @@ import no.nav.foreldrepenger.oppslag.util.Pingable;
 
 @Retryable(include = WebServiceException.class, exclude = { UnauthorizedException.class, NotFoundException.class,
         TokenExpiredException.class })
-public interface PersonTjeneste extends Pingable {
+public interface BankkontoTjeneste extends Pingable {
 
     Bankkonto bankkonto(Fødselsnummer fnr);
 
