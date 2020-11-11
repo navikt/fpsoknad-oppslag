@@ -1,10 +1,7 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.person;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonRequestUtil.request;
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.BANKKONTO;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.FAMILIERELASJONER;
-import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.KOMMUNIKASJON;
 
 import java.util.Objects;
 
@@ -20,7 +17,6 @@ import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
-import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.HentPersonResponse;
 
 public class PersonClientTpsWs implements PersonTjeneste {
@@ -42,18 +38,13 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     @Override
-    public Person hentPersonInfo(Fødselsnummer fnr) {
-        HentPersonRequest request = request(fnr, KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
-        LOG.trace("Slår opp person");
-        no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
-        Person p = person(fnr, tpsPerson);
-        LOG.trace("Slo opp person OK");
-        return p;
+    public Bankkonto bankkonto(Fødselsnummer fnr) {
+        return PersonMapper.kontonr(hentPerson(fnr).getPerson());
     }
 
-    private HentPersonResponse hentPerson(HentPersonRequest request) {
+    private HentPersonResponse hentPerson(Fødselsnummer fnr) {
         try {
-            return person.hentPerson(request);
+            return person.hentPerson(request(fnr, BANKKONTO));
         } catch (SOAPFaultException e) {
             if (tokenUtil.isExpired()) {
                 throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
@@ -73,4 +64,5 @@ public class PersonClientTpsWs implements PersonTjeneste {
         return getClass().getSimpleName() + " [person=" + person + ", healthIndicator=" + healthIndicator
                 + ", tokenUtil=" + tokenUtil + "]";
     }
+
 }

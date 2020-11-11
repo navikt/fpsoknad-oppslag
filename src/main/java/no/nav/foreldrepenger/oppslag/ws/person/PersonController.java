@@ -1,7 +1,5 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,9 +32,7 @@ public class PersonController {
     @GetMapping("/kontonr")
     public Bankkonto kontonr() {
         LOG.info("Slår opp kontonummer");
-        var knr = Optional.ofNullable(personClient.hentPersonInfo(new Fødselsnummer(tokenHandler.autentisertBruker())))
-                .map(Person::getBankkonto)
-                .orElse(null);
+        var knr = personClient.bankkonto(new Fødselsnummer(tokenHandler.autentisertBruker()));
         LOG.info("Slo opp kontonummer OK");
         return knr;
     }

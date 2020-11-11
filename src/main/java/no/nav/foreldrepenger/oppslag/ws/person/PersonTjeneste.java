@@ -13,5 +13,6 @@ import no.nav.foreldrepenger.oppslag.util.Pingable;
         TokenExpiredException.class })
 public interface PersonTjeneste extends Pingable {
 
-    Person hentPersonInfo(Fødselsnummer fnr);
+    Bankkonto bankkonto(Fødselsnummer fnr);
+
 }
