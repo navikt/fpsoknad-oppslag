@@ -38,7 +38,7 @@ public class PersonController {
     public Person person() {
         LOG.trace("Slår opp person");
         var fnr = new Fødselsnummer(tokenHandler.autentisertBruker());
-        return personClient.hentPersonInfo(new ID(aktorClient.aktorIdForFnr(fnr), fnr));
+        return personClient.hentPersonInfo(fnr);
     }
 
     @GetMapping("/navn")

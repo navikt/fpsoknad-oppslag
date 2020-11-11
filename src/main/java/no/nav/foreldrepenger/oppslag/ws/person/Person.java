@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.neovisionaries.i18n.CountryCode;
 
 @JsonPropertyOrder({ "id", "fødselsdato", "navn", "kjønn", "målform" })
 public class Person {
 
-    @JsonUnwrapped
-    private final ID id;
+    private final Fødselsnummer fnr;
     private final CountryCode landKode;
     private final Kjønn kjønn;
     private final LocalDate fødselsdato;
@@ -21,9 +19,9 @@ public class Person {
     private final Navn navn;
     private final List<Barn> barn;
 
-    public Person(ID id, CountryCode landKode, Kjønn kjønn, Navn navn, String målform,
+    public Person(Fødselsnummer fnr, CountryCode landKode, Kjønn kjønn, Navn navn, String målform,
             Bankkonto bankkonto, LocalDate fødselsdato, List<Barn> barn) {
-        this.id = id;
+        this.fnr = fnr;
         this.landKode = landKode;
         this.kjønn = kjønn;
         this.målform = målform;
@@ -37,8 +35,8 @@ public class Person {
         return kjønn;
     }
 
-    public ID getId() {
-        return id;
+    public Fødselsnummer getFnr() {
+        return fnr;
     }
 
     public LocalDate getFødselsdato() {
@@ -74,7 +72,7 @@ public class Person {
             return false;
         }
         Person person = (Person) o;
-        return Objects.equals(id, person.id) &&
+        return Objects.equals(fnr, person.fnr) &&
                 (landKode == person.landKode) &&
                 (kjønn == person.kjønn) &&
                 Objects.equals(fødselsdato, person.fødselsdato) &&
@@ -86,12 +84,12 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, landKode, kjønn, fødselsdato, målform, bankkonto, navn);
+        return Objects.hash(fnr, landKode, kjønn, fødselsdato, målform, bankkonto, navn);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " [id=" + id + ", landKode=" + landKode + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato
+        return getClass().getSimpleName() + " [fnr=" + fnr + ", landKode=" + landKode + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato
                 + ", målform=" + målform
                 + ", bankkonto=" + bankkonto + ", navn=" + navn + ", barn=" + barn + "]";
     }

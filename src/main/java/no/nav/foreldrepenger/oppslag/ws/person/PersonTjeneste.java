@@ -13,7 +13,7 @@ import no.nav.foreldrepenger.oppslag.util.Pingable;
         TokenExpiredException.class })
 public interface PersonTjeneste extends Pingable {
 
-    Person hentPersonInfo(ID id);
+    Person hentPersonInfo(Fødselsnummer fnr);
 
     Navn navn(Fødselsnummer fnr);
 

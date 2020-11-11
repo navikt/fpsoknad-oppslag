@@ -21,10 +21,10 @@ final class PersonMapper {
     private PersonMapper() {
     }
 
-    public static no.nav.foreldrepenger.oppslag.ws.person.Person person(ID id,
+    public static no.nav.foreldrepenger.oppslag.ws.person.Person person(Fødselsnummer fnr,
             no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person, List<Barn> barn) {
         return new no.nav.foreldrepenger.oppslag.ws.person.Person(
-                id,
+                fnr,
                 countryCode(person),
                 Kjønn.valueOf(person.getKjoenn().getKjoenn().getValue()),
                 name(person.getPersonnavn(), Kjønn.valueOf(person.getKjoenn().getKjoenn().getValue())),

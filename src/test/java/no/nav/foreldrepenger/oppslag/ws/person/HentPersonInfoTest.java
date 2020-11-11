@@ -33,7 +33,6 @@ import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.ws.EndpointSTSClientConfig;
 import no.nav.foreldrepenger.oppslag.ws.OnBehalfOfOutInterceptor;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import no.nav.tjeneste.virksomhet.person.v3.feil.PersonIkkeFunnet;
@@ -78,7 +77,7 @@ public class HentPersonInfoTest {
     @Test
     public void testHentingAvPersonMedBarnSkalKallePåTpsToGanger() throws Exception {
         when(tps.hentPerson(any())).thenReturn(response(barn("11111898765", "FNR")));
-        klient.hentPersonInfo(id());
+        klient.hentPersonInfo(new Fødselsnummer("fnr"));
         verify(tps, times(2)).hentPerson(any());
     }
 
@@ -87,7 +86,7 @@ public class HentPersonInfoTest {
         when(tps.hentPerson(any()))
                 .thenThrow(new HentPersonPersonIkkeFunnet("Fant ikke", new PersonIkkeFunnet()));
         assertThrows(NotFoundException.class, () -> {
-            klient.hentPersonInfo(id());
+            klient.hentPersonInfo(new Fødselsnummer("fnr"));
         });
         verify(tps).hentPerson(any());
     }
@@ -96,7 +95,7 @@ public class HentPersonInfoTest {
     public void testRetryUntilFail() throws Exception {
         when(tps.hentPerson(any()))
                 .thenThrow(soapFault());
-        assertThrows(SOAPFaultException.class, () -> klient.hentPersonInfo(id()));
+        assertThrows(SOAPFaultException.class, () -> klient.hentPersonInfo(new Fødselsnummer("fnr")));
         verify(tps, times(3)).hentPerson(any());
     }
 
@@ -105,7 +104,7 @@ public class HentPersonInfoTest {
         when(tps.hentPerson(any()))
                 .thenThrow(soapFault())
                 .thenReturn(response(barn("11111898765", "FNR")));
-        klient.hentPersonInfo(id());
+        klient.hentPersonInfo(new Fødselsnummer("fnr"));
         verify(tps, times(3)).hentPerson(any());
     }
 
@@ -113,12 +112,8 @@ public class HentPersonInfoTest {
     public void testHentingAvPersonMedFdatBarnSkalKallePåTpsEnGang() throws Exception {
         when(tps.hentPerson(any())).thenReturn(response(barn("11111800000", "FDAT")));
 
-        klient.hentPersonInfo(id());
+        klient.hentPersonInfo(new Fødselsnummer("fnr"));
         verify(tps).hentPerson(any());
-    }
-
-    private static ID id() {
-        return new ID(new AktørId("aktør"), new Fødselsnummer("fnr"));
     }
 
     private static HentPersonResponse response(Familierelasjon rel) {

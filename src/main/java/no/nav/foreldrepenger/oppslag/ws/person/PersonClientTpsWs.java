@@ -81,14 +81,13 @@ public class PersonClientTpsWs implements PersonTjeneste {
     }
 
     @Override
-    public Person hentPersonInfo(ID id) {
-        HentPersonRequest request = request(id.getFnr(), KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
+    public Person hentPersonInfo(Fødselsnummer fnr) {
+        HentPersonRequest request = request(fnr, KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.trace("Slår opp person");
-        LOG.trace(CONFIDENTIAL, "Fra ID {}", id);
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
         List<Barn> barnFor = barnFor(tpsPerson);
         LOG.trace("Slo opp barn " + barnFor);
-        Person p = person(id, tpsPerson, barnFor);
+        Person p = person(fnr, tpsPerson, barnFor);
         LOG.info("Slo opp person OK");
         LOG.trace(CONFIDENTIAL, "Person er {}", p);
         return p;
