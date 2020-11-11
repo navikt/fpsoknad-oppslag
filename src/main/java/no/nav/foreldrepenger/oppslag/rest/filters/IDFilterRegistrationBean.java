@@ -1,8 +1,6 @@
 package no.nav.foreldrepenger.oppslag.rest.filters;
 
-import static no.nav.foreldrepenger.oppslag.rest.OppslagController.OPPSLAG;
-import static no.nav.foreldrepenger.oppslag.rest.filters.FilterRegistrationUtil.urlPatternsFor;
-import static no.nav.foreldrepenger.oppslag.ws.person.PersonController.PERSON;
+import static no.nav.foreldrepenger.oppslag.rest.filters.FilterRegistrationUtil.always;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,7 @@ public class IDFilterRegistrationBean extends FilterRegistrationBean<IDToMDCFilt
 
     public IDFilterRegistrationBean(IDToMDCFilterBean idFilter) {
         setFilter(idFilter);
-        setUrlPatterns(urlPatternsFor(OPPSLAG, PERSON));
+        setUrlPatterns(always());
         LOG.info("Registrert filter {}", this);
     }
 }

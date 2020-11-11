@@ -14,7 +14,4 @@ import no.nav.foreldrepenger.oppslag.util.Pingable;
 public interface PersonTjeneste extends Pingable {
 
     Person hentPersonInfo(Fødselsnummer fnr);
-
-    Navn navn(Fødselsnummer fnr);
-
 }

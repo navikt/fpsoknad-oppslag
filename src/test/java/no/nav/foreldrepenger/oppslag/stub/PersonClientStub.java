@@ -47,8 +47,4 @@ public class PersonClientStub implements PersonTjeneste {
         return singletonList(barn);
     }
 
-    @Override
-    public Navn navn(Fødselsnummer fnr) {
-        return new Navn("Ole", "Gunnar", "Solskjær", Kjønn.M);
-    }
 }

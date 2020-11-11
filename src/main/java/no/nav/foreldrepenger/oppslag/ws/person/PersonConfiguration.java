@@ -28,14 +28,8 @@ public class PersonConfiguration extends WsClient<PersonV3> {
     }
 
     @Bean
-    public Barnutvelger barnutvelger(@Value("${foreldrepenger.selvbetjening.maxmonthsback:24}") int months) {
-        return new BarnMorRelasjonSjekkendeBarnutvelger(months);
-    }
-
-    @Bean
     public PersonTjeneste personKlientTpsWs(@Qualifier(PERSON_V3) PersonV3 personV3,
-            @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler,
-            Barnutvelger barnutvelger) {
-        return new PersonClientTpsWs(personV3, healthIndicator, handler, barnutvelger);
+            @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler) {
+        return new PersonClientTpsWs(personV3, healthIndicator, handler);
     }
 }
