@@ -18,7 +18,6 @@ import com.neovisionaries.i18n.CountryCode;
 import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.foreldrepenger.oppslag.ws.person.Bankkonto;
 import no.nav.foreldrepenger.oppslag.ws.person.Fødselsnummer;
-import no.nav.foreldrepenger.oppslag.ws.person.ID;
 import no.nav.foreldrepenger.oppslag.ws.person.Kjønn;
 import no.nav.foreldrepenger.oppslag.ws.person.Navn;
 import no.nav.foreldrepenger.oppslag.ws.person.Person;
@@ -70,8 +69,8 @@ public class SerializationTest {
         assertEquals(object, deserialized);
     }
 
-    private static ID id() {
-        return new ID(aktoer(), fnr());
+    private static Fødselsnummer id() {
+        return fnr();
     }
 
     private static Navn name() {

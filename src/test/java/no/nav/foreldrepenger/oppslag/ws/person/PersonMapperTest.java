@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import no.nav.foreldrepenger.oppslag.util.DateUtil;
-import no.nav.foreldrepenger.oppslag.ws.aktor.AktørId;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoUtland;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bankkontonummer;
@@ -29,9 +28,9 @@ public class PersonMapperTest {
 
     @Test
     public void basePerson() {
-        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
+        var id = new Fødselsnummer("123456378910");
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, createBasePerson(), emptyList());
-        assertEquals("123456378910", mapped.getId().getFnr().getFnr());
+        assertEquals("123456378910", mapped.getFnr().getFnr());
         assertEquals("Diego", mapped.getNavn().getFornavn());
         assertEquals("Armando", mapped.getNavn().getMellomnavn());
         assertEquals("Maradona", mapped.getNavn().getEtternavn());
@@ -39,7 +38,7 @@ public class PersonMapperTest {
 
     @Test
     public void withMålform() {
-        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
+        var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithMålform();
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
         assertEquals("Turkmenistansk", mapped.getMålform());
@@ -47,7 +46,7 @@ public class PersonMapperTest {
 
     @Test
     public void withNorskKonto() {
-        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
+        var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithNorskKonto();
         no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
         Bankkonto expected = new Bankkonto("1234567890", "Ripoff inc.");
@@ -56,7 +55,7 @@ public class PersonMapperTest {
 
     @Test
     public void withUtenlandskKonto() {
-        ID id = new ID(new AktørId("123445"), new Fødselsnummer("123456378910"));
+        var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithUtenlandskKonto();
         Person mapped = person(id, tpsPerson, emptyList());
         Bankkonto expected = new Bankkonto("swiftster", "bankkode");
