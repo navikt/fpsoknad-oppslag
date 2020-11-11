@@ -10,7 +10,7 @@ import no.nav.foreldrepenger.oppslag.ws.WsClient;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 
 @Configuration
-public class PersonConfiguration extends WsClient<PersonV3> {
+public class BankkontoConfiguration extends WsClient<PersonV3> {
 
     public static final String PERSON_V3 = "person";
     private static final String HEALTH_INDICATOR_PERSON = "healthIndicatorPerson";
