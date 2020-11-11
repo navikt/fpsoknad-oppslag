@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -17,10 +16,9 @@ public class Person {
     private final String målform;
     private final Bankkonto bankkonto;
     private final Navn navn;
-    private final List<Barn> barn;
 
     public Person(Fødselsnummer fnr, CountryCode landKode, Kjønn kjønn, Navn navn, String målform,
-            Bankkonto bankkonto, LocalDate fødselsdato, List<Barn> barn) {
+            Bankkonto bankkonto, LocalDate fødselsdato) {
         this.fnr = fnr;
         this.landKode = landKode;
         this.kjønn = kjønn;
@@ -28,7 +26,6 @@ public class Person {
         this.bankkonto = bankkonto;
         this.navn = navn;
         this.fødselsdato = fødselsdato;
-        this.barn = barn;
     }
 
     public Kjønn getKjønn() {
@@ -59,10 +56,6 @@ public class Person {
         return navn;
     }
 
-    public List<Barn> getBarn() {
-        return barn;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,7 +84,7 @@ public class Person {
     public String toString() {
         return getClass().getSimpleName() + " [fnr=" + fnr + ", landKode=" + landKode + ", kjønn=" + kjønn + ", fødselsdato=" + fødselsdato
                 + ", målform=" + målform
-                + ", bankkonto=" + bankkonto + ", navn=" + navn + ", barn=" + barn + "]";
+                + ", bankkonto=" + bankkonto + ", navn=" + navn + "]";
     }
 
 }

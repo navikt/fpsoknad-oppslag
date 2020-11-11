@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -12,7 +11,6 @@ import no.nav.foreldrepenger.oppslag.util.Pair;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoUtland;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
-import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.PersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Personnavn;
 
@@ -22,7 +20,7 @@ final class PersonMapper {
     }
 
     public static no.nav.foreldrepenger.oppslag.ws.person.Person person(Fødselsnummer fnr,
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person, List<Barn> barn) {
+            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person person) {
         return new no.nav.foreldrepenger.oppslag.ws.person.Person(
                 fnr,
                 countryCode(person),
@@ -30,18 +28,7 @@ final class PersonMapper {
                 name(person.getPersonnavn(), Kjønn.valueOf(person.getKjoenn().getKjoenn().getValue())),
                 målform(person),
                 bankkonto(person),
-                birthDate(person),
-                barn);
-    }
-
-    public static Barn barn(NorskIdent id, Fødselsnummer fnrMor,
-            no.nav.tjeneste.virksomhet.person.v3.informasjon.Person barn, AnnenForelder annenForelder) {
-        return new Barn(
-                fnrMor,
-                new Fødselsnummer(id.getIdent()),
-                birthDate(barn),
-                name(barn.getPersonnavn(), Kjønn.valueOf(barn.getKjoenn().getKjoenn().getValue())),
-                annenForelder);
+                birthDate(person));
     }
 
     public static AnnenForelder annenForelder(no.nav.tjeneste.virksomhet.person.v3.informasjon.Person annenForelder) {

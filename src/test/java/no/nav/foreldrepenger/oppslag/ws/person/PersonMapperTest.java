@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.ws.person;
 
-import static java.util.Collections.emptyList;
 import static no.nav.foreldrepenger.oppslag.ws.person.PersonMapper.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,7 +28,7 @@ public class PersonMapperTest {
     @Test
     public void basePerson() {
         var id = new Fødselsnummer("123456378910");
-        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, createBasePerson(), emptyList());
+        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, createBasePerson());
         assertEquals("123456378910", mapped.getFnr().getFnr());
         assertEquals("Diego", mapped.getNavn().getFornavn());
         assertEquals("Armando", mapped.getNavn().getMellomnavn());
@@ -40,7 +39,7 @@ public class PersonMapperTest {
     public void withMålform() {
         var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithMålform();
-        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
+        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson);
         assertEquals("Turkmenistansk", mapped.getMålform());
     }
 
@@ -48,7 +47,7 @@ public class PersonMapperTest {
     public void withNorskKonto() {
         var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithNorskKonto();
-        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson, emptyList());
+        no.nav.foreldrepenger.oppslag.ws.person.Person mapped = person(id, tpsPerson);
         Bankkonto expected = new Bankkonto("1234567890", "Ripoff inc.");
         assertEquals(expected, mapped.getBankkonto());
     }
@@ -57,7 +56,7 @@ public class PersonMapperTest {
     public void withUtenlandskKonto() {
         var id = new Fødselsnummer("123456378910");
         Bruker tpsPerson = personWithUtenlandskKonto();
-        Person mapped = person(id, tpsPerson, emptyList());
+        Person mapped = person(id, tpsPerson);
         Bankkonto expected = new Bankkonto("swiftster", "bankkode");
         assertEquals(expected, mapped.getBankkonto());
     }

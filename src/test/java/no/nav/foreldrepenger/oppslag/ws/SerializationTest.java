@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.ws;
 
-import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
@@ -73,7 +72,7 @@ public class SerializationTest {
 
     private static Person person() {
         return new Person(id(), CountryCode.NO, Kjønn.M, name(), "nynorsk",
-                bankkonto(), birthDate(), emptyList());
+                bankkonto(), birthDate());
     }
 
     private static LocalDate birthDate() {

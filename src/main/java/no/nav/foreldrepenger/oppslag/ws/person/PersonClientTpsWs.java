@@ -6,7 +6,6 @@ import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.FAMILIERELASJONER;
 import static no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov.KOMMUNIKASJON;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.xml.ws.soap.SOAPFaultException;
@@ -47,7 +46,7 @@ public class PersonClientTpsWs implements PersonTjeneste {
         HentPersonRequest request = request(fnr, KOMMUNIKASJON, BANKKONTO, FAMILIERELASJONER);
         LOG.trace("Slår opp person");
         no.nav.tjeneste.virksomhet.person.v3.informasjon.Person tpsPerson = hentPerson(request).getPerson();
-        Person p = person(fnr, tpsPerson, List.of());
+        Person p = person(fnr, tpsPerson);
         LOG.trace("Slo opp person OK");
         return p;
     }
