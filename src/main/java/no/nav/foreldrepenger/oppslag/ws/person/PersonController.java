@@ -36,7 +36,7 @@ public class PersonController {
 
     @GetMapping
     public Person person() {
-        LOG.info("Slår opp person");
+        LOG.trace("Slår opp person");
         var fnr = new Fødselsnummer(tokenHandler.autentisertBruker());
         return personClient.hentPersonInfo(new ID(aktorClient.aktorIdForFnr(fnr), fnr));
     }
@@ -50,9 +50,11 @@ public class PersonController {
     @GetMapping("/kontonr")
     public Bankkonto kontonr() {
         LOG.info("Slår opp kontonummer");
-        return Optional.ofNullable(person())
+        var knr = Optional.ofNullable(person())
                 .map(Person::getBankkonto)
                 .orElse(null);
+        LOG.info("Slo opp kontonummer OK");
+        return knr;
     }
 
     @GetMapping("/maalform")
