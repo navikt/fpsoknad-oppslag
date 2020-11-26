@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.3.3</version>
+                <version>3.0.0</version>
                 <configuration>
                     <vmArgs>
                         <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
