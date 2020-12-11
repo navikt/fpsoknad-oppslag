@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 
 @Component
@@ -40,8 +41,8 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
     @Override
     public void handleMessage(Message message) throws Fault {
         if (tokenUtil.isExpired()) {
-            LOG.warn("Token looks expired {}, should probably throw", tokenUtil.getExpiryDate());
-            // throw new TokenExpiredException(tokenUtil.getExpiryDate(), null);
+            LOG.warn("Token looks expired {}, throwing", tokenUtil.getExpiryDate());
+            throw new TokenExpiredException(tokenUtil.getExpiryDate(), null);
         }
         message.put(STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(tokenUtil.getToken()));
     }
