@@ -34,7 +34,7 @@ server:
     forward-headers-strategy: framework
 spring:
     cloud:
-     bootstrap.enabled: true
+      bootstrap.enabled: true
       discovery:
         client:
           health-indicator:
