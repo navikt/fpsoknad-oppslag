@@ -1,6 +1,8 @@
 spring:
    cloud:
       vault:
+         bootstrap:
+          enabled: true
          reactive:
            enabled: false
          enabled: true
