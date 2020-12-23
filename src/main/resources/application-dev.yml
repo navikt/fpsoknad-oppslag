@@ -12,7 +12,7 @@ management :
        enabled : false
 
 spring:
-  config.import: vault:
+  config.import: vault
   mvc:
     log-request-details : true
 org:
