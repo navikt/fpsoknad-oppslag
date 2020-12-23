@@ -142,6 +142,10 @@
             <artifactId>spring-cloud-vault-config</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_spring_boot</artifactId>
             <version>0.9.0</version>
