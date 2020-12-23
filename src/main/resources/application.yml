@@ -33,8 +33,8 @@ server:
       context-path: /api
     forward-headers-strategy: framework
 spring:
-    config.import: vault://
     cloud:
+      bootstrap.enabled: true
       discovery:
         client:
           health-indicator:
