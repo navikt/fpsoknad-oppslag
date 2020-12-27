@@ -33,9 +33,9 @@ server:
       context-path: /api
     forward-headers-strategy: framework
 spring:
-  config:
-    import: vault://
-  cloud:
+   config:
+     import: vault://
+   cloud:
      vault:
          enabled: true
          reactive:
@@ -49,11 +49,7 @@ spring:
             enabled: true
             application-name: fpsoknad-oppslag/teamforeldrepenger
             default-context: fpsoknad-oppslag/teamforeldrepenger
-       discovery:
-         client:
-           health-indicator:
-             enabled: false
-    cache :
+   cache :
       cache-names : aktør, fnr, organisasjon, navn
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
     application:
