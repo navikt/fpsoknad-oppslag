@@ -50,7 +50,6 @@ spring:
             backend: kv/prod/fss
             application-name: fpsoknad-oppslag/teamforeldrepenger
             default-context: fpsoknad-oppslag/teamforeldrepenger
-         fail-fast: true
       discovery:
         client:
           health-indicator:
