@@ -1,4 +1,4 @@
-
+debug: true
 sts.uri: https://security-token-service.nais.preprod.local/rest/v1/sts/token?grant_type=client_credentials&scope=openid
 management :
    endpoints:
