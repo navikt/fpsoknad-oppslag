@@ -1,3 +1,4 @@
+
 sts.uri: https://security-token-service.nais.preprod.local/rest/v1/sts/token?grant_type=client_credentials&scope=openid
 management :
    endpoints:
@@ -13,10 +14,21 @@ management :
 spring:
   cloud:
      vault:
+         enabled: true
+         reactive:
+           enabled: false
+         uri: https://vault.adeo.no
+         authentication: KUBERNETES
          kubernetes:
+            role: fpsoknad-oppslag
             kubernetes-path: kubernetes/preprod/fss
+            service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
          kv:
+            enabled: true
             backend: kv/preprod/fss
+            application-name: fpsoknad-oppslag/teamforeldrepenger
+            default-context: fpsoknad-oppslag/teamforeldrepenger
+  config.import: vault://
   mvc:
     log-request-details : true
 org:

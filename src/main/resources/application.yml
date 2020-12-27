@@ -33,22 +33,13 @@ server:
       context-path: /api
     forward-headers-strategy: framework
 spring:
-    config:
-      import: vault://
     cloud:
       vault:
-         enabled: true
-         reactive:
-           enabled: false
-         uri: https://vault.adeo.no
-         authentication: KUBERNETES
-         kubernetes:
-            role: fpsoknad-oppslag
-            service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
-         kv:
-            enabled: true
-            application-name: fpsoknad-oppslag/teamforeldrepenger
-            default-context: fpsoknad-oppslag/teamforeldrepenger
+        fail-fast: true
+      discovery:
+        client:
+          health-indicator:
+            enabled: false
     cache :
       cache-names : aktør, fnr, organisasjon, navn
       caffeine.spec: maximumSize=100,expireAfterAccess=3600s
