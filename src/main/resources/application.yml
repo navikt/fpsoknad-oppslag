@@ -33,9 +33,24 @@ server:
       context-path: /api
     forward-headers-strategy: framework
 spring:
+    config.import: vault://
     cloud:
       vault:
-        fail-fast: true
+         reactive:
+           enabled: false
+         enabled: true 
+         uri: https://vault.adeo.no
+         authentication: KUBERNETES
+         kubernetes:
+            role: fpsoknad-oppslag
+            kubernetes-path: kubernetes/prod/fss
+            service-account-token-file: /var/run/secrets/kubernetes.io/serviceaccount/token        
+         kv:
+            enabled: true
+            backend: kv/prod/fss
+            application-name: fpsoknad-oppslag/teamforeldrepenger
+            default-context: fpsoknad-oppslag/teamforeldrepenger
+         fail-fast: true
       discovery:
         client:
           health-indicator:
@@ -55,19 +70,10 @@ spring:
     main.banner-mode: 'off'
     
 virksomhet:
-  arbeidsforhold:
-    v3:
-      endpointurl: https://modapp.adeo.no/aareg-services/ArbeidsforholdService/v3
-  organisasjon:
-    v5: 
-      endpointurl: https://modapp.adeo.no/ereg/ws/OrganisasjonService/v5
-  person:
+ person:
     v3:
       endpointurl: https://wasapp.adeo.no/tpsws/ws/Person/v3
-aktoer:
-  v2:
-    endpointurl: https://app.adeo.no/aktoerregister/ws/Aktoer/v2 
-    
+   
 securitytokenservice:
     username: ${fpselvbetjening.username}
     password : ${fpselvbetjening.password}
