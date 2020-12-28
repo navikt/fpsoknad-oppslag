@@ -18,7 +18,6 @@ spring:
          enabled: true
          reactive:
            enabled: false
-         uri: https://vault.adeo.no
          authentication: KUBERNETES
          kubernetes:
             role: fpsoknad-oppslag
