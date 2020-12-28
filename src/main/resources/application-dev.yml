@@ -12,7 +12,6 @@ management :
        enabled : false
 
 spring:
-  config.import: vault://
   cloud:
      vault:
          authentication: KUBERNETES
