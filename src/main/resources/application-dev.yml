@@ -15,9 +15,6 @@ spring:
   config.import: vault://
   cloud:
      vault:
-         enabled: true
-         reactive:
-           enabled: false
          authentication: KUBERNETES
          kubernetes:
             role: fpsoknad-oppslag
