@@ -15,7 +15,6 @@ spring:
   config.import: vault://
   cloud:
      vault:
-         authentication: KUBERNETES
          kubernetes:
             role: fpsoknad-oppslag
             kubernetes-path: kubernetes/preprod/fss
