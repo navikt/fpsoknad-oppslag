@@ -30,7 +30,7 @@ org:
 virksomhet:             
  person:
    v3:
-     endpointurl: https://wasapp-q1.adeo.no/tpsws/ws/Person/v3
+     endpointurl: https://app-q1.adeo.no/tpsws-aura/ws/Person/v3
    
 securitytokenservice:
     url: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
