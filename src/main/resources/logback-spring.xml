@@ -29,6 +29,6 @@
     </springProfile>
     <springProfile name="dev,local">
         <logger name="no.nav.foreldrepenger" level="trace" />
-        <logger name="org.springframework.cloud" level="trace" />
+        <logger name="no.nav.security" level="trace" />
     </springProfile>
 </configuration>
