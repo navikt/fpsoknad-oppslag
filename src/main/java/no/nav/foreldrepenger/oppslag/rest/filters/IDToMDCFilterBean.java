@@ -52,6 +52,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
             if (tokenUtil.getExpiryDate() != null) {
                 tilMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
             }
+            if (tokenUtil.erAutentisert() && (EnvUtil.isDev(getEnvironment()))) {
+                LOG.warn("Token er {}", tokenUtil.getToken());
+            }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",
                     req.getRequestURI(), e);
