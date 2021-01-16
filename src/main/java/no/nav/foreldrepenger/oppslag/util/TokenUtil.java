@@ -44,6 +44,13 @@ public class TokenUtil {
                 .orElse(null);
     }
 
+    public String getIssuer() {
+        return Optional.ofNullable(claimSet())
+                .map(c -> c.get("iss"))
+                .map(String.class::cast)
+                .orElse(null);
+    }
+
     public String getSubject() {
         return Optional.ofNullable(claimSet())
                 .map(JwtTokenClaims::getSubject)

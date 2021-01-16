@@ -110,7 +110,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler impl
         LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
                 tokenUtil.getExpiryDate(), e);
         if (EnvUtil.isDev(env)) {
-            LOG.warn("Token {}", tokenUtil.getToken());
+            LOG.warn("Token issuer {}", tokenUtil.getIssuer());
         }
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
