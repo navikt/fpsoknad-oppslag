@@ -38,3 +38,4 @@ spec:
       requests:
         cpu: 250m
         memory: 1536Mi 
+  webproxy: true
