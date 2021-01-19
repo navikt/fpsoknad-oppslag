@@ -12,6 +12,7 @@ management :
        enabled : false
 
 spring:
+  config.import: vault://
   cloud:
      vault:
          kubernetes:
