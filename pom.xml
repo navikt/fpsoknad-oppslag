@@ -21,7 +21,7 @@
         <relativePath />
     </parent>
     <properties>
-
+        <nimbus-jose-jwt.version>8.20</nimbus-jose-jwt.version>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
