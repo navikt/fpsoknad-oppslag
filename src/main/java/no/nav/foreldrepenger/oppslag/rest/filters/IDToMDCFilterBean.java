@@ -3,6 +3,7 @@ package no.nav.foreldrepenger.oppslag.rest.filters;
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_TOKEN_EXPIRY_ID;
 import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_USER_ID;
 import static no.nav.foreldrepenger.oppslag.util.MDCUtil.tilMDC;
+import static no.nav.foreldrepenger.oppslag.util.StringUtil.mask;
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 
 @Order(HIGHEST_PRECEDENCE)
@@ -45,15 +45,9 @@ public class IDToMDCFilterBean extends GenericFilterBean {
 
     private void headersTilMDC(HttpServletRequest req) {
         try {
-            String fnr = tokenUtil.getSubject();
-            if (EnvUtil.isDevOrLocal(getEnvironment())) {
-                tilMDC(NAV_USER_ID, fnr);
-            }
+            tilMDC(NAV_USER_ID, mask(tokenUtil.getSubject()));
             if (tokenUtil.getExpiryDate() != null) {
                 tilMDC(NAV_TOKEN_EXPIRY_ID, tokenUtil.getExpiryDate().toString(), null);
-            }
-            if (tokenUtil.erAutentisert() && (EnvUtil.isDev(getEnvironment()))) {
-                LOG.warn("Token er {}", tokenUtil.getToken());
             }
         } catch (Exception e) {
             LOG.warn("Noe gikk galt ved setting av MDC-verdier for request {}, MDC-verdier er inkomplette",

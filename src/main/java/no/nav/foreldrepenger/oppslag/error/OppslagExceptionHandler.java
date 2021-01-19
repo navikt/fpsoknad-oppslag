@@ -16,8 +16,6 @@ import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,19 +27,16 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.boot.conditionals.EnvUtil;
 import no.nav.foreldrepenger.oppslag.util.StringUtil;
 import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
 @ControllerAdvice
-public class OppslagExceptionHandler extends ResponseEntityExceptionHandler implements EnvironmentAware {
+public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Inject
     TokenUtil tokenUtil;
-
-    private Environment env;
 
     private static final Logger LOG = LoggerFactory.getLogger(OppslagExceptionHandler.class);
 
@@ -109,9 +104,6 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler impl
         ApiError apiError = new ApiError(status, e, messages);
         LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
                 tokenUtil.getExpiryDate(), e);
-        if (EnvUtil.isDev(env)) {
-            LOG.warn("Token issuer {}", tokenUtil.getIssuer());
-        }
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
@@ -131,11 +123,4 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler impl
     private static String errorMessage(FieldError error) {
         return error.getField() + " " + error.getDefaultMessage();
     }
-
-    @Override
-    public void setEnvironment(Environment env) {
-        this.env = env;
-
-    }
-
 }
