@@ -22,7 +22,7 @@ management:
     endpoints:
       web:
         exposure:
-          include:  env, info, health, metrics, prometheus
+          include:  env, configprops, info, health, metrics, prometheus
     health :
       diskspace:
         enabled: false
