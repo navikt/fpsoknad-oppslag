@@ -50,7 +50,7 @@ spring:
 virksomhet:
  person:
     v3:
-      endpointurl: https://wasapp.adeo.no/tpsws/ws/Person/v3
+      endpointurl: https://app.adeo.no/tpsws-aura/ws/Person/v3
    
 securitytokenservice:
     username: ${fpselvbetjening.username}
