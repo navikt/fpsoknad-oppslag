@@ -1,7 +1,7 @@
 fpsoknad-oppslag
 ================
 
-Slår opp fra diverse interne registre for å assistere selvbetjent søknad om foreldrepenger og engangsstønad
+Slår opp fra TPS
 
 # Komme i gang
 
