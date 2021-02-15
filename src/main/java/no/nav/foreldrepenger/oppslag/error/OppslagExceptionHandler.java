@@ -102,8 +102,14 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
             List<Object> messages) {
 
         ApiError apiError = new ApiError(status, e, messages);
-        LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
-                tokenUtil.getExpiryDate(), e);
+        if (tokenUtil.erAutentisert() && !tokenUtil.isExpired()) {
+            LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
+                    tokenUtil.getExpiryDate(), e);
+        } else {
+            LOG.trace("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
+                    tokenUtil.getExpiryDate(), e);
+
+        }
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
     }
 
