@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.error;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -95,7 +94,7 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> logAndRespond(HttpStatus status, Exception e, WebRequest req, Object... messages) {
-        return logAndRespond(status, e, req, asList(messages));
+        return logAndRespond(status, e, req, List.of(messages));
     }
 
     private ResponseEntity<Object> logAndRespond(HttpStatus status, Exception e, WebRequest req,
