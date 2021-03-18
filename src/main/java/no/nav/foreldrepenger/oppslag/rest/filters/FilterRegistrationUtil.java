@@ -1,6 +1,5 @@
 package no.nav.foreldrepenger.oppslag.rest.filters;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
@@ -20,7 +19,7 @@ final class FilterRegistrationUtil {
     }
 
     static List<String> always() {
-        return singletonList(ALWAYS);
+        return List.of(ALWAYS);
     }
 
 }

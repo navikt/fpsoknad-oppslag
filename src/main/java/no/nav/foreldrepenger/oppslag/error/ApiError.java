@@ -2,13 +2,13 @@ package no.nav.foreldrepenger.oppslag.error;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Feature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED;
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static no.nav.foreldrepenger.oppslag.util.MDCUtil.callId;
 import static org.springframework.core.NestedExceptionUtils.getMostSpecificCause;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 
@@ -27,7 +27,7 @@ class ApiError {
     private final String uuid;
 
     ApiError(HttpStatus status, Throwable t) {
-        this(status, t, emptyList());
+        this(status, t, List.of());
     }
 
     ApiError(HttpStatus status, Throwable t, List<Object> objects) {
@@ -57,7 +57,7 @@ class ApiError {
         return getMostSpecificCause(e).getMessage();
     }
 
-    private static ImmutableList<String> messages(Throwable t, List<Object> objects) {
+    private static List<String> messages(Throwable t, List<Object> objects) {
         var builder = new ImmutableList.Builder<String>();
         String msg = getRootCauseMessage(t);
         if (msg != null) {
@@ -65,7 +65,7 @@ class ApiError {
         }
         return builder
                 .addAll(objects.stream()
-                        .filter(s -> s != null)
+                        .filter(Objects::nonNull)
                         .map(Object::toString)
                         .collect(toList()))
                 .build();
