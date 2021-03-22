@@ -15,8 +15,6 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import no.nav.cxf.metrics.MetricFeature;
-
 @Component
 public class WsClient<T> implements EnvironmentAware {
 
@@ -43,7 +41,6 @@ public class WsClient<T> implements EnvironmentAware {
     @SuppressWarnings("unchecked")
     private T createAndConfigurePort(String serviceUrl, Class<?> portType) {
         var jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
-        jaxWsProxyFactoryBean.getFeatures().add(new MetricFeature());
         jaxWsProxyFactoryBean.setServiceClass(portType);
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
         T port = (T) jaxWsProxyFactoryBean.create();
