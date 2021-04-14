@@ -29,7 +29,6 @@ jobs:
           java-version: 15
           distribution: 'adopt'
 
-
       - name: Kompiler
         run: |
           mvn package  --settings .github/workflows/.m2/settings.xml
