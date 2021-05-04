@@ -30,6 +30,6 @@ public class BankkontoConfiguration extends WsClient<PersonV3> {
     @Bean
     public BankkontoTjeneste bankkontoKlient(@Qualifier(PERSON_V3) PersonV3 client,
             @Qualifier(HEALTH_INDICATOR_PERSON) PersonV3 healthIndicator, TokenUtil handler) {
-        return new BankkontoClientWs(client, healthIndicator, handler);
+        return new BankkontoClientWs(healthIndicator, /* client, */ healthIndicator, handler);
     }
 }
