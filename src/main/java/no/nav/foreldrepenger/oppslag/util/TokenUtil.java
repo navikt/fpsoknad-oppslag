@@ -2,11 +2,13 @@ package no.nav.foreldrepenger.oppslag.util;
 
 import static java.time.Instant.now;
 import static no.nav.foreldrepenger.oppslag.config.Constants.ISSUER;
+import static no.nav.foreldrepenger.oppslag.config.Constants.TOKENX;
 
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
@@ -63,20 +65,37 @@ public class TokenUtil {
     }
 
     public String getToken() {
+        return Stream.of(ISSUER, TOKENX)
+                .map(this::getToken)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseThrow(unauthenticated("Fant ikke ID-token"));
+
+    }
+
+    private String getToken(String issuer) {
         return Optional.ofNullable(context())
-                .map(c -> c.getJwtToken(ISSUER))
+                .map(c -> c.getJwtToken(issuer))
                 .filter(Objects::nonNull)
                 .map(JwtToken::getTokenAsString)
-                .orElseThrow(unauthenticated("Fant ikke ID-token"));
+                .orElse(null);
     }
 
     private static Supplier<? extends JwtTokenValidatorException> unauthenticated(String msg) {
         return () -> new JwtTokenValidatorException(msg);
     }
 
-    private JwtTokenClaims claimSet() {
+    public JwtTokenClaims claimSet() {
+        return Stream.of(ISSUER, TOKENX)
+                .map(this::claimSet)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private JwtTokenClaims claimSet(String issuer) {
         return Optional.ofNullable(context())
-                .map(s -> s.getClaims(ISSUER))
+                .map(s -> s.getClaims(issuer))
                 .orElse(null);
     }
 
