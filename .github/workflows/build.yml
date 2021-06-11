@@ -6,6 +6,8 @@ on:
             - master
 env:
     IMAGE_BASE: ghcr.io/${{ github.repository }}
+    GITHUB_USERNAME: x-access-token
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   kompiler:
