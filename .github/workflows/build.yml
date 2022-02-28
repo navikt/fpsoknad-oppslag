@@ -30,7 +30,7 @@ jobs:
           mvn clean install --batch-mode --quiet --settings .github/.m2/settings.xml
 
       - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@42d299face0c5c43a0487c477f595ac9cf22f1a7 # Use commit-sha1 instead of tag for security concerns
+        uses: docker/login-action@bb984efc561711aaa26e433c32c3521176eae55b # Use commit-sha1 instead of tag for security concerns
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
