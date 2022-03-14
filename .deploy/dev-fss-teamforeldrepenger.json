@@ -1,4 +1,6 @@
 {
-  "ingresses":  ["https://fpsoknad-oppslag.dev.adeo.no","https://fpsoknad-oppslag.dev.nav.no"]
-
+    "ingresses":  [
+        "https://fpsoknad-oppslag.dev.adeo.no",
+        "https://fpsoknad-oppslag.dev.nav.no"
+    ]
 }
