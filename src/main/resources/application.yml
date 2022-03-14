@@ -53,3 +53,8 @@ securitytokenservice:
   username: ${fpselvbetjening.username}
   password : ${fpselvbetjening.password}
   url: https://sts.adeo.no/SecurityTokenServiceProvider/
+
+springdoc:
+  packages-to-scan: no.nav.foreldrepenger.oppslag
+  swagger-ui:
+    disable-swagger-default-url: true
