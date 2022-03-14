@@ -1,59 +1,55 @@
 no.nav:
   security:
-     jwt:
-       issuer:
-         tokenx:
-             discoveryurl: ${token.x.well.known.url}
-             accepted_audience: ${token.x.client.id}
-         selvbetjening:
-             proxy-url: http://webproxy.nais:8088
-             discoveryurl: ${loginservice.idporten.discovery.url}
-             accepted_audience: ${loginservice.idporten.audience}
+    jwt:
+      issuer:
+        tokenx:
+          discoveryurl: ${token.x.well.known.url}
+          accepted_audience: ${token.x.client.id}
 
 management:
-    endpoint:
-      health:    
-       show-details : never
-    metrics:
-      web:
-        server:
-          request:
-            autotime:
-              enabled: true
-    endpoints:
-      web:
-        exposure:
-          include:  env, configprops, info, health, metrics, prometheus
-    health :
-      diskspace:
-        enabled: false
-      jms:
-        enabled: false
+  endpoint:
+    health:
+      show-details : never
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:  env, configprops, info, health, metrics, prometheus
+  health :
+    diskspace:
+      enabled: false
+    jms:
+      enabled: false
 server:
-    servlet:
-      context-path: /api
-    forward-headers-strategy: framework
+  servlet:
+    context-path: /api
+  forward-headers-strategy: framework
 spring:
-    cache :
-      cache-names : aktør, fnr, organisasjon, navn
-      caffeine.spec: maximumSize=100,expireAfterAccess=3600s
-    application:
-      name : fpsoknad-oppslag
-    jackson:
-      default-property-inclusion: non-null
-      deserialization:
-         accept-single-value-as-array: true
-         fail-on-unknown-properties: false
-      serialization:
-         fail-on-empty-beans: false
-    main.banner-mode: 'off'
-    
+  cache :
+    cache-names : aktør, fnr, organisasjon, navn
+    caffeine.spec: maximumSize=100,expireAfterAccess=3600s
+  application:
+    name : fpsoknad-oppslag
+  jackson:
+    default-property-inclusion: non-null
+    deserialization:
+      accept-single-value-as-array: true
+      fail-on-unknown-properties: false
+    serialization:
+      fail-on-empty-beans: false
+  main.banner-mode: 'off'
+
 virksomhet:
- person:
+  person:
     v3:
       endpointurl: https://app.adeo.no/tpsws-aura/ws/Person/v3
-   
+
 securitytokenservice:
-    username: ${fpselvbetjening.username}
-    password : ${fpselvbetjening.password}
-    url: https://sts.adeo.no/SecurityTokenServiceProvider/          
+  username: ${fpselvbetjening.username}
+  password : ${fpselvbetjening.password}
+  url: https://sts.adeo.no/SecurityTokenServiceProvider/

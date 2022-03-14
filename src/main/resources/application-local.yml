@@ -1,8 +1,8 @@
 management :
-   endpoints.web.exposure.include:  '*'
-   endpoint:
-     health.show-details : always
-     security.enabled : false
+  endpoints.web.exposure.include:  '*'
+  endpoint:
+    health.show-details : always
+    security.enabled : false
 
 no.nav.security.jwt:
   issuer:
@@ -29,14 +29,14 @@ securitytokenservice.url: http://localhost
 server.port: 9000
 
 spring :
-    mvc.log-request-details : true   
-    jackson :
-      default-property-inclusion :  non-absent
-      mapper :
-         accept-case-insensitive-properties: true
-      deserialization :
-         accept-single-value-as-array: true
-         fail-on-unknown-properties: false
-      serialization :
-         write-empty-json-arrays: false
-         fail-on-empty-beans: false
+  mvc.log-request-details : true
+  jackson :
+    default-property-inclusion :  non-absent
+    mapper :
+      accept-case-insensitive-properties: true
+    deserialization :
+      accept-single-value-as-array: true
+      fail-on-unknown-properties: false
+    serialization :
+      write-empty-json-arrays: false
+      fail-on-empty-beans: false
