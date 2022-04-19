@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
-        <cxf.version>3.5.1</cxf.version>
+        <cxf.version>3.5.2</cxf.version>
         <springdoc.version>1.6.7</springdoc.version>
         <nimbus-jose-jwt.version>8.23</nimbus-jose-jwt.version>
         <token-validation-version>2.0.14</token-validation-version>
