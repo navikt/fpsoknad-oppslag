@@ -55,8 +55,13 @@ public class TokenUtil {
 
     public String getSubject() {
         return Optional.ofNullable(claimSet())
-                .map(JwtTokenClaims::getSubject)
-                .orElse(null);
+            .map(this::getSubjectFromPidOrSub)
+            .orElse(null);
+    }
+
+    private String getSubjectFromPidOrSub(JwtTokenClaims claims) {
+        return Optional.ofNullable(claims.getStringClaim("pid"))
+            .orElseGet(claims::getSubject);
     }
 
     public String autentisertBruker() {
