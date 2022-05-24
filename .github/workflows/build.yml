@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Sett opp Java  17
         uses: actions/setup-java@v3
         with:
@@ -82,3 +84,9 @@ jobs:
                           title: 'Deploy av ${{ env.TAG }}',
                           body: '/promote dev-fss'})
              });
+
+      - name: Sonar analyse
+        run: |
+          mvn jacoco:prepare-agent jacoco:report sonar:sonar --settings .github/.m2/settings.xml
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
