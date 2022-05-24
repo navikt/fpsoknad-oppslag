@@ -1,7 +1,6 @@
 package no.nav.foreldrepenger.oppslag.util;
 
 import static java.time.Instant.now;
-import static no.nav.foreldrepenger.oppslag.config.Constants.ISSUER;
 import static no.nav.foreldrepenger.oppslag.config.Constants.TOKENX;
 
 import java.util.Date;
@@ -70,7 +69,7 @@ public class TokenUtil {
     }
 
     public String getToken() {
-        return Stream.of(ISSUER, TOKENX)
+        return Stream.of(TOKENX)
                 .map(this::getToken)
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -91,7 +90,7 @@ public class TokenUtil {
     }
 
     public JwtTokenClaims claimSet() {
-        return Stream.of(ISSUER, TOKENX)
+        return Stream.of(TOKENX)
                 .map(this::claimSet)
                 .filter(Objects::nonNull)
                 .findFirst()

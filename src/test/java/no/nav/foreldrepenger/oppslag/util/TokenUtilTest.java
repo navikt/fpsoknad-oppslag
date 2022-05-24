@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.oppslag.util;
 
-import static no.nav.foreldrepenger.oppslag.config.Constants.ISSUER;
+import static no.nav.foreldrepenger.oppslag.config.Constants.TOKENX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,7 +45,7 @@ public class TokenUtilTest {
     @BeforeEach
     public void before() {
         when(holder.getTokenValidationContext()).thenReturn(context);
-        when(context.getClaims(eq(ISSUER))).thenReturn(claims);
+        when(context.getClaims(eq(TOKENX))).thenReturn(claims);
         tokenHandler = new TokenUtil(holder);
     }
 
@@ -82,7 +82,7 @@ public class TokenUtilTest {
 
     @Test
     public void testNoClaims() {
-        when(context.getClaims(eq(ISSUER))).thenReturn(null);
+        when(context.getClaims(eq(TOKENX))).thenReturn(null);
         assertFalse(tokenHandler.erAutentisert());
         assertNull(tokenHandler.getSubject());
         assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.autentisertBruker());
@@ -97,7 +97,7 @@ public class TokenUtilTest {
 
     @Test
     public void testNoToken() {
-        when(context.getJwtToken(eq(ISSUER))).thenReturn(null);
+        when(context.getJwtToken(eq(TOKENX))).thenReturn(null);
         assertThrows(JwtTokenValidatorException.class, () -> tokenHandler.getToken());
     }
 
