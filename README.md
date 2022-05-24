@@ -1,3 +1,8 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=navikt_fpsoknad-oppslag&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=navikt_fpsoknad-oppslag)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=navikt_fpsoknad-oppslag&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=navikt_fpsoknad-oppslag)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=navikt_fpsoknad-oppslag&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=navikt_fpsoknad-oppslag)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=navikt_fpsoknad-oppslag&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=navikt_fpsoknad-oppslag)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=navikt_fpsoknad-oppslag&metric=coverage)](https://sonarcloud.io/summary/new_code?id=navikt_fpsoknad-oppslag)
 fpsoknad-oppslag
 ================
 
