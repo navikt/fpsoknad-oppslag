@@ -51,6 +51,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
         try {
             String content = wrapWithBinarySecurityToken(token.getBytes());
             var factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             factory.setNamespaceAware(true);
             factory.setFeature(FEATURE_SECURE_PROCESSING, true);
             return factory.newDocumentBuilder().parse(new InputSource(new StringReader(content))).getDocumentElement();
