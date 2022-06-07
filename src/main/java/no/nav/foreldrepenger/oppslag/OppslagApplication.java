@@ -1,7 +1,7 @@
 package no.nav.foreldrepenger.oppslag;
 
 import static java.util.Collections.singletonList;
-import static no.nav.foreldrepenger.boot.conditionals.Cluster.profiler;
+import static no.nav.boot.conditionals.Cluster.profiler;
 import static org.springframework.retry.RetryContext.NAME;
 
 import java.lang.reflect.Field;

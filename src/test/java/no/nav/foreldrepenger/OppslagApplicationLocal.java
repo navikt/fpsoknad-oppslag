@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger;
 
-import static no.nav.foreldrepenger.boot.conditionals.Cluster.profiler;
+import static no.nav.boot.conditionals.Cluster.profiler;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
