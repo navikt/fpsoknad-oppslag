@@ -1,6 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws;
 
-import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;

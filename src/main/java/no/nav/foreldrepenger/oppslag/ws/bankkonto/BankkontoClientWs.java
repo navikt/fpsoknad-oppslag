@@ -10,10 +10,11 @@ import javax.xml.ws.soap.SOAPFaultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.error.NotFoundException;
 import no.nav.foreldrepenger.oppslag.error.TokenExpiredException;
 import no.nav.foreldrepenger.oppslag.error.UnauthorizedException;
-import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.binding.HentPersonSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
@@ -46,8 +47,8 @@ public class BankkontoClientWs implements BankkontoTjeneste {
         try {
             return person.hentPerson(request(fnr, BANKKONTO));
         } catch (SOAPFaultException e) {
-            if (tokenUtil.isExpired()) {
-                throw new TokenExpiredException(tokenUtil.getExpiryDate(), e);
+            if (tokenUtil.erUtløpt()) {
+                throw new TokenExpiredException(tokenUtil.getExpiration(), e);
             }
             throw e;
         } catch (HentPersonPersonIkkeFunnet e) {

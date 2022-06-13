@@ -1,10 +1,10 @@
 package no.nav.foreldrepenger.oppslag.error;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TokenExpiredException extends UnauthenticatedException {
 
-    public TokenExpiredException(Date expDate, Throwable cause) {
+    public TokenExpiredException(LocalDateTime expDate, Throwable cause) {
         super(expDate, cause);
     }
 

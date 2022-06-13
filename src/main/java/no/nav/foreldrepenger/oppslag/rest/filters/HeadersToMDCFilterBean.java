@@ -1,12 +1,11 @@
 package no.nav.foreldrepenger.oppslag.rest.filters;
 
-import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_CALL_ID;
-import static no.nav.foreldrepenger.oppslag.config.Constants.NAV_CONSUMER_ID;
-import static no.nav.foreldrepenger.oppslag.util.MDCUtil.tilMDC;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CALL_ID;
+import static no.nav.foreldrepenger.common.util.Constants.NAV_CONSUMER_ID;
+import static no.nav.foreldrepenger.common.util.MDCUtil.toMDC;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -19,20 +18,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import no.nav.foreldrepenger.oppslag.util.CallIdGenerator;
+import no.nav.foreldrepenger.common.util.CallIdGenerator;
 
 @Component
 public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean.class);
 
-    private final CallIdGenerator generator;
+    private final CallIdGenerator generator = new CallIdGenerator();
     private final String applicationName;
 
-    @Inject
-    public HeadersToMDCFilterBean(CallIdGenerator generator,
-            @Value("${spring.application.name}") String applicationName) {
-        this.generator = generator;
+    public HeadersToMDCFilterBean(@Value("${spring.application.name}") String applicationName) {
         this.applicationName = applicationName;
     }
 
@@ -45,8 +41,8 @@ public class HeadersToMDCFilterBean extends GenericFilterBean {
 
     private void putValues(HttpServletRequest request) {
         try {
-            tilMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
-            tilMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
+            toMDC(NAV_CONSUMER_ID, request.getHeader(NAV_CONSUMER_ID), applicationName);
+            toMDC(NAV_CALL_ID, request.getHeader(NAV_CALL_ID), generator.create());
         } catch (Exception e) {
             LOG.warn("Noe gikk feil ved propagering av header-verdier for request {}, MDC-verdier er inkomplette",
                     request.getRequestURL(), e);

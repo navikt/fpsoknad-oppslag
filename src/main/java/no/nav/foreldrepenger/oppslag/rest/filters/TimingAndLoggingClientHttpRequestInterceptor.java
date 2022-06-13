@@ -16,43 +16,33 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
-import no.nav.foreldrepenger.oppslag.util.TokenUtil;
-
 @Component
 public class TimingAndLoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(TimingAndLoggingClientHttpRequestInterceptor.class);
 
-    private final TokenUtil tokenUtil;
-
-    public TimingAndLoggingClientHttpRequestInterceptor(TokenUtil tokenUtil) {
-        this.tokenUtil = tokenUtil;
-    }
-
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
-            throws IOException {
+        throws IOException {
 
-        LOG.info("{} - {}", request.getMethodValue(), request.getURI());
-        var timer = new StopWatch();
+        StopWatch timer = new StopWatch();
         timer.start();
-        var respons = execution.execute(request, body);
+        ClientHttpResponse respons = execution.execute(request, body);
         timer.stop();
-        if (hasError(respons.getStatusCode())) {
-            LOG.warn("{} - {} - ({}). Dette tok {}ms. ({})", request.getMethodValue(), request.getURI(),
-                    respons.getRawStatusCode(), timer.getTime(MILLISECONDS), tokenUtil.getExpiryDate());
-        } else {
-            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI(),
-                    respons.getRawStatusCode(), timer.getTime(MILLISECONDS));
-        }
+        log(request, respons.getStatusCode(), timer);
         return respons;
     }
 
-    protected boolean hasError(HttpStatus code) {
-        return (code.series() == CLIENT_ERROR) || (code.series() == SERVER_ERROR);
+    private static void log(HttpRequest request, HttpStatus code, StopWatch timer) {
+        if (hasError(code)) {
+            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
+                code, timer.getTime(MILLISECONDS));
+        } else {
+            LOG.info("{} - {} - ({}). Dette tok {}ms", request.getMethodValue(), request.getURI().getPath(),
+                code, timer.getTime(MILLISECONDS));
+        }
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " [tokenUtil=" + tokenUtil + "]";
+    private static boolean hasError(HttpStatus code) {
+        return code.series().equals(CLIENT_ERROR) || code.series().equals(SERVER_ERROR);
     }
 }

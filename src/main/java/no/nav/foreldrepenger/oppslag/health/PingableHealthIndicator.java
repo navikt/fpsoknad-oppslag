@@ -5,7 +5,7 @@ import java.net.URI;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
-import no.nav.foreldrepenger.oppslag.util.Pingable;
+import no.nav.foreldrepenger.oppslag.http.Pingable;
 
 public abstract class PingableHealthIndicator implements HealthIndicator, Pingable {
 

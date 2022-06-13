@@ -2,7 +2,8 @@ package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
 import java.util.Optional;
 
-import no.nav.foreldrepenger.oppslag.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoNorge;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.BankkontoUtland;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Bruker;
@@ -22,7 +23,7 @@ final class BankkontoMapper {
             var bankkonto = bruker.getBankkonto();
             return Optional.ofNullable(bankkonto)
                     .map(BankkontoMapper::kontoinfo)
-                    .map(i -> new Bankkonto(i.getFirst(), i.getSecond()))
+                    .map(i -> new Bankkonto(i.getLeft(), i.getRight()))
                     .orElse(null);
         }
         return null;
