@@ -8,7 +8,6 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
@@ -23,11 +22,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import no.nav.foreldrepenger.oppslag.util.StringUtil;
-import no.nav.foreldrepenger.oppslag.util.TokenUtil;
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException;
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException;
 
@@ -100,21 +99,13 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> logAndRespond(HttpStatus status, Exception e, WebRequest req,
             List<Object> messages) {
         var apiError = new ApiError(status, e, messages);
-        if (tokenUtil.erAutentisert() && !tokenUtil.isExpired()) {
-            LOG.warn("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
-                    tokenUtil.getExpiryDate(), e);
+        var path = fullPathTilKaltEndepunkt(req);
+        if (tokenUtil.erAutentisert() && !tokenUtil.erUtløpt()) {
+            LOG.warn("[{}] {} {}", path, status, apiError.getMessages(), e);
         } else {
-            LOG.trace("({}) {} {} ({}, {})", subject(), status, apiError.getMessages(), status.value(),
-                    tokenUtil.getExpiryDate(), e);
-
+            LOG.debug("[{}] {} {}", path, status, apiError.getMessages(),e);
         }
         return handleExceptionInternal(e, apiError, new HttpHeaders(), status, req);
-    }
-
-    private String subject() {
-        return Optional.ofNullable(tokenUtil.getSubject())
-                .map(StringUtil::mask)
-                .orElse("Uautentisert");
     }
 
     private static List<String> validationErrors(MethodArgumentNotValidException e) {
@@ -126,5 +117,13 @@ public class OppslagExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static String errorMessage(FieldError error) {
         return error.getField() + " " + error.getDefaultMessage();
+    }
+
+    private static String fullPathTilKaltEndepunkt(WebRequest req) {
+        try {
+            return ((ServletWebRequest)req).getRequest().getRequestURI();
+        } catch (Exception e) {
+            return req.getContextPath();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package no.nav.foreldrepenger.oppslag.ws.bankkonto;
 
+import no.nav.foreldrepenger.common.domain.Fødselsnummer;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Aktoer;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.Informasjonsbehov;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.NorskIdent;
@@ -19,7 +20,7 @@ public class RequestUtil {
     }
 
     static HentPersonRequest request(Fødselsnummer fnr, Informasjonsbehov... behov) {
-        return request(fnr.getFnr(), behov);
+        return request(fnr.value(), behov);
     }
 
     private static void infoBehov(HentPersonRequest req, Informasjonsbehov... behov) {

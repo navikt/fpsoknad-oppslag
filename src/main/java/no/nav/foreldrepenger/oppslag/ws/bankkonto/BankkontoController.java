@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import no.nav.foreldrepenger.common.util.TokenUtil;
 import no.nav.foreldrepenger.oppslag.http.ProtectedRestController;
-import no.nav.foreldrepenger.oppslag.util.TokenUtil;
 
 @ProtectedRestController(BankkontoController.PERSON)
 public class BankkontoController {
@@ -28,7 +28,7 @@ public class BankkontoController {
     @GetMapping("/kontonr")
     public Bankkonto kontonr() {
         LOG.info("Slår opp kontonummer");
-        var knr = personClient.bankkonto(new Fødselsnummer(tokenHandler.autentisertBruker()));
+        var knr = personClient.bankkonto(tokenHandler.autentisertBrukerOrElseThrowException());
         LOG.info("Slo opp kontonummer OK");
         return knr;
     }

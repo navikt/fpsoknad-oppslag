@@ -1,4 +1,4 @@
-package no.nav.foreldrepenger.oppslag.util;
+package no.nav.foreldrepenger.oppslag.http;
 
 public interface Pingable {
     void ping();
