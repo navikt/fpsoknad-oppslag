@@ -6,7 +6,7 @@
 fpsoknad-oppslag
 ================
 
-Slår opp fra TPS
+Brukes bare av fpsoknad-mottak til å slå opp kontonummer på person fra TPS.
 
 # Komme i gang
 

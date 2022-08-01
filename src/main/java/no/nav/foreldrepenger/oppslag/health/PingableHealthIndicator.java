@@ -11,7 +11,7 @@ public abstract class PingableHealthIndicator implements HealthIndicator, Pingab
 
     private final URI serviceUrl;
 
-    public PingableHealthIndicator(URI serviceUrl) {
+    protected PingableHealthIndicator(URI serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
 
