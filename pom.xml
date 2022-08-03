@@ -33,7 +33,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <fpsoknad-felles.version>0.8.14</fpsoknad-felles.version>
-        <token-validation-version>2.1.2</token-validation-version>
+        <token-validation-version>2.1.3</token-validation-version>
         <boot-conditionals.version>3.0.2</boot-conditionals.version>
 
         <cxf.version>3.5.3</cxf.version>
