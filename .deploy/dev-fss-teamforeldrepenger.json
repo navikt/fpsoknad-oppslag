@@ -1,6 +1,7 @@
 {
     "ingresses":  [
-        "https://fpsoknad-oppslag.dev.adeo.no",
-        "https://fpsoknad-oppslag.dev.nav.no"
-    ]
+        "https://fpsoknad-oppslag.dev.intern.nav.no"
+    ],
+    "minReplicas": "1",
+    "maxReplicas": "2"
 }
